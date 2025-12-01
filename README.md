@@ -159,12 +159,15 @@ Cada microservicio sigue la arquitectura:
 ```
 controller/
 service/
+    base/
     interfaces/
     impl/
 repository/
 client/
 config/
 model/
+dto/
+mapper/
 ```
 
 ---
