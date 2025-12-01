@@ -2,9 +2,12 @@ package ar.edu.utn.frc.backend.ServicioDepositos.service.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import ar.edu.utn.frc.backend.ServicioDepositos.model.Deposito;
 import ar.edu.utn.frc.backend.ServicioDepositos.service.interfaces.IDepositoService;
 
+@Service
 public class DepositoServiceImpl implements IDepositoService {
 
     public Deposito crear(Deposito deposito) {

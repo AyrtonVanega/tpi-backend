@@ -9,4 +9,3 @@ public interface CrudService<T, ID> {
     T obtenerPorId(ID id);
     List<T> obtenerTodos();
 }
-
