@@ -1,6 +1,12 @@
 # **README – Trabajo Práctico Integrador 2025**
 
-**Backend de Aplicaciones – Sistema de Logística de Transporte de Contenedores**
+**Sistema de Logística de Transporte de Contenedores**
+
+Universidad Tecnológica Nacional - Facultad Regional de Córdoba
+
+Cátedra: Backend de Aplicaciones
+
+Jefe de Cátedra: Felipe Steffolani
 
 ---
 
@@ -38,9 +44,15 @@ La arquitectura se divide en cuatro microservicios principales:
 
 **Entidades:**
 
-* Solicitudes
-* Contenedores
+* SOLICITUDES
+* ESTADOS_SOLICITUD
+* CONTENEDORES
+* HISTORIALES_ESTADO_CONTENEDOR
+* ESTADOS_CONTENEDOR
 
+**Diagrama Entidad-Relación:**
+
+![DER Depositos](docs/DerMsSolicitudes.png)
 ---
 
 ## **2️⃣ ServicioRutas**
@@ -55,11 +67,15 @@ La arquitectura se divide en cuatro microservicios principales:
 
 **Entidades:**
 
-* Rutas
-* Tramos
-* TramosXRutas
-* Tarifas
+* RUTAS
+* TRAMOS
+* TRAMOS_X_RUTAS
+* ESTADOS_TRAMO_RUTA
+* TARIFAS
 
+**Diagrama Entidad-Relación:**
+
+![DER Depositos](docs/DerMsRutas.png)
 ---
 
 ## **3️⃣ ServicioDepositos**
@@ -72,10 +88,14 @@ La arquitectura se divide en cuatro microservicios principales:
 
 **Entidades:**
 
-* Ubicaciones
-* Depositos
-* EstadiasDeposito
+* UBICACIONES
+* DEPOSITOS
+* ESTADIAS_DEPOSITO
+* ESTADOS_ESTADIA_DEPOSITO
 
+**Diagrama Entidad-Relación:**
+
+![DER Depositos](docs/DerMsDepositos.png)
 ---
 
 ## **4️⃣ ServicioPersonas**
@@ -88,17 +108,14 @@ La arquitectura se divide en cuatro microservicios principales:
 
 **Entidades:**
 
-* Personas
-* Clientes
-* Transportistas
-* Camiones
+* PERSONAS
+* CLIENTES
+* TRANSPORTISTAS
+* CAMIONES
 
----
+**Diagrama Entidad-Relación:**
 
-# 🗄️ **DIAGRAMA ENTIDAD–RELACIÓN**
-
-![Diagrama del sistema](docs/DiagramaEntidadRelacion.png)
-
+![DER Depositos](docs/DerMsPersonas.png)
 ---
 
 # 🔐 **Seguridad**
