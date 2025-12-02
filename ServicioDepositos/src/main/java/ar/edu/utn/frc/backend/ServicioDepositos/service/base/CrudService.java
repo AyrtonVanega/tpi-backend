@@ -2,10 +2,10 @@ package ar.edu.utn.frc.backend.ServicioDepositos.service.base;
 
 import java.util.List;
 
-public interface CrudService<T, ID> {
-    T crear(T entity);
-    T actualizar(ID id, T entity);
+public interface CrudService<ResponseDTO, RequestDTO, ID> {
+    ResponseDTO crear(RequestDTO entity);
+    ResponseDTO actualizar(ID id, RequestDTO entity);
     void eliminar(ID id);
-    T obtenerPorId(ID id);
-    List<T> obtenerTodos();
+    ResponseDTO obtenerPorId(ID id);
+    List<ResponseDTO> obtenerTodos();
 }

@@ -1,3 +1,4 @@
+/*
 package ar.edu.utn.frc.backend.ServicioDepositos.service.impl;
 
 import java.util.List;
@@ -28,3 +29,4 @@ public class EstadoEstadiaDepositoServiceImpl implements IEstadoEstadiaDepositoS
         return List.of();
     }
 }
+ */

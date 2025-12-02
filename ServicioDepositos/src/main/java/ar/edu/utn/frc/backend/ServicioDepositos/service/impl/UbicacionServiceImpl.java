@@ -4,27 +4,70 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.ServicioDepositos.dto.UbicacionRequestDto;
+import ar.edu.utn.frc.backend.ServicioDepositos.dto.UbicacionResponseDto;
+import ar.edu.utn.frc.backend.ServicioDepositos.mapper.UbicacionMapper;
 import ar.edu.utn.frc.backend.ServicioDepositos.model.Ubicacion;
+import ar.edu.utn.frc.backend.ServicioDepositos.repository.UbicacionRepository;
 import ar.edu.utn.frc.backend.ServicioDepositos.service.interfaces.IUbicacionService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class UbicacionServiceImpl implements IUbicacionService {
 
-    public Ubicacion crear(Ubicacion ubicacion) {
-        return ubicacion;
+    private final UbicacionRepository ubicacionRepository;
+    private final UbicacionMapper ubicacionMapper;
+
+    public UbicacionResponseDto crear(UbicacionRequestDto ubicacionRequestDto) {
+        Ubicacion ubicacion = ubicacionMapper.toEntity(ubicacionRequestDto);
+        ubicacionRepository.save(ubicacion);
+        return ubicacionMapper.toResponse(ubicacion);
     }
 
-    public Ubicacion actualizar(Long idUbicacion, Ubicacion ubicacion) {
-        return ubicacion;
+    public UbicacionResponseDto actualizar(Long idUbicacion, UbicacionRequestDto ubicacionRequestDto) {
+        Ubicacion ubicacion = ubicacionRepository.findById(idUbicacion)
+                .orElseThrow(() -> {
+                    log.error("Ubicacion {} no encontrada", idUbicacion);
+                    return new RuntimeException();
+                });
+
+        ubicacion.setDireccion(ubicacionRequestDto.getDireccion());
+        ubicacion.setLatitud(ubicacionRequestDto.getLatitud());
+        ubicacion.setLongitud(ubicacionRequestDto.getLongitud());
+        ubicacion.setNombreCiudad(ubicacionRequestDto.getNombreCiudad());
+
+        ubicacionRepository.save(ubicacion);
+
+        return ubicacionMapper.toResponse(ubicacion);
     }
 
-    public void eliminar(Long idUbicacion) {}
+    public void eliminar(Long idUbicacion) {
+        Ubicacion ubicacion = ubicacionRepository.findById(idUbicacion)
+                .orElseThrow(() -> {
+                    log.error("Ubicacion {} no encontrada", idUbicacion);
+                    return new RuntimeException();
+                });
 
-    public Ubicacion obtenerPorId(Long idUbicacion) {
-        return Ubicacion.builder().build();
+        ubicacionRepository.delete(ubicacion);
     }
 
-    public List<Ubicacion> obtenerTodos() {
-        return List.of();
+    public UbicacionResponseDto obtenerPorId(Long idUbicacion) {
+        Ubicacion ubicacion = ubicacionRepository.findById(idUbicacion)
+                .orElseThrow(() -> {
+                    log.error("Ubicacion {} no encontrada", idUbicacion);
+                    return new RuntimeException();
+                });
+
+        return ubicacionMapper.toResponse(ubicacion);
+    }
+
+    public List<UbicacionResponseDto> obtenerTodos() {
+        List<Ubicacion> ubicaciones = ubicacionRepository.findAll();
+        return ubicaciones.stream()
+                .map(ubicacionMapper::toResponse)
+                .toList();
     }
 }
