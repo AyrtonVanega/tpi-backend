@@ -1,0 +1,181 @@
+version: '3.9'
+
+services:
+
+  # ----------------------------------------------------
+  # API GATEWAY
+  # ----------------------------------------------------
+
+  #ms-apigateway:
+  #  build:
+  #    context: ./ApiGateway
+  #    dockerfile: Dockerfile
+  #  container_name: ms_apigateway
+  #  ports:
+  #    - "9000:9000"
+  #  depends_on:
+  #    - ms-transporte
+  #    - ms-solicitudtransporte
+  #    - ms-logistica
+  #  restart: on-failure
+  #  networks:
+  #    - TP_Back
+
+  # ----------------------------------------------------
+  # SERVICIO DEPOSITOS
+  # ----------------------------------------------------
+
+  ServicioDepositos:
+    build:
+      context: ./ServicioDepositos
+      dockerfile: Dockerfile
+    container_name: ms_depositos
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db_depositos
+    restart: on-failure # Si la app falla, intenta reiniciarla
+    networks:
+      - TP_Back
+
+  db_depositos:
+    image: postgres:16
+    container_name: db_depositos
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - depositos_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_depositos
+    networks:
+      - TP_Back
+
+  # ----------------------------------------------------
+  # SERVICIO PERSONAS
+  # ----------------------------------------------------
+
+  ServicioPersonas:
+    build:
+      context: ./ServicioPersonas
+      dockerfile: Dockerfile
+    container_name: ms_personas
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db_personas
+    restart: on-failure
+    networks:
+      - TP_Back
+
+  db_personas:
+    image: postgres:16
+    container_name: db_personas
+    ports:
+      - "5434:5432"
+    volumes:
+      - personas_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_personas
+    networks:
+      - TP_Back
+
+  # ----------------------------------------------------
+  # SERVICIO RUTAS
+  # ----------------------------------------------------
+
+  ServicioRutas:
+    build:
+      context: ./ServicioRutas
+      dockerfile: Dockerfile
+    container_name: ms_rutas
+    ports:
+      - "8082:8080"
+    depends_on:
+      - db_rutas
+    restart: on-failure
+    networks:
+      - TP_Back
+
+  db_rutas:
+    image: postgres:16
+    container_name: db_rutas
+    ports:
+      - "5435:5432"
+    volumes:
+      - rutas_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_rutas
+    networks:
+      - TP_Back
+
+  # ----------------------------------------------------
+  # SERVICIO SOLICITUDES
+  # ----------------------------------------------------
+
+  ServicioSolicitudes:
+    build:
+      context: ./ServicioSolicitudes
+      dockerfile: Dockerfile
+    container_name: ms_solicitudes
+    ports:
+      - "8083:8080"
+    depends_on:
+      - db_solicitudes
+    restart: on-failure
+    networks:
+      - TP_Back
+
+  db_solicitudes:
+    image: postgres:16
+    container_name: db_solicitudes
+    ports:
+      - "5436:5432"
+    volumes:
+      - solicitudes_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_solicitudes
+    networks:
+      - TP_Back
+
+  # ----------------------------------------------------
+  # OSRM - ROUTING SERVICE
+  # ----------------------------------------------------
+
+  osrm:
+    image: osrm/osrm-backend
+    container_name: osrm_server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./osrm-data:/data
+    command: osrm-routed /data/argentina-latest.osrm
+    restart: on-failure
+    networks:
+      - TP_Back
+
+  # ----------------------------------------------------
+  # DEFINICIÓN DE VOLÚMENES PERSISTENTES
+  # ----------------------------------------------------
+volumes:
+  depositos_data:
+  personas_data:
+  rutas_data:
+  solicitudes_data:
+
+  # ----------------------------------------------------
+  # DEFINICIÓN DE REDES
+  # ----------------------------------------------------
+networks:
+  # Red personalizada para comunicación interna de todos los microservicios y DBs
+  TP_Back:
+    driver: bridge
