@@ -1,10 +1,12 @@
 package ar.edu.utn.frc.backend.ServicioDepositos.dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DepositoRequestDto {
     private String direccion;
     private double latitud;

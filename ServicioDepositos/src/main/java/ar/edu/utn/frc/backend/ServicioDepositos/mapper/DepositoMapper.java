@@ -1,17 +1,33 @@
 package ar.edu.utn.frc.backend.ServicioDepositos.mapper;
 
-import org.mapstruct.Mapper;
-
 import ar.edu.utn.frc.backend.ServicioDepositos.dto.DepositoRequestDto;
 import ar.edu.utn.frc.backend.ServicioDepositos.dto.DepositoResponseDto;
 import ar.edu.utn.frc.backend.ServicioDepositos.model.Deposito;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring", uses = UbicacionMapper.class)
-public interface DepositoMapper extends GenericMapper<Deposito, DepositoRequestDto, DepositoResponseDto> {
+@Component
+public class DepositoMapper implements GenericMapper<Deposito, DepositoResponseDto, DepositoRequestDto> {
     
-    @Override
-    Deposito toEntity(DepositoRequestDto dto);
+    public Deposito toEntity(DepositoRequestDto dto) {
+        Deposito deposito = new Deposito();
 
-    @Override
-    DepositoResponseDto toResponse(Deposito entity);
+        deposito.setDireccion(dto.getDireccion());
+        deposito.setLatitud(dto.getLatitud());
+        deposito.setLongitud(dto.getLongitud());
+        deposito.setNombreCiudad(dto.getNombreCiudad());
+        deposito.setCostoEstadiaDiaria(dto.getCostoEstadiaDiaria());
+
+        return deposito;
+    }
+
+    public DepositoResponseDto toResponse(Deposito entity) {
+        return DepositoResponseDto.builder()
+                .idDeposito(entity.getId())
+                .direccion(entity.getDireccion())
+                .latitud(entity.getLatitud())
+                .longitud(entity.getLongitud())
+                .nombreCiudad(entity.getNombreCiudad())
+                .costoEstadiaDiaria(entity.getCostoEstadiaDiaria())
+                .build();
+    }
 }

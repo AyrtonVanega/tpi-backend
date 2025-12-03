@@ -47,7 +47,7 @@ public class DepositoController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/idDeposito")
+    @GetMapping("/{idDeposito}")
     public ResponseEntity<DepositoResponseDto> obtenerDepositoPorId(@PathVariable Long idDeposito) {
         return ResponseEntity.ok(depositoService.obtenerPorId(idDeposito));
     }

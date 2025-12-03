@@ -1,17 +1,31 @@
 package ar.edu.utn.frc.backend.ServicioDepositos.mapper;
 
-import org.mapstruct.Mapper;
-
 import ar.edu.utn.frc.backend.ServicioDepositos.dto.UbicacionRequestDto;
 import ar.edu.utn.frc.backend.ServicioDepositos.dto.UbicacionResponseDto;
 import ar.edu.utn.frc.backend.ServicioDepositos.model.Ubicacion;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface UbicacionMapper extends GenericMapper<Ubicacion, UbicacionRequestDto, UbicacionResponseDto> {
-    
-    @Override
-    Ubicacion toEntity(UbicacionRequestDto dto);
+@Component
+public class UbicacionMapper implements GenericMapper<Ubicacion, UbicacionResponseDto, UbicacionRequestDto> {
 
-    @Override
-    UbicacionResponseDto toResponse(Ubicacion entity);
+    public Ubicacion toEntity(UbicacionRequestDto dto) {
+        Ubicacion ubicacion = new Ubicacion();
+
+        ubicacion.setDireccion(dto.getDireccion());
+        ubicacion.setLatitud(dto.getLatitud());
+        ubicacion.setLongitud(dto.getLongitud());
+        ubicacion.setNombreCiudad(dto.getNombreCiudad());
+
+        return ubicacion;
+    }
+
+    public UbicacionResponseDto toResponse(Ubicacion entity){
+        return UbicacionResponseDto.builder()
+                .idUbicacion(entity.getId())
+                .direccion(entity.getDireccion())
+                .latitud(entity.getLatitud())
+                .longitud(entity.getLongitud())
+                .nombreCiudad(entity.getNombreCiudad())
+                .build();
+    }
 }

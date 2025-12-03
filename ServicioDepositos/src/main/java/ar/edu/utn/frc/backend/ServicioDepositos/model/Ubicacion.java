@@ -31,7 +31,7 @@ public class Ubicacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_ubicacion")
-    private Long idUbicacion;
+    private Long id;
 
     @Column
     private String direccion;
@@ -46,4 +46,15 @@ public class Ubicacion {
     private String nombreCiudad;
 
     //Relacion con Tramos
+
+    @Override
+    public String toString() {
+        return "Ubicacion{" +
+                "id=" + id +
+                ", direccion='" + direccion + '\'' +
+                ", latitud=" + latitud +
+                ", longitud=" + longitud +
+                ", nombreCiudad='" + nombreCiudad + '\'' +
+                '}';
+    }
 }

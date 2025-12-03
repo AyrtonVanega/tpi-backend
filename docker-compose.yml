@@ -25,7 +25,7 @@ services:
   # SERVICIO DEPOSITOS
   # ----------------------------------------------------
 
-  ServicioDepositos:
+  servicio-depositos:
     build:
       context: ./ServicioDepositos
       dockerfile: Dockerfile
@@ -58,7 +58,7 @@ services:
   # SERVICIO PERSONAS
   # ----------------------------------------------------
 
-  ServicioPersonas:
+  servicio-personas:
     build:
       context: ./ServicioPersonas
       dockerfile: Dockerfile
@@ -89,7 +89,7 @@ services:
   # SERVICIO RUTAS
   # ----------------------------------------------------
 
-  ServicioRutas:
+  servicio-rutas:
     build:
       context: ./ServicioRutas
       dockerfile: Dockerfile
@@ -120,7 +120,7 @@ services:
   # SERVICIO SOLICITUDES
   # ----------------------------------------------------
 
-  ServicioSolicitudes:
+  servicio-solicitudes:
     build:
       context: ./ServicioSolicitudes
       dockerfile: Dockerfile

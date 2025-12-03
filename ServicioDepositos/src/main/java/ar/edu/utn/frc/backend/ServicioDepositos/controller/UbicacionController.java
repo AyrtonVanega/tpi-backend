@@ -47,7 +47,7 @@ public class UbicacionController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/idUbicacion")
+    @GetMapping("/{idUbicacion}")
     public ResponseEntity<UbicacionResponseDto> obtenerUbicacionPorId(@PathVariable Long idUbicacion) {
         return ResponseEntity.ok(ubicacionService.obtenerPorId(idUbicacion));
     }
