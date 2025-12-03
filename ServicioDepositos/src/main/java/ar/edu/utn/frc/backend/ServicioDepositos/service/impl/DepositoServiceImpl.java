@@ -21,12 +21,14 @@ public class DepositoServiceImpl implements IDepositoService {
     private final DepositoRepository depositoRepository;
     private final DepositoMapper depositoMapper;
 
+    @Override
     public DepositoResponseDto crear(DepositoRequestDto depositoRequestDto) {
         Deposito deposito = depositoMapper.toEntity(depositoRequestDto);
         depositoRepository.save(deposito);
         return depositoMapper.toResponse(deposito);
     }
 
+    @Override
     public DepositoResponseDto actualizar(Long idDeposito, DepositoRequestDto depositoRequestDto) {
         Deposito deposito = depositoRepository.findById(idDeposito)
                 .orElseThrow(() -> {
@@ -45,6 +47,7 @@ public class DepositoServiceImpl implements IDepositoService {
         return depositoMapper.toResponse(deposito);
     }
 
+    @Override
     public void eliminar(Long idDeposito) {
         Deposito deposito = depositoRepository.findById(idDeposito)
                 .orElseThrow(() -> {
@@ -55,6 +58,7 @@ public class DepositoServiceImpl implements IDepositoService {
         depositoRepository.delete(deposito);
     }
 
+    @Override
     public DepositoResponseDto obtenerPorId(Long idDeposito) {
         Deposito deposito = depositoRepository.findById(idDeposito)
                 .orElseThrow(() -> {
@@ -65,10 +69,25 @@ public class DepositoServiceImpl implements IDepositoService {
         return depositoMapper.toResponse(deposito);
     }
 
+    @Override
     public List<DepositoResponseDto> obtenerTodos() {
         List<Deposito> depositos = depositoRepository.findAll();
         return depositos.stream()
                 .map(depositoMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public Deposito buscarDepositoPorId(Long idDeposito) {
+        return depositoRepository.findById(idDeposito)
+                .orElseThrow(() -> {
+                    log.error("Deposito {} no encontrado", idDeposito);
+                    return new RuntimeException();
+                });
+    }
+
+    @Override
+    public List<Deposito> buscarDepositos() {
+        return depositoRepository.findAll();
     }
 }

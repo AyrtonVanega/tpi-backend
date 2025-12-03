@@ -24,7 +24,7 @@ public class EstadoEstadiaDeposito {
     @Column(name = "id_estado")
     private Long idEstado;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String codigo;
 
     @Column

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UbicacionMapper implements GenericMapper<Ubicacion, UbicacionResponseDto, UbicacionRequestDto> {
 
+    @Override
     public Ubicacion toEntity(UbicacionRequestDto dto) {
         Ubicacion ubicacion = new Ubicacion();
 
@@ -19,6 +20,7 @@ public class UbicacionMapper implements GenericMapper<Ubicacion, UbicacionRespon
         return ubicacion;
     }
 
+    @Override
     public UbicacionResponseDto toResponse(Ubicacion entity){
         return UbicacionResponseDto.builder()
                 .idUbicacion(entity.getId())

@@ -8,8 +8,9 @@ import lombok.Getter;
 @Getter
 @Builder
 public class EstadiaDepositoResponseDto {
-    //private id
+    private Long idDeposito;
+    private Long idSolicitud;
     private LocalDateTime fechaHoraEntrada;
     private LocalDateTime fechaHoraSalida;
-    //private estado
+    private EstadoEstadiaDepositoResponseDto estado;
 }

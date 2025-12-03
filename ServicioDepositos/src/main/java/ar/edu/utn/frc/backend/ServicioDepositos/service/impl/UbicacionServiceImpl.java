@@ -21,12 +21,14 @@ public class UbicacionServiceImpl implements IUbicacionService {
     private final UbicacionRepository ubicacionRepository;
     private final UbicacionMapper ubicacionMapper;
 
+    @Override
     public UbicacionResponseDto crear(UbicacionRequestDto ubicacionRequestDto) {
         Ubicacion ubicacion = ubicacionMapper.toEntity(ubicacionRequestDto);
         ubicacionRepository.save(ubicacion);
         return ubicacionMapper.toResponse(ubicacion);
     }
 
+    @Override
     public UbicacionResponseDto actualizar(Long idUbicacion, UbicacionRequestDto ubicacionRequestDto) {
         Ubicacion ubicacion = ubicacionRepository.findById(idUbicacion)
                 .orElseThrow(() -> {
@@ -44,6 +46,7 @@ public class UbicacionServiceImpl implements IUbicacionService {
         return ubicacionMapper.toResponse(ubicacion);
     }
 
+    @Override
     public void eliminar(Long idUbicacion) {
         Ubicacion ubicacion = ubicacionRepository.findById(idUbicacion)
                 .orElseThrow(() -> {
@@ -54,6 +57,7 @@ public class UbicacionServiceImpl implements IUbicacionService {
         ubicacionRepository.delete(ubicacion);
     }
 
+    @Override
     public UbicacionResponseDto obtenerPorId(Long idUbicacion) {
         Ubicacion ubicacion = ubicacionRepository.findById(idUbicacion)
                 .orElseThrow(() -> {
@@ -64,6 +68,7 @@ public class UbicacionServiceImpl implements IUbicacionService {
         return ubicacionMapper.toResponse(ubicacion);
     }
 
+    @Override
     public List<UbicacionResponseDto> obtenerTodos() {
         List<Ubicacion> ubicaciones = ubicacionRepository.findAll();
         return ubicaciones.stream()

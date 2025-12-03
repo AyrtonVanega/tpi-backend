@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DepositoMapper implements GenericMapper<Deposito, DepositoResponseDto, DepositoRequestDto> {
-    
+
+    @Override
     public Deposito toEntity(DepositoRequestDto dto) {
         Deposito deposito = new Deposito();
 
@@ -20,6 +21,7 @@ public class DepositoMapper implements GenericMapper<Deposito, DepositoResponseD
         return deposito;
     }
 
+    @Override
     public DepositoResponseDto toResponse(Deposito entity) {
         return DepositoResponseDto.builder()
                 .idDeposito(entity.getId())

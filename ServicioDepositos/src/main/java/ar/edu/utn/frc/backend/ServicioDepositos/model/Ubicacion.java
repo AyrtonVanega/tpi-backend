@@ -46,15 +46,4 @@ public class Ubicacion {
     private String nombreCiudad;
 
     //Relacion con Tramos
-
-    @Override
-    public String toString() {
-        return "Ubicacion{" +
-                "id=" + id +
-                ", direccion='" + direccion + '\'' +
-                ", latitud=" + latitud +
-                ", longitud=" + longitud +
-                ", nombreCiudad='" + nombreCiudad + '\'' +
-                '}';
-    }
 }

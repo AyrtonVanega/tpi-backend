@@ -1,33 +1,98 @@
-/*
 package ar.edu.utn.frc.backend.ServicioDepositos.service.impl;
 
 import java.util.List;
 
+import ar.edu.utn.frc.backend.ServicioDepositos.dto.EstadiaDepositoRequestDto;
+import ar.edu.utn.frc.backend.ServicioDepositos.dto.EstadiaDepositoResponseDto;
+import ar.edu.utn.frc.backend.ServicioDepositos.mapper.EstadiaDepositoMapper;
+import ar.edu.utn.frc.backend.ServicioDepositos.model.Deposito;
+import ar.edu.utn.frc.backend.ServicioDepositos.model.EstadiaDeposito;
+import ar.edu.utn.frc.backend.ServicioDepositos.repository.EstadiaDepositoRepository;
+import ar.edu.utn.frc.backend.ServicioDepositos.service.interfaces.IDepositoService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frc.backend.ServicioDepositos.model.EstadiaDeposito;
 import ar.edu.utn.frc.backend.ServicioDepositos.model.EstadiaDepositoId;
 import ar.edu.utn.frc.backend.ServicioDepositos.service.interfaces.IEstadiaDepositoService;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
 
-    public EstadiaDeposito crear(EstadiaDeposito estadiaDeposito) {
-        return estadiaDeposito;
+    private final IDepositoService depositoService;
+
+    private final EstadiaDepositoRepository estadiaDepositoRepository;
+
+    private final EstadiaDepositoMapper estadiaMapper;
+
+    @Override
+    public EstadiaDepositoResponseDto crear(EstadiaDepositoRequestDto dto) {
+        EstadiaDeposito estadiaDeposito = estadiaMapper.toEntity(dto);
+        estadiaDepositoRepository.save(estadiaDeposito);
+        return estadiaMapper.toResponse(estadiaDeposito);
     }
 
-    public EstadiaDeposito actualizar(EstadiaDepositoId idEstadiaDeposito, EstadiaDeposito estadiaDeposito) {
-        return estadiaDeposito;
+    @Override
+    public EstadiaDepositoResponseDto actualizar(EstadiaDepositoId idEstadiaDeposito, EstadiaDepositoRequestDto dto) {
+        EstadiaDeposito estadiaDeposito = estadiaDepositoRepository.findById(idEstadiaDeposito)
+                .orElseThrow(() -> {
+                    log.error(
+                            "Estadia Deposito no encontrada - idDeposito:{}, idSolicitud:{}",
+                            idEstadiaDeposito.getIdDeposito(),
+                            idEstadiaDeposito.getIdSolicitud()
+                    );
+                    return new RuntimeException();
+                });
+
+        Deposito deposito = depositoService.buscarDepositoPorId(dto.getIdDeposito());
+        //EstadoEstadiaDeposito estado = estadoService.buscarEstadoPorId(dto.getIdEstado());
+
+        estadiaDeposito.setDeposito(deposito);
+        estadiaDeposito.setIdSolicitud(dto.getIdSolicitud());
+        estadiaDeposito.setFechaHoraEntrada(dto.getFechaHoraEntrada());
+        estadiaDeposito.setFechaHoraSalida(dto.getFechaHoraSalida());
+        //estadiaDeposito.setEstado(estado);
+
+        estadiaDepositoRepository.save(estadiaDeposito);
+
+        return estadiaMapper.toResponse(estadiaDeposito);
     }
 
-    public void eliminar(EstadiaDepositoId idEstadiaDeposito) {}
-
-    public EstadiaDeposito obtenerPorId(EstadiaDepositoId idEstadiaDeposito) {
-        return new EstadiaDeposito();
+    @Override
+    public void eliminar(EstadiaDepositoId idEstadiaDeposito) {
+        EstadiaDeposito estadiaDeposito = estadiaDepositoRepository.findById(idEstadiaDeposito)
+                .orElseThrow(() -> {
+                    log.error(
+                            "Estadia Deposito no encontrada - idDeposito:{}, idSolicitud:{}",
+                            idEstadiaDeposito.getIdDeposito(),
+                            idEstadiaDeposito.getIdSolicitud()
+                    );
+                    return new RuntimeException();
+                });
+        estadiaDepositoRepository.delete(estadiaDeposito);
     }
 
-    public List<EstadiaDeposito> obtenerTodos() {
-        return List.of();
+    @Override
+    public EstadiaDepositoResponseDto obtenerPorId(EstadiaDepositoId idEstadiaDeposito) {
+        EstadiaDeposito estadiaDeposito = estadiaDepositoRepository.findById(idEstadiaDeposito)
+                .orElseThrow(() -> {
+                    log.error(
+                            "Estadia Deposito no encontrada - idDeposito:{}, idSolicitud:{}",
+                            idEstadiaDeposito.getIdDeposito(),
+                            idEstadiaDeposito.getIdSolicitud()
+                    );
+                    return new RuntimeException();
+                });
+        return estadiaMapper.toResponse(estadiaDeposito);
+    }
+
+    @Override
+    public List<EstadiaDepositoResponseDto> obtenerTodos() {
+        List<EstadiaDeposito> estadias = estadiaDepositoRepository.findAll();
+        return estadias.stream()
+                .map(estadiaMapper::toResponse)
+                .toList();
     }
 }
- */

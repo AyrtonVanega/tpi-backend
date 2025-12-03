@@ -34,9 +34,4 @@ public class Deposito extends Ubicacion{
 
     @OneToMany(mappedBy = "deposito", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<EstadiaDeposito> estadiasDeposito;
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }
