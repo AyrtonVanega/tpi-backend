@@ -12,13 +12,13 @@ import ar.edu.utn.frc.backend.ServicioPersonas.service.interfaces.ICamionService
 public class CamionServiceImpl implements ICamionService {
 
     @Override
-    public CamionResponseDto crear(CamionRequestDto entity) {
+    public CamionResponseDto crear(CamionRequestDto dto) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'crear'");
     }
 
     @Override
-    public CamionResponseDto actualizar(String id, CamionRequestDto entity) {
+    public CamionResponseDto actualizar(String id, CamionRequestDto dto) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'actualizar'");
     }
