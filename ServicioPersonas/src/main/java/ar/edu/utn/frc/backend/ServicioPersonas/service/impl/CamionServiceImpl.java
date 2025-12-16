@@ -6,38 +6,74 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.ServicioPersonas.dto.CamionRequestDto;
 import ar.edu.utn.frc.backend.ServicioPersonas.dto.CamionResponseDto;
+import ar.edu.utn.frc.backend.ServicioPersonas.mapper.CamionMapper;
+import ar.edu.utn.frc.backend.ServicioPersonas.model.Camion;
+import ar.edu.utn.frc.backend.ServicioPersonas.repository.CamionRepository;
 import ar.edu.utn.frc.backend.ServicioPersonas.service.interfaces.ICamionService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class CamionServiceImpl implements ICamionService {
+
+    private final CamionRepository camionRepository;
+    private final CamionMapper camionMapper;
 
     @Override
     public CamionResponseDto crear(CamionRequestDto dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'crear'");
+        Camion camion = camionMapper.toEntity(dto);
+        camionRepository.save(camion);
+        return camionMapper.toResponse(camion);
     }
 
     @Override
-    public CamionResponseDto actualizar(String id, CamionRequestDto dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actualizar'");
+    public CamionResponseDto actualizar(String idCamion, CamionRequestDto dto) {
+        Camion camion = camionRepository.findById(idCamion)
+                .orElseThrow(() -> {
+                    log.error("Camion {} no encontrado", idCamion);
+                    return new RuntimeException();
+                });
+
+        camion.setVolumen(dto.getVolumen());
+        camion.setPeso(dto.getPeso());
+        camion.setDisponibilidad(dto.isDisponibilidad());
+        camion.setCostoBaseKm(dto.getCostoBaseKm());
+        camion.setConsumoCombustiblePromedio(dto.getConsumoCombustiblePromedio());
+
+        camionRepository.save(camion);
+
+        return camionMapper.toResponse(camion);
     }
 
     @Override
-    public void eliminar(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eliminar'");
+    public void eliminar(String idCamion) {
+        Camion camion = camionRepository.findById(idCamion)
+                .orElseThrow(() -> {
+                    log.error("Camion {} no encontrado", idCamion);
+                    return new RuntimeException();
+                });
+
+        camionRepository.delete(camion);
     }
 
     @Override
-    public CamionResponseDto obtenerPorId(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerPorId'");
+    public CamionResponseDto obtenerPorId(String idCamion) {
+        Camion camion = camionRepository.findById(idCamion)
+                .orElseThrow(() -> {
+                    log.error("Camion {} no encontrado", idCamion);
+                    return new RuntimeException();
+                });
+            
+        return camionMapper.toResponse(camion);
     }
 
     @Override
     public List<CamionResponseDto> obtenerTodos() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerTodos'");
+        return camionRepository.findAll()
+                .stream()
+                .map(camionMapper::toResponse)
+                .toList();
     }
 }
