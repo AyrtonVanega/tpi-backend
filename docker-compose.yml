@@ -12,7 +12,7 @@ services:
       dockerfile: Dockerfile
     container_name: api_gateway
     ports:
-      - "9000:9000"
+      - "9000:8080"
     depends_on:
       - eureka-server
     restart: on-failure
