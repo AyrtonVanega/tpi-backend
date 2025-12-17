@@ -6,20 +6,33 @@ services:
   # API GATEWAY
   # ----------------------------------------------------
 
-  #ms-apigateway:
-  #  build:
-  #    context: ./ApiGateway
-  #    dockerfile: Dockerfile
-  #  container_name: ms_apigateway
-  #  ports:
-  #    - "9000:9000"
-  #  depends_on:
-  #    - ms-transporte
-  #    - ms-solicitudtransporte
-  #    - ms-logistica
-  #  restart: on-failure
-  #  networks:
-  #    - TP_Back
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api_gateway
+    ports:
+      - "9000:9000"
+    depends_on:
+      - eureka-server
+    restart: on-failure
+    networks:
+      - TP_Back
+    
+  # ----------------------------------------------------
+  # EUREKA SERVER
+  # ----------------------------------------------------
+
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    container_name: eureka_server
+    ports:
+      - "8761:8761"
+    restart: on-failure
+    networks:
+      - TP_Back
 
   # ----------------------------------------------------
   # SERVICIO DEPOSITOS
@@ -27,12 +40,13 @@ services:
 
   servicio-depositos:
     build:
-      context: ./ServicioDepositos
+      context: ./servicio-depositos
       dockerfile: Dockerfile
     container_name: ms_depositos
     ports:
       - "8080:8080"
     depends_on:
+      - eureka-server
       - db_depositos
     restart: on-failure # Si la app falla, intenta reiniciarla
     networks:
@@ -60,12 +74,13 @@ services:
 
   servicio-personas:
     build:
-      context: ./ServicioPersonas
+      context: ./servicio-personas
       dockerfile: Dockerfile
     container_name: ms_personas
     ports:
       - "8081:8080"
     depends_on:
+      - eureka-server
       - db_personas
     restart: on-failure
     networks:
@@ -91,12 +106,13 @@ services:
 
   servicio-rutas:
     build:
-      context: ./ServicioRutas
+      context: ./servicio-rutas
       dockerfile: Dockerfile
     container_name: ms_rutas
     ports:
       - "8082:8080"
     depends_on:
+      - eureka-server
       - db_rutas
     restart: on-failure
     networks:
@@ -122,12 +138,13 @@ services:
 
   servicio-solicitudes:
     build:
-      context: ./ServicioSolicitudes
+      context: ./servicio-solicitudes
       dockerfile: Dockerfile
     container_name: ms_solicitudes
     ports:
       - "8083:8080"
     depends_on:
+      - eureka-server
       - db_solicitudes
     restart: on-failure
     networks:
