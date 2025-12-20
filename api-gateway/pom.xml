@@ -32,6 +32,12 @@
 	</properties>
 	<dependencies>
 
+		<!-- Reactor/Reactive stack -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
 		<!-- Spring Cloud Gateway -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -68,6 +74,7 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- Test -->
 		<dependency>
 			<groupId>io.projectreactor</groupId>
 			<artifactId>reactor-test</artifactId>

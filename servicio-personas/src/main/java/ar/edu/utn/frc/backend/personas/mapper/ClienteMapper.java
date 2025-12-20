@@ -1,9 +1,12 @@
 package ar.edu.utn.frc.backend.personas.mapper;
 
+import org.springframework.stereotype.Component;
+
 import ar.edu.utn.frc.backend.personas.dto.ClienteRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.ClienteResponseDto;
 import ar.edu.utn.frc.backend.personas.model.Cliente;
 
+@Component
 public class ClienteMapper implements GenericMapper<Cliente, ClienteResponseDto, ClienteRequestDto> {
 
     @Override

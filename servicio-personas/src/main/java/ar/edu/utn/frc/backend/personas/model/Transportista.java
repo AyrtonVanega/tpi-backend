@@ -16,7 +16,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "CLIENTES")
+@Table(name = "TRANSPORTISTAS")
 @PrimaryKeyJoinColumns({
     @PrimaryKeyJoinColumn(name = "doc", referencedColumnName = "doc"),
     @PrimaryKeyJoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
