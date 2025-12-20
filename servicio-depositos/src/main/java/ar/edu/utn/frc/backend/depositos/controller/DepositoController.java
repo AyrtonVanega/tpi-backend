@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/depositos")
+@RequestMapping("/depositos")
 public class DepositoController {
 
     private final IDepositoService depositoService;

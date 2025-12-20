@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/contenedores")
+@RequestMapping("/contenedores")
 public class ContenedorController {
 
     private final IContenedorService contenedorService;

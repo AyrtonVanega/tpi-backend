@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/camiones")
+@RequestMapping("/camiones")
 public class CamionController {
 
     private final ICamionService camionService;

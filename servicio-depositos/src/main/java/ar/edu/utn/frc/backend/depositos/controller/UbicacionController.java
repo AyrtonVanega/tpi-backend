@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/ubicaciones")
+@RequestMapping("/ubicaciones")
 public class UbicacionController {
     
     private final IUbicacionService ubicacionService;

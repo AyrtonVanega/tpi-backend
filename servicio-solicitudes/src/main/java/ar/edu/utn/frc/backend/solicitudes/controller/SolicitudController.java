@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/solicitudes")
+@RequestMapping("/solicitudes")
 public class SolicitudController {
 
     private final ISolicitudService solicitudService;

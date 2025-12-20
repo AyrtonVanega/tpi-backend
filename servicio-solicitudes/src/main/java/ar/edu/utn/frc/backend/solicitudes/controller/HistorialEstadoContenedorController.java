@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/historiales-estado-contenedor")
+@RequestMapping("/historiales-estado-contenedor")
 public class HistorialEstadoContenedorController {
 
     private final IHistorialEstadoContenedorService historialService;

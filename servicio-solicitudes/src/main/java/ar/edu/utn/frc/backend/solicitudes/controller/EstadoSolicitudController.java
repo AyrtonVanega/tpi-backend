@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/estados-solicitud")
+@RequestMapping("/estados-solicitud")
 public class EstadoSolicitudController {
 
     private final IEstadoSolicitudService estadoSolicitudService;

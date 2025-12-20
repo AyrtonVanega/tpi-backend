@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/estados-contenedor")
+@RequestMapping("/estados-contenedor")
 public class EstadoContenedorController {
 
     private final IEstadoContenedorService estadoContenedorService;

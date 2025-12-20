@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/estadias-deposito")
+@RequestMapping("/estadias-deposito")
 public class EstadiaDepositoController {
 
     private final IEstadiaDepositoService estadiaDepositoService;
