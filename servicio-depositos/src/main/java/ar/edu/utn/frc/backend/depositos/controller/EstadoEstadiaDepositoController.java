@@ -3,6 +3,7 @@ package ar.edu.utn.frc.backend.depositos.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import ar.edu.utn.frc.backend.depositos.dto.EstadoEstadiaDepositoRequestDto;
@@ -18,6 +19,7 @@ public class EstadoEstadiaDepositoController {
 
     private final IEstadoEstadiaDepositoService estadoEstadiaDepositoService;
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @PostMapping
     public ResponseEntity<EstadoEstadiaDepositoResponseDto> crearEstadoEstadia(
             @RequestBody EstadoEstadiaDepositoRequestDto dto) {
@@ -27,6 +29,7 @@ public class EstadoEstadiaDepositoController {
                 .body(estadoEstadiaDeposito);
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @PutMapping("/{idEstadoEstadiaDeposito}")
     public ResponseEntity<EstadoEstadiaDepositoResponseDto> actualizarEstadoEstadia(
             @PathVariable Long idEstadoEstadiaDeposito,
@@ -34,6 +37,7 @@ public class EstadoEstadiaDepositoController {
         return ResponseEntity.ok(estadoEstadiaDepositoService.actualizar(idEstadoEstadiaDeposito, dto));
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @DeleteMapping("/{idEstadoEstadiaDeposito}")
     public ResponseEntity<Void> eliminarEstadoEstadia(
             @PathVariable Long idEstadoEstadiaDeposito) {
@@ -41,12 +45,14 @@ public class EstadoEstadiaDepositoController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping("/{idEstadoEstadiaDeposito}")
     public ResponseEntity<EstadoEstadiaDepositoResponseDto> obtenerEstadoEstadia(
             @PathVariable Long idEstadoEstadiaDeposito) {
         return ResponseEntity.ok(estadoEstadiaDepositoService.obtenerPorId(idEstadoEstadiaDeposito));
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping
     public ResponseEntity<List<EstadoEstadiaDepositoResponseDto>> obtenerEstadoEstadia() {
         return ResponseEntity.ok(estadoEstadiaDepositoService.obtenerTodos());

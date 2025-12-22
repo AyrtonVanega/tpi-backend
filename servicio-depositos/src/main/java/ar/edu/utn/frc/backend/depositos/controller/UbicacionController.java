@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class UbicacionController {
                 .body(ubicacionCreada);
     }
 
+    @PreAuthorize("hasRole('CLIENTE')")
     @PutMapping("/{idUbicacion}")
     public ResponseEntity<UbicacionResponseDto> actualizarUbicacion(
             @PathVariable Long idUbicacion,
@@ -41,17 +43,20 @@ public class UbicacionController {
         return ResponseEntity.ok(ubicacionService.actualizar(idUbicacion, ubicacionRequestDto));
     }
 
+    @PreAuthorize("hasRole('CLIENTE')")
     @DeleteMapping("/{idUbicacion}")
     public ResponseEntity<Void> eliminarUbicacion(@PathVariable Long idUbicacion) {
         ubicacionService.eliminar(idUbicacion);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping("/{idUbicacion}")
     public ResponseEntity<UbicacionResponseDto> obtenerUbicacionPorId(@PathVariable Long idUbicacion) {
         return ResponseEntity.ok(ubicacionService.obtenerPorId(idUbicacion));
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping()
     public ResponseEntity<List<UbicacionResponseDto>> obtenerUbicaciones() {
         return ResponseEntity.ok(ubicacionService.obtenerTodos());
