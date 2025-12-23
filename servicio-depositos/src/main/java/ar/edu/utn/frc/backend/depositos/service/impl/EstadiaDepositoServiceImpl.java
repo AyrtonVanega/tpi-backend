@@ -17,6 +17,7 @@ import ar.edu.utn.frc.backend.depositos.model.EstadoEstadiaDeposito;
 import ar.edu.utn.frc.backend.depositos.repository.EstadiaDepositoRepository;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IDepositoService;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IEstadiaDepositoService;
+import ar.edu.utn.frc.backend.depositos.service.interfaces.IEstadoEstadiaDepositoService;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ import ar.edu.utn.frc.backend.depositos.service.interfaces.IEstadiaDepositoServi
 public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
 
     private final IDepositoService depositoService;
+    private final IEstadoEstadiaDepositoService estadoEstadiaService;
 
     private final EstadiaDepositoRepository estadiaDepositoRepository;
 
@@ -31,17 +33,19 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
 
     @Override
     public void crear(CreateEstadiaDepositoDto dto) {
+        // Mapea campos simples
         EstadiaDeposito estadiaDeposito = estadiaMapper.toEntity(dto);
 
-        // Setear la PK embebida
+        // Setea la PK embebida
         EstadiaDepositoId id = new EstadiaDepositoId(dto.getIdDeposito(), dto.getIdSolicitud());
         estadiaDeposito.setIdEstadiaDeposito(id);
 
-        // Resolver relación con Deposito
+        // Resuelve la relación con Deposito
         Deposito deposito = depositoService.buscarDepositoPorId(dto.getIdDeposito());
         estadiaDeposito.setDeposito(deposito);
 
-        EstadoEstadiaDeposito estado = null;
+        // Setea el estado inicial
+        EstadoEstadiaDeposito estado = estadoEstadiaService.buscarPorCodigo("ACTIVA");
         estadiaDeposito.setEstado(estado);
 
         estadiaDepositoRepository.save(estadiaDeposito);
@@ -61,10 +65,11 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
                     return new RuntimeException();
                 });
 
-        // Actualizar campos simples con el mapper
+        // Actualiza campos simples con el mapper
         estadiaMapper.updateFromPatchDto(dto, estadiaDeposito);
 
-        EstadoEstadiaDeposito estado = null;
+        // Actualiza estado si es necesario
+        EstadoEstadiaDeposito estado = estadoEstadiaService.buscarPorCodigo(dto.getCodigoEstado());
         estadiaDeposito.setEstado(estado);
 
         estadiaDepositoRepository.save(estadiaDeposito);
