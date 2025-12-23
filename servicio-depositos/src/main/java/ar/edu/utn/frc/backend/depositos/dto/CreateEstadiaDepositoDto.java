@@ -2,15 +2,15 @@ package ar.edu.utn.frc.backend.depositos.dto;
 
 import java.time.LocalDateTime;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-public class EstadiaDepositoRequestDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateEstadiaDepositoDto {
     private Long idDeposito;
     private Long idSolicitud;
     private LocalDateTime fechaHoraEntrada;
-    private LocalDateTime fechaHoraSalida;
-    private Long idEstado;
 }

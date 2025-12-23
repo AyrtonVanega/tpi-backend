@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EstadiaDepositoResponseDto {
-    private Long idDeposito;
-    private Long idSolicitud;
-    private LocalDateTime fechaHoraEntrada;
+public class PatchEstadiaDepositoDto {
     private LocalDateTime fechaHoraSalida;
     private String codigoEstado;
 }

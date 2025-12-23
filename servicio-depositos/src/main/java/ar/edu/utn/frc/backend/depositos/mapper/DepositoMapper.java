@@ -1,36 +1,33 @@
 package ar.edu.utn.frc.backend.depositos.mapper;
 
-import org.springframework.stereotype.Component;
+import java.util.List;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 
 import ar.edu.utn.frc.backend.depositos.dto.DepositoRequestDto;
 import ar.edu.utn.frc.backend.depositos.dto.DepositoResponseDto;
 import ar.edu.utn.frc.backend.depositos.model.Deposito;
 
-@Component
-public class DepositoMapper implements GenericMapper<Deposito, DepositoResponseDto, DepositoRequestDto> {
+@Mapper(
+    componentModel = "spring",
+    unmappedTargetPolicy = ReportingPolicy.ERROR,
+    uses = {UbicacionMapper.class}
+)
+public interface DepositoMapper{
 
-    @Override
-    public Deposito toEntity(DepositoRequestDto dto) {
-        Deposito deposito = new Deposito();
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "estadiasDeposito", ignore = true)
+    Deposito toEntity(DepositoRequestDto dto);
 
-        deposito.setDireccion(dto.getDireccion());
-        deposito.setLatitud(dto.getLatitud());
-        deposito.setLongitud(dto.getLongitud());
-        deposito.setNombreCiudad(dto.getNombreCiudad());
-        deposito.setCostoEstadiaDiaria(dto.getCostoEstadiaDiaria());
+    @Mapping(target = "idDeposito", source = "id")
+    DepositoResponseDto toResponse(Deposito entity);
 
-        return deposito;
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "estadiasDeposito", ignore = true)
+    void updateFromDto(DepositoRequestDto dto, @MappingTarget Deposito entity);
 
-    @Override
-    public DepositoResponseDto toResponse(Deposito entity) {
-        return DepositoResponseDto.builder()
-                .idDeposito(entity.getId())
-                .direccion(entity.getDireccion())
-                .latitud(entity.getLatitud())
-                .longitud(entity.getLongitud())
-                .nombreCiudad(entity.getNombreCiudad())
-                .costoEstadiaDiaria(entity.getCostoEstadiaDiaria())
-                .build();
-    }
+    List<DepositoResponseDto> toResponseList(List<Deposito> depositos);
 }

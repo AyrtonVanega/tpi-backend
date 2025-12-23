@@ -22,28 +22,21 @@ public class UbicacionServiceImpl implements IUbicacionService {
     private final UbicacionMapper ubicacionMapper;
 
     @Override
-    public UbicacionResponseDto crear(UbicacionRequestDto ubicacionRequestDto) {
+    public void crear(UbicacionRequestDto ubicacionRequestDto) {
         Ubicacion ubicacion = ubicacionMapper.toEntity(ubicacionRequestDto);
         ubicacionRepository.save(ubicacion);
-        return ubicacionMapper.toResponse(ubicacion);
     }
 
     @Override
-    public UbicacionResponseDto actualizar(Long idUbicacion, UbicacionRequestDto ubicacionRequestDto) {
+    public void actualizar(Long idUbicacion, UbicacionRequestDto ubicacionRequestDto) {
         Ubicacion ubicacion = ubicacionRepository.findById(idUbicacion)
                 .orElseThrow(() -> {
                     log.error("Ubicacion {} no encontrada", idUbicacion);
                     return new RuntimeException();
                 });
 
-        ubicacion.setDireccion(ubicacionRequestDto.getDireccion());
-        ubicacion.setLatitud(ubicacionRequestDto.getLatitud());
-        ubicacion.setLongitud(ubicacionRequestDto.getLongitud());
-        ubicacion.setNombreCiudad(ubicacionRequestDto.getNombreCiudad());
-
+        ubicacionMapper.updateFromDto(ubicacionRequestDto, ubicacion);
         ubicacionRepository.save(ubicacion);
-
-        return ubicacionMapper.toResponse(ubicacion);
     }
 
     @Override
@@ -71,8 +64,6 @@ public class UbicacionServiceImpl implements IUbicacionService {
     @Override
     public List<UbicacionResponseDto> obtenerTodos() {
         List<Ubicacion> ubicaciones = ubicacionRepository.findAll();
-        return ubicaciones.stream()
-                .map(ubicacionMapper::toResponse)
-                .toList();
+        return ubicacionMapper.toResponseList(ubicaciones);
     }
 }

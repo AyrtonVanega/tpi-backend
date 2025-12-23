@@ -28,20 +28,20 @@ public class DepositoController {
 
     @PreAuthorize("hasRole('OPERADOR')")
     @PostMapping()
-    public ResponseEntity<DepositoResponseDto> crearDeposito(@RequestBody DepositoRequestDto depositoRequestDto) {
-        DepositoResponseDto depositoCreado = depositoService.crear(depositoRequestDto);
-
+    public ResponseEntity<Void> crearDeposito(@RequestBody DepositoRequestDto depositoRequestDto) {
+        depositoService.crear(depositoRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(depositoCreado);
+                .build();
     }
 
     @PreAuthorize("hasRole('OPERADOR')")
     @PutMapping("/{idDeposito}")
-    public ResponseEntity<DepositoResponseDto> actualizarDeposito(
+    public ResponseEntity<Void> actualizarDeposito(
             @PathVariable Long idDeposito,
             @RequestBody DepositoRequestDto depositoRequestDto) {
-        return ResponseEntity.ok(depositoService.actualizar(idDeposito, depositoRequestDto));
+        depositoService.actualizar(idDeposito, depositoRequestDto);
+        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('OPERADOR')")

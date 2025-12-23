@@ -22,29 +22,21 @@ public class DepositoServiceImpl implements IDepositoService {
     private final DepositoMapper depositoMapper;
 
     @Override
-    public DepositoResponseDto crear(DepositoRequestDto depositoRequestDto) {
+    public void crear(DepositoRequestDto depositoRequestDto) {
         Deposito deposito = depositoMapper.toEntity(depositoRequestDto);
         depositoRepository.save(deposito);
-        return depositoMapper.toResponse(deposito);
     }
 
     @Override
-    public DepositoResponseDto actualizar(Long idDeposito, DepositoRequestDto depositoRequestDto) {
+    public void actualizar(Long idDeposito, DepositoRequestDto depositoRequestDto) {
         Deposito deposito = depositoRepository.findById(idDeposito)
                 .orElseThrow(() -> {
                     log.error("Deposito {} no encontrado", idDeposito);
                     return new RuntimeException();
                 });
 
-        deposito.setDireccion(depositoRequestDto.getDireccion());
-        deposito.setLatitud(depositoRequestDto.getLatitud());
-        deposito.setLongitud(depositoRequestDto.getLongitud());
-        deposito.setNombreCiudad(depositoRequestDto.getNombreCiudad());
-        deposito.setCostoEstadiaDiaria(depositoRequestDto.getCostoEstadiaDiaria());
-
+        depositoMapper.updateFromDto(depositoRequestDto, deposito);
         depositoRepository.save(deposito);
-
-        return depositoMapper.toResponse(deposito);
     }
 
     @Override
@@ -72,9 +64,7 @@ public class DepositoServiceImpl implements IDepositoService {
     @Override
     public List<DepositoResponseDto> obtenerTodos() {
         List<Deposito> depositos = depositoRepository.findAll();
-        return depositos.stream()
-                .map(depositoMapper::toResponse)
-                .toList();
+        return depositoMapper.toResponseList(depositos);
     }
 
     @Override

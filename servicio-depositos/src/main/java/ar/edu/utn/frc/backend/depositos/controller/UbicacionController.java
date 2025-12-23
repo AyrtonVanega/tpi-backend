@@ -27,20 +27,20 @@ public class UbicacionController {
     private final IUbicacionService ubicacionService;
 
     @PostMapping()
-    public ResponseEntity<UbicacionResponseDto> crearUbicacion(@RequestBody UbicacionRequestDto ubicacionRequestDto) {
-        UbicacionResponseDto ubicacionCreada = ubicacionService.crear(ubicacionRequestDto);
-
+    public ResponseEntity<Void> crearUbicacion(@RequestBody UbicacionRequestDto ubicacionRequestDto) {
+        ubicacionService.crear(ubicacionRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ubicacionCreada);
+                .build();
     }
 
     @PreAuthorize("hasRole('CLIENTE')")
     @PutMapping("/{idUbicacion}")
-    public ResponseEntity<UbicacionResponseDto> actualizarUbicacion(
+    public ResponseEntity<Void> actualizarUbicacion(
             @PathVariable Long idUbicacion,
             @RequestBody UbicacionRequestDto ubicacionRequestDto) {
-        return ResponseEntity.ok(ubicacionService.actualizar(idUbicacion, ubicacionRequestDto));
+        ubicacionService.actualizar(idUbicacion, ubicacionRequestDto);
+        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('CLIENTE')")

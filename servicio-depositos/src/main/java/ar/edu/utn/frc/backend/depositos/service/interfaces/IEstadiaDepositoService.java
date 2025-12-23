@@ -1,11 +1,20 @@
 package ar.edu.utn.frc.backend.depositos.service.interfaces;
 
-import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoRequestDto;
-import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoResponseDto;
-import ar.edu.utn.frc.backend.depositos.model.EstadiaDepositoId;
-import ar.edu.utn.frc.backend.depositos.service.base.CrudService;
+import java.util.List;
 
-public interface IEstadiaDepositoService extends CrudService<
-        EstadiaDepositoResponseDto, EstadiaDepositoRequestDto, EstadiaDepositoId> {
-    
+import ar.edu.utn.frc.backend.depositos.dto.CreateEstadiaDepositoDto;
+import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoResponseDto;
+import ar.edu.utn.frc.backend.depositos.dto.PatchEstadiaDepositoDto;
+
+public interface IEstadiaDepositoService {
+
+        void crear(CreateEstadiaDepositoDto dto);
+
+        void actualizarParcial(Long idDeposito, Long idSolicitud, PatchEstadiaDepositoDto dto);
+
+        void eliminar(Long idDeposito, Long idSolicitud);
+
+        EstadiaDepositoResponseDto obtenerPorId(Long idDeposito, Long idSolicitud);
+
+        List<EstadiaDepositoResponseDto> obtenerEstadiasActivas();
 }

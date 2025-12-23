@@ -1,44 +1,42 @@
 package ar.edu.utn.frc.backend.depositos.mapper;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import java.util.List;
 
-import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoRequestDto;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
+
+import ar.edu.utn.frc.backend.depositos.dto.CreateEstadiaDepositoDto;
 import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoResponseDto;
+import ar.edu.utn.frc.backend.depositos.dto.PatchEstadiaDepositoDto;
 import ar.edu.utn.frc.backend.depositos.model.EstadiaDeposito;
-import ar.edu.utn.frc.backend.depositos.model.EstadiaDepositoId;
 
-@Component
-@RequiredArgsConstructor
-public class EstadiaDepositoMapper implements GenericMapper<
-        EstadiaDeposito, EstadiaDepositoResponseDto, EstadiaDepositoRequestDto> {
+@Mapper(
+    componentModel = "spring", 
+    unmappedTargetPolicy = ReportingPolicy.ERROR
+)
+public interface EstadiaDepositoMapper {
 
-    private final EstadoEstadiaDepositoMapper estadoMapper;
+    @Mapping(target = "idEstadiaDeposito", ignore = true)
+    @Mapping(target = "deposito", ignore = true)
+    @Mapping(target = "estado", ignore = true)
+    @Mapping(target = "fechaHoraSalida", ignore = true)
+    EstadiaDeposito toEntity(CreateEstadiaDepositoDto dto);
 
-    @Override
-    public EstadiaDeposito toEntity(EstadiaDepositoRequestDto dto) {
-        EstadiaDepositoId id = new EstadiaDepositoId(
-                dto.getIdDeposito(),
-                dto.getIdSolicitud()
-        );
+    @Mapping(target = "idDeposito", source = "idEstadiaDeposito.idDeposito")
+    @Mapping(target = "codigoEstado", source = "estado.codigo")
+    EstadiaDepositoResponseDto toResponse(EstadiaDeposito entity);
 
-        EstadiaDeposito estadia = new EstadiaDeposito();
-        estadia.setIdEstadiaDeposito(id);
-        estadia.setIdSolicitud(dto.getIdSolicitud());
-        estadia.setFechaHoraEntrada(dto.getFechaHoraEntrada());
-        estadia.setFechaHoraSalida(dto.getFechaHoraSalida());
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "idEstadiaDeposito", ignore = true)
+    @Mapping(target = "deposito", ignore = true)
+    @Mapping(target = "fechaHoraEntrada", ignore = true)
+    @Mapping(target = "idSolicitud", ignore = true)
+    @Mapping(target = "estado", ignore = true)
+    void updateFromPatchDto(PatchEstadiaDepositoDto dto, @MappingTarget EstadiaDeposito entity);
 
-        return estadia;
-    }
-
-    @Override
-    public EstadiaDepositoResponseDto toResponse(EstadiaDeposito entity) {
-        return EstadiaDepositoResponseDto.builder()
-                .idDeposito(entity.getIdEstadiaDeposito().getIdDeposito())
-                .idSolicitud(entity.getIdEstadiaDeposito().getIdSolicitud())
-                .fechaHoraEntrada(entity.getFechaHoraEntrada())
-                .fechaHoraSalida(entity.getFechaHoraSalida())
-                .estado(estadoMapper.toResponse(entity.getEstado()))
-                .build();
-    }
+    List<EstadiaDepositoResponseDto> toResponseList(List<EstadiaDeposito> estadias);
 }

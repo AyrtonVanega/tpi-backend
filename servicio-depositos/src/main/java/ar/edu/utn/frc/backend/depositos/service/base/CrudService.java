@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface CrudService<ResponseDTO, RequestDTO, ID> {
 
-    ResponseDTO crear(RequestDTO entity);
+    void crear(RequestDTO entity);
 
-    ResponseDTO actualizar(ID id, RequestDTO entity);
+    void actualizar(ID id, RequestDTO entity);
 
     void eliminar(ID id);
 

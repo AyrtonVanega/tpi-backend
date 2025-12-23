@@ -1,10 +1,12 @@
 package ar.edu.utn.frc.backend.depositos.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DepositoResponseDto {
     private Long idDeposito;
     private String direccion;

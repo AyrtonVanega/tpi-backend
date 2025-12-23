@@ -5,8 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoRequestDto;
+import ar.edu.utn.frc.backend.depositos.dto.CreateEstadiaDepositoDto;
 import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoResponseDto;
+import ar.edu.utn.frc.backend.depositos.dto.PatchEstadiaDepositoDto;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IEstadiaDepositoService;
 
 import java.util.List;
@@ -19,19 +20,39 @@ public class EstadiaDepositoController {
     private final IEstadiaDepositoService estadiaDepositoService;
 
     @PostMapping()
-    public ResponseEntity<EstadiaDepositoResponseDto> crearEstadia(@RequestBody EstadiaDepositoRequestDto dto) {
-        EstadiaDepositoResponseDto estadia = estadiaDepositoService.crear(dto);
+    public ResponseEntity<Void> crearEstadia(@RequestBody CreateEstadiaDepositoDto dto) {
+        estadiaDepositoService.crear(dto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(estadia);
+                .build();
     }
 
-    //@PutMapping("/{idEstadiaDeposito}")
-    //@DeleteMapping("/{idEstadiaDeposito}")
-    //@GetMapping("/{idEstadiaDeposito}")
+    @PatchMapping("/{idDeposito}/{idSolicitud}")
+    public ResponseEntity<Void> actualizarParcialEstadia(
+            @PathVariable Long idDeposito,
+            @PathVariable Long idSolicitud,
+            @RequestBody PatchEstadiaDepositoDto dto) {
+        estadiaDepositoService.actualizarParcial(idDeposito, idSolicitud, dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{idDeposito}/{idSolicitud}")
+    public ResponseEntity<Void> eliminarEstadia(
+            @PathVariable Long idDeposito,
+            @PathVariable Long idSolicitud) {
+        estadiaDepositoService.eliminar(idDeposito, idSolicitud);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{idDeposito}/{idSolicitud}")
+    public ResponseEntity<EstadiaDepositoResponseDto> obtenerEstadiaPorId(
+            @PathVariable Long idDeposito,
+            @PathVariable Long idSolicitud) {
+        return ResponseEntity.ok(estadiaDepositoService.obtenerPorId(idDeposito, idSolicitud));
+    }
 
     @GetMapping()
-    public ResponseEntity<List<EstadiaDepositoResponseDto>> listarEstadias() {
-        return ResponseEntity.ok(estadiaDepositoService.obtenerTodos());
+    public ResponseEntity<List<EstadiaDepositoResponseDto>> listarEstadiasActivas() {
+        return ResponseEntity.ok(estadiaDepositoService.obtenerEstadiasActivas());
     }
 }

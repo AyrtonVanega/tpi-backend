@@ -44,6 +44,4 @@ public class Ubicacion {
     
     @Column(name = "nombre_ciudad")
     private String nombreCiudad;
-
-    //Relacion con Tramos
 }
