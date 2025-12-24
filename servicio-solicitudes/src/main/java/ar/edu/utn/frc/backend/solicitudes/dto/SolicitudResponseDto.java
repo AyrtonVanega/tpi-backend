@@ -1,12 +1,14 @@
 package ar.edu.utn.frc.backend.solicitudes.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SolicitudResponseDto {
     private Long idSolicitud;
     private LocalDateTime fechaHoraInicio;
@@ -15,7 +17,9 @@ public class SolicitudResponseDto {
     private double tiempoEstimado;
     private double costoReal;
     private double tiempoReal;
-    private Long idEstadoSolicitud;
+    private String codigoEstadoSolicitud;
     private Long idContenedor;
-    // ruta y cliente
+    private Long idRuta;
+    private String docCliente;
+    private String tipoDocCliente;
 }
