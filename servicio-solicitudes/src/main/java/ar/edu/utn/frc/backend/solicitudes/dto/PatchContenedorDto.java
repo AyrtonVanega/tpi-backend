@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EstadoContenedorRequestDto {
-    private String codigo;
-    private String descripcion;
+public class PatchContenedorDto {
+    private String codigoEstadoContenedor;
 }

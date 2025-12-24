@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EstadoSolicitudRequestDto {
-    private String codigo;
-    private String descripcion;
+public class CreateContenedorDto {
+    private double ancho;
+    private double alto;
+    private double largo;
+    private double peso;
 }

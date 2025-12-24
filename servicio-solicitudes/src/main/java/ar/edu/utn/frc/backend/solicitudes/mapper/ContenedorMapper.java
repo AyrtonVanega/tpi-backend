@@ -1,35 +1,33 @@
 package ar.edu.utn.frc.backend.solicitudes.mapper;
 
-import org.springframework.stereotype.Component;
+import java.util.List;
 
-import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorRequestDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
+
 import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorResponseDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.CreateContenedorDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 
-@Component
-public class ContenedorMapper implements GenericMapper<Contenedor, ContenedorResponseDto, ContenedorRequestDto> {
+@Mapper(
+    componentModel = "spring", 
+    unmappedTargetPolicy = ReportingPolicy.ERROR
+)
+public interface ContenedorMapper {
 
-    @Override
-    public Contenedor toEntity(ContenedorRequestDto dto) {
-        Contenedor contenedor = new Contenedor();
+    @Mapping(target = "idContenedor", ignore = true)
+    @Mapping(target = "historialesEstadoContenedor", ignore = true)
+    Contenedor toEntity(CreateContenedorDto dto);
 
-        contenedor.setAncho(dto.getAncho());
-        contenedor.setAlto(dto.getAlto());
-        contenedor.setLargo(dto.getLargo());
-        contenedor.setPeso(dto.getPeso());
+    @Mapping(target = "idSolicitud", ignore = true)
+    ContenedorResponseDto toResponse(Contenedor entity);
 
-        return contenedor;
-    }
+    @Mapping(target = "idContenedor", ignore = true)
+    @Mapping(target = "historialesEstadoContenedor", ignore = true)
+    void updateFromPutDto(PutContenedorDto dto, @MappingTarget Contenedor entity);
 
-    @Override
-    public ContenedorResponseDto toResponse(Contenedor entity) {
-        return ContenedorResponseDto.builder()
-                .idContenedor(entity.getIdContenedor())
-                .ancho(entity.getAncho())
-                .alto(entity.getAlto())
-                .largo(entity.getLargo())
-                .peso(entity.getPeso())
-                .idSolicitud(entity.getSolicitud().getIdSolicitud())
-                .build();
-    }
+    List<ContenedorResponseDto> toResponseList(List<Contenedor> contenedores);
 }

@@ -1,9 +1,8 @@
 package ar.edu.utn.frc.backend.solicitudes.service.interfaces;
 
-import ar.edu.utn.frc.backend.solicitudes.dto.HistorialEstadoContenedorRequestDto;
-import ar.edu.utn.frc.backend.solicitudes.dto.HistorialEstadoContenedorResponseDto;
-import ar.edu.utn.frc.backend.solicitudes.service.base.CrudService;
+import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 
-public interface IHistorialEstadoContenedorService extends CrudService<
-        HistorialEstadoContenedorResponseDto, HistorialEstadoContenedorRequestDto, Long> {
+public interface IHistorialEstadoContenedorService {
+
+    void registarCambioEstado(Contenedor contenedor, String codigoEstadoNuevo);
 }

@@ -33,9 +33,6 @@ public class Contenedor {
     @Column
     private double peso;
 
-    @OneToOne(mappedBy = "contenedor")
-    private Solicitud solicitud;
-
     @OneToMany(mappedBy = "contenedor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<HistorialEstadoContenedor> historialesEstadoContenedor;
 

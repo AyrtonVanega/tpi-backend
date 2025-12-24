@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorRequestDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorResponseDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.CreateContenedorDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.PatchContenedorDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IContenedorService;
 
 import java.util.List;
@@ -19,27 +21,22 @@ public class ContenedorController {
     private final IContenedorService contenedorService;
 
     @PostMapping
-    public ResponseEntity<ContenedorResponseDto> crearContenedor(
-            @RequestBody ContenedorRequestDto contenedorRequestDto) {
+    public ResponseEntity<Void> crearContenedor(
+            @RequestBody CreateContenedorDto contenedorRequestDto) {
 
-        ContenedorResponseDto contenedorCreado = contenedorService.crear(contenedorRequestDto);
+        contenedorService.crear(contenedorRequestDto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(contenedorCreado);
+                .build();
     }
 
     @PutMapping("/{idContenedor}")
-    public ResponseEntity<ContenedorResponseDto> actualizarContenedor(
+    public ResponseEntity<Void> actualizarContenedor(
             @PathVariable Long idContenedor,
-            @RequestBody ContenedorRequestDto contenedorRequestDto) {
+            @RequestBody PutContenedorDto contenedorRequestDto) {
 
-        return ResponseEntity.ok(contenedorService.actualizar(idContenedor, contenedorRequestDto));
-    }
-
-    @DeleteMapping("/{idContenedor}")
-    public ResponseEntity<Void> eliminarContenedor(@PathVariable Long idContenedor) {
-        contenedorService.eliminar(idContenedor);
+        contenedorService.actualizar(idContenedor, contenedorRequestDto);
         return ResponseEntity.noContent().build();
     }
 
@@ -51,5 +48,14 @@ public class ContenedorController {
     @GetMapping()
     public ResponseEntity<List<ContenedorResponseDto>> obtenerContenedores() {
         return ResponseEntity.ok(contenedorService.obtenerTodos());
+    }
+
+    @PatchMapping("/{idContenedor}/estado")
+    public ResponseEntity<Void> actualizarEstadoContenedor(
+            @PathVariable Long idContenedor,
+            @RequestBody PatchContenedorDto contenedorRequestDto) {
+
+        contenedorService.actualizarEstado(idContenedor, contenedorRequestDto);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -2,15 +2,21 @@ package ar.edu.utn.frc.backend.solicitudes.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudRequestDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
 import ar.edu.utn.frc.backend.solicitudes.mapper.SolicitudMapper;
+import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
+import ar.edu.utn.frc.backend.solicitudes.model.EstadoSolicitud;
 import ar.edu.utn.frc.backend.solicitudes.model.Solicitud;
 import ar.edu.utn.frc.backend.solicitudes.repository.SolicitudRepository;
+import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IEstadoSolicitudService;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.ISolicitudService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,44 +24,57 @@ import java.util.List;
 @Slf4j
 public class SolicitudServiceImpl implements ISolicitudService {
 
+    private final IEstadoSolicitudService estadoSolicitudService;
+
     private final SolicitudRepository solicitudRepository;
+
     private final SolicitudMapper solicitudMapper;
 
     @Override
-    public SolicitudResponseDto crear(SolicitudRequestDto solicitudRequestDto) {
-        Solicitud solicitud = solicitudMapper.toEntity(solicitudRequestDto);
+    public void crear(CreateSolicitudDto solicitudRequestDto) {
+
+        // Crea, si no existen, las ubicaciones de origen y destino
+
+        // Crea, si no existe, el contenedor
+        Contenedor contenedor = null;
+
+        // Registra, si no esta registrado, el cliente
+        //Cliente cliente = null;
+
+        // Busca el Estado inicial
+        EstadoSolicitud estadoSolicitud = estadoSolicitudService.buscarPorCodigo("BORRADOR");
+
+        // Crea la solicitud seteando Contenendor, Cliente, Estado y Fecha de Inicio
+        Solicitud solicitud = Solicitud.builder()
+                .contenedor(contenedor)
+                //.cliente(cliente)
+                .estadoSolicitud(estadoSolicitud)
+                .fechaHoraInicio(LocalDateTime.now())
+                .build();
+
         solicitudRepository.save(solicitud);
-        return solicitudMapper.toResponse(solicitud);
     }
 
     @Override
-    public SolicitudResponseDto actualizar(Long idSolicitud, SolicitudRequestDto solicitudRequestDto) {
+    public void actualizarParcial(Long idSolicitud, PatchSolicitudDto solicitudRequestDto) {
         Solicitud solicitud = solicitudRepository.findById(idSolicitud)
                 .orElseThrow(() -> {
                     log.error("Solicitud {} no encontrada", idSolicitud);
                     return new RuntimeException();
                 });
+        // Mapea los campos simples no nulos
+        solicitudMapper.updateFromPatchDto(solicitudRequestDto, solicitud);
 
-        solicitud.setFechaHoraInicio(solicitudRequestDto.getFechaHoraInicio());
-        solicitud.setFechaHoraFin(solicitudRequestDto.getFechaHoraFin());
-        solicitud.setCostoEstimado(solicitudRequestDto.getCostoEstimado());
-        solicitud.setTiempoEstimado(solicitudRequestDto.getTiempoEstimado());
-        solicitud.setCostoReal(solicitudRequestDto.getCostoReal());
-        solicitud.setTiempoReal(solicitudRequestDto.getTiempoReal());
+        // Busca el estado si se actualiza
+        EstadoSolicitud nuevoEstado = estadoSolicitudService
+                .buscarPorCodigo(solicitudRequestDto.getCodigoEstadoSolicitud());
+        solicitud.setEstadoSolicitud(nuevoEstado);
+
+        // Busca la ruta si se actualiza
+        //Ruta nuevaRuta = null;
+        //solicitud.setRuta(nuevaRuta);
 
         solicitudRepository.save(solicitud);
-
-        return solicitudMapper.toResponse(solicitud);
-    }
-
-    @Override
-    public void eliminar(Long idSolicitud) {
-        Solicitud solicitud = solicitudRepository.findById(idSolicitud)
-                .orElseThrow(() -> {
-                    log.error("Solicitud {} no encontrada", idSolicitud);
-                    return new RuntimeException();
-                });
-        solicitudRepository.delete(solicitud);
     }
 
     @Override
@@ -71,8 +90,20 @@ public class SolicitudServiceImpl implements ISolicitudService {
     @Override
     public List<SolicitudResponseDto> obtenerTodos() {
         List<Solicitud> solicitudes = solicitudRepository.findAll();
-        return solicitudes.stream()
-                .map(solicitudMapper::toResponse)
-                .toList();
+        return solicitudMapper.toResponseList(solicitudes);
+    }
+
+    @Override
+    public void cancelarSolicitud(Long idSolicitud) {
+        Solicitud solicitud = solicitudRepository.findById(idSolicitud)
+                .orElseThrow(() -> {
+                    log.error("Solicitud {} no encontrada", idSolicitud);
+                    return new RuntimeException();
+                });
+        
+        EstadoSolicitud estadoCancelado = estadoSolicitudService.buscarPorCodigo("CANCELADA");
+        solicitud.setEstadoSolicitud(estadoCancelado);
+
+        solicitudRepository.save(solicitud);
     }
 }

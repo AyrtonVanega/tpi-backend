@@ -1,38 +1,37 @@
 package ar.edu.utn.frc.backend.solicitudes.mapper;
 
-import org.springframework.stereotype.Component;
+import java.util.List;
 
-import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudRequestDto;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
+
+import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
 import ar.edu.utn.frc.backend.solicitudes.model.Solicitud;
 
-@Component
-public class SolicitudMapper implements GenericMapper<Solicitud, SolicitudResponseDto, SolicitudRequestDto> {
+@Mapper(
+    componentModel = "spring", 
+    unmappedTargetPolicy = ReportingPolicy.ERROR
+)
+public interface SolicitudMapper {
 
-    @Override
-    public Solicitud toEntity(SolicitudRequestDto dto) {
-        Solicitud solicitud = new Solicitud();
+    @Mapping(target = "codigoEstadoSolicitud", ignore = true)
+    @Mapping(target = "idContenedor", ignore = true)
+    @Mapping(target = "idRuta", ignore = true)
+    @Mapping(target = "docCliente", ignore = true)
+    @Mapping(target = "tipoDocCliente", ignore = true)
+    SolicitudResponseDto toResponse(Solicitud entity);
 
-        solicitud.setFechaHoraInicio(dto.getFechaHoraInicio());
-        solicitud.setFechaHoraFin(dto.getFechaHoraFin());
-        solicitud.setCostoEstimado(dto.getCostoEstimado());
-        solicitud.setTiempoEstimado(dto.getTiempoEstimado());
-        solicitud.setCostoReal(dto.getCostoReal());
-        solicitud.setTiempoReal(dto.getTiempoReal());
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "idSolicitud", ignore = true)
+    @Mapping(target = "fechaHoraInicio", ignore = true)
+    @Mapping(target = "estadoSolicitud", ignore = true)
+    @Mapping(target = "contenedor", ignore = true)
+    void updateFromPatchDto(PatchSolicitudDto dto, @MappingTarget Solicitud entity);
 
-        return solicitud;
-    }
-
-    @Override
-    public SolicitudResponseDto toResponse(Solicitud entity) {
-        return SolicitudResponseDto.builder()
-                .idSolicitud(entity.getIdSolicitud())
-                .fechaHoraInicio(entity.getFechaHoraInicio())
-                .fechaHoraFin(entity.getFechaHoraFin())
-                .costoEstimado(entity.getCostoEstimado())
-                .tiempoEstimado(entity.getTiempoEstimado())
-                .costoReal(entity.getCostoReal())
-                .tiempoReal(entity.getTiempoReal())
-                .build();
-    }
+    List<SolicitudResponseDto> toResponseList(List<Solicitud> solicitudes);
 }

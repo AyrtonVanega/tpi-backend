@@ -1,8 +1,20 @@
 package ar.edu.utn.frc.backend.solicitudes.service.interfaces;
 
-import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudRequestDto;
-import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
-import ar.edu.utn.frc.backend.solicitudes.service.base.CrudService;
+import java.util.List;
 
-public interface ISolicitudService extends CrudService<SolicitudResponseDto, SolicitudRequestDto, Long> {
+import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
+
+public interface ISolicitudService {
+
+    void crear(CreateSolicitudDto solicitudRequestDto);
+
+    void actualizarParcial(Long idSolicitud, PatchSolicitudDto solicitudRequestDto);
+
+    SolicitudResponseDto obtenerPorId(Long idSolicitud);
+
+    List<SolicitudResponseDto> obtenerTodos();
+
+    void cancelarSolicitud(Long idSolicitud);
 }

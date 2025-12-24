@@ -1,9 +1,8 @@
 package ar.edu.utn.frc.backend.solicitudes.service.interfaces;
 
-import ar.edu.utn.frc.backend.solicitudes.dto.EstadoSolicitudRequestDto;
-import ar.edu.utn.frc.backend.solicitudes.dto.EstadoSolicitudResponseDto;
-import ar.edu.utn.frc.backend.solicitudes.service.base.CrudService;
+import ar.edu.utn.frc.backend.solicitudes.model.EstadoSolicitud;
 
-public interface IEstadoSolicitudService extends CrudService<
-        EstadoSolicitudResponseDto, EstadoSolicitudRequestDto, Long> {
+public interface IEstadoSolicitudService {
+
+        EstadoSolicitud buscarPorCodigo(String codigo);
 }

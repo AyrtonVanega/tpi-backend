@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Data
 @Builder
@@ -26,7 +24,4 @@ public class EstadoSolicitud {
 
     @Column
     private String descripcion;
-
-    @OneToMany(mappedBy = "estadoSolicitud", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Solicitud> solicitudes;
 }

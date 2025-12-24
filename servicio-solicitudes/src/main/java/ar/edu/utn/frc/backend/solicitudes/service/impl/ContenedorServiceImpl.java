@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorRequestDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorResponseDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.CreateContenedorDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.PatchContenedorDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.mapper.ContenedorMapper;
 import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 import ar.edu.utn.frc.backend.solicitudes.repository.ContenedorRepository;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IContenedorService;
+import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IHistorialEstadoContenedorService;
 
 import java.util.List;
 
@@ -18,43 +21,35 @@ import java.util.List;
 @Slf4j
 public class ContenedorServiceImpl implements IContenedorService {
 
+    private final IHistorialEstadoContenedorService historialEstadoService;
+
     private final ContenedorRepository contenedorRepository;
+
     private final ContenedorMapper contenedorMapper;
 
     @Override
-    public ContenedorResponseDto crear(ContenedorRequestDto contenedorRequestDto) {
+    public void crear(CreateContenedorDto contenedorRequestDto) {
+        // Mapea DTO a Entidad
         Contenedor contenedor = contenedorMapper.toEntity(contenedorRequestDto);
-        contenedorRepository.save(contenedor);
-        return contenedorMapper.toResponse(contenedor);
+
+        // Guarda el contenedor
+        contenedor = contenedorRepository.save(contenedor);
+
+        // Registra el estado inicial en el historial
+        historialEstadoService.registarCambioEstado(contenedor, "EN_ORIGEN");
+
     }
 
     @Override
-    public ContenedorResponseDto actualizar(Long idContenedor, ContenedorRequestDto contenedorRequestDto) {
+    public void actualizar(Long idContenedor, PutContenedorDto contenedorRequestDto) {
         Contenedor contenedor = contenedorRepository.findById(idContenedor)
                 .orElseThrow(() -> {
                     log.error("Contenedor {} no encontrado", idContenedor);
                     return new RuntimeException();
                 });
 
-        contenedor.setAncho(contenedorRequestDto.getAncho());
-        contenedor.setAlto(contenedorRequestDto.getAlto());
-        contenedor.setLargo(contenedorRequestDto.getLargo());
-        contenedor.setPeso(contenedorRequestDto.getPeso());
-
+        contenedorMapper.updateFromPutDto(contenedorRequestDto, contenedor);
         contenedorRepository.save(contenedor);
-
-        return contenedorMapper.toResponse(contenedor);
-    }
-
-    @Override
-    public void eliminar(Long idContenedor) {
-        Contenedor contenedor = contenedorRepository.findById(idContenedor)
-                .orElseThrow(() -> {
-                    log.error("Contenedor {} no encontrado", idContenedor);
-                    return new RuntimeException();
-                });
-
-        contenedorRepository.delete(contenedor);
     }
 
     @Override
@@ -70,8 +65,18 @@ public class ContenedorServiceImpl implements IContenedorService {
     @Override
     public List<ContenedorResponseDto> obtenerTodos() {
         List<Contenedor> contenedores = contenedorRepository.findAll();
-        return contenedores.stream()
-                .map(contenedorMapper::toResponse)
-                .toList();
+        return contenedorMapper.toResponseList(contenedores);
+    }
+
+    @Override
+    public void actualizarEstado(Long idContenedor, PatchContenedorDto contenedorRequestDto) {
+        Contenedor contenedor = contenedorRepository.findById(idContenedor)
+                .orElseThrow(() -> {
+                    log.error("Contenedor {} no encontrado", idContenedor);
+                    return new RuntimeException();
+                });
+
+        // Registra el cambio de estado en el historial
+        historialEstadoService.registarCambioEstado(contenedor, contenedorRequestDto.getCodigoEstadoContenedor());
     }
 }

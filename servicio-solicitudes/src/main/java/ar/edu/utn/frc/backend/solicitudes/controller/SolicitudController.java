@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudRequestDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.ISolicitudService;
 
@@ -19,27 +20,19 @@ public class SolicitudController {
     private final ISolicitudService solicitudService;
 
     @PostMapping
-    public ResponseEntity<SolicitudResponseDto> crearSolicitud(
-            @RequestBody SolicitudRequestDto solicitudRequestDto) {
-
-        SolicitudResponseDto solicitudCreada = solicitudService.crear(solicitudRequestDto);
-
+    public ResponseEntity<Void> crearSolicitud(@RequestBody CreateSolicitudDto solicitudRequestDto) {
+        solicitudService.crear(solicitudRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(solicitudCreada);
+                .build();
     }
 
-    @PutMapping("/{idSolicitud}")
-    public ResponseEntity<SolicitudResponseDto> actualizarSolicitud(
+    @PatchMapping("/{idSolicitud}")
+    public ResponseEntity<Void> actualizarSolicitud(
             @PathVariable Long idSolicitud,
-            @RequestBody SolicitudRequestDto solicitudRequestDto) {
+            @RequestBody PatchSolicitudDto solicitudRequestDto) {
 
-        return ResponseEntity.ok(solicitudService.actualizar(idSolicitud, solicitudRequestDto));
-    }
-
-    @DeleteMapping("/{idSolicitud}")
-    public ResponseEntity<Void> eliminarSolicitud(@PathVariable Long idSolicitud) {
-        solicitudService.eliminar(idSolicitud);
+        solicitudService.actualizarParcial(idSolicitud, solicitudRequestDto);
         return ResponseEntity.noContent().build();
     }
 
@@ -51,5 +44,11 @@ public class SolicitudController {
     @GetMapping()
     public ResponseEntity<List<SolicitudResponseDto>> obtenerSolicitudes() {
         return ResponseEntity.ok(solicitudService.obtenerTodos());
+    }
+
+    @PatchMapping("/{idSolicitud}/cancelar")
+    public ResponseEntity<Void> cancelarSolicitud(@PathVariable Long idSolicitud) {
+        solicitudService.cancelarSolicitud(idSolicitud);
+        return ResponseEntity.noContent().build();
     }
 }

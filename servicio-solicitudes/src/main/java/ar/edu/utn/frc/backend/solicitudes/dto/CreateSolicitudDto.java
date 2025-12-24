@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateSolicitudRequestDto {
+public class CreateSolicitudDto {
 
     private String direccionUbicacionOrigen;
     private double latitudUbicacionOrigen;
