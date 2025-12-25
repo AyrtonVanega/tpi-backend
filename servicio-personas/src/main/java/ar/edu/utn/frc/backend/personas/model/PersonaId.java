@@ -26,5 +26,5 @@ public class PersonaId implements Serializable {
     private String doc;
 
     @Column(name = "tipo_doc")
-    private char tipoDoc;
+    private String tipoDoc;
 }

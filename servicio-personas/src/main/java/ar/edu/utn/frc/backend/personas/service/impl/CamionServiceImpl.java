@@ -21,24 +21,19 @@ public class CamionServiceImpl implements ICamionService {
 
     private final CamionRepository camionRepository;
     private final CamionMapper camionMapper;
-
+    
     @Override
-    public void crear(CamionRequestDto dto) {
-
-        // Mapea datos simples de DTO a Entidad
-        Camion camion = camionMapper.toEntity(dto);
-
-        // Setea la disponibilidad por defecto en true
-        camion.setDisponibilidad(true);
-
-        camionRepository.save(camion);
+    public Camion crearSiNoExiste(String patente, double volumen, double peso, double costoBaseKm,
+            double consumoCombustiblePromedio) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'crearSiNoExiste'");
     }
-
+    
     @Override
-    public void actualizar(String idCamion, CamionRequestDto dto) {
-        Camion camion = camionRepository.findById(idCamion)
+    public void actualizar(String patenteCamion, CamionRequestDto dto) {
+        Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
-                    log.error("Camion {} no encontrado", idCamion);
+                    log.error("Camion {} no encontrado", patenteCamion);
                     return new RuntimeException();
                 });
 
@@ -47,10 +42,10 @@ public class CamionServiceImpl implements ICamionService {
     }
 
     @Override
-    public void eliminar(String idCamion) {
-        Camion camion = camionRepository.findById(idCamion)
+    public void eliminar(String patenteCamion) {
+        Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
-                    log.error("Camion {} no encontrado", idCamion);
+                    log.error("Camion {} no encontrado", patenteCamion);
                     return new RuntimeException();
                 });
 
@@ -58,10 +53,10 @@ public class CamionServiceImpl implements ICamionService {
     }
 
     @Override
-    public CamionResponseDto obtenerPorId(String idCamion) {
-        Camion camion = camionRepository.findById(idCamion)
+    public CamionResponseDto obtenerPorId(String patenteCamion) {
+        Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
-                    log.error("Camion {} no encontrado", idCamion);
+                    log.error("Camion {} no encontrado", patenteCamion);
                     return new RuntimeException();
                 });
             
@@ -69,16 +64,16 @@ public class CamionServiceImpl implements ICamionService {
     }
 
     @Override
-    public List<CamionResponseDto> obtenerTodos() {
-        List<Camion> camiones = camionRepository.findAll();
+    public List<CamionResponseDto> obtenerCamionesDisponibles() {
+        List<Camion> camiones = camionRepository.findByDisponibilidadTrue();
         return camionMapper.toResponseList(camiones);
     }
 
     @Override
-    public void actualizarDisponibilidad(String patente, PatchCamionDto patchCamionDto) {
-        Camion camion = camionRepository.findById(patente)
+    public void actualizarDisponibilidad(String patenteCamion, PatchCamionDto patchCamionDto) {
+        Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
-                    log.error("Camion {} no encontrado", patente);
+                    log.error("Camion {} no encontrado", patenteCamion);
                     return new RuntimeException();
                 });
 

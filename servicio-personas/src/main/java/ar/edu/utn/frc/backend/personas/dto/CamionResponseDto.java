@@ -1,10 +1,12 @@
 package ar.edu.utn.frc.backend.personas.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CamionResponseDto {
     private String patente;
     private double volumen;

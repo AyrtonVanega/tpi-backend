@@ -2,13 +2,11 @@ package ar.edu.utn.frc.backend.personas.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,14 +24,6 @@ import lombok.AllArgsConstructor;
 public class CamionController {
 
     private final ICamionService camionService;
-
-    @PostMapping()
-    public ResponseEntity<Void> crearCamion(@RequestBody CamionRequestDto camionRequestDto) {
-        camionService.crear(camionRequestDto);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
-    }
 
     @PutMapping("/{patenteCamion}")
     public ResponseEntity<Void> actualizarCamion(
@@ -64,8 +54,8 @@ public class CamionController {
         return ResponseEntity.ok(camionService.obtenerPorId(patenteCamion));
     }
 
-    @GetMapping()
-    public ResponseEntity<List<CamionResponseDto>> obtenerCamiones() {
-        return ResponseEntity.ok(camionService.obtenerTodos());
+    @GetMapping("/disponibles")
+    public ResponseEntity<List<CamionResponseDto>> obtenerCamionesDisponibles() {
+        return ResponseEntity.ok(camionService.obtenerCamionesDisponibles());
     }
 }
