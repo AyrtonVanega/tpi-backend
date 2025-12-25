@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.personas.dto.CamionRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.CamionResponseDto;
+import ar.edu.utn.frc.backend.personas.dto.PatchCamionDto;
 import ar.edu.utn.frc.backend.personas.mapper.CamionMapper;
 import ar.edu.utn.frc.backend.personas.model.Camion;
 import ar.edu.utn.frc.backend.personas.repository.CamionRepository;
@@ -22,29 +23,27 @@ public class CamionServiceImpl implements ICamionService {
     private final CamionMapper camionMapper;
 
     @Override
-    public CamionResponseDto crear(CamionRequestDto dto) {
+    public void crear(CamionRequestDto dto) {
+
+        // Mapea datos simples de DTO a Entidad
         Camion camion = camionMapper.toEntity(dto);
+
+        // Setea la disponibilidad por defecto en true
+        camion.setDisponibilidad(true);
+
         camionRepository.save(camion);
-        return camionMapper.toResponse(camion);
     }
 
     @Override
-    public CamionResponseDto actualizar(String idCamion, CamionRequestDto dto) {
+    public void actualizar(String idCamion, CamionRequestDto dto) {
         Camion camion = camionRepository.findById(idCamion)
                 .orElseThrow(() -> {
                     log.error("Camion {} no encontrado", idCamion);
                     return new RuntimeException();
                 });
 
-        camion.setVolumen(dto.getVolumen());
-        camion.setPeso(dto.getPeso());
-        camion.setDisponibilidad(dto.isDisponibilidad());
-        camion.setCostoBaseKm(dto.getCostoBaseKm());
-        camion.setConsumoCombustiblePromedio(dto.getConsumoCombustiblePromedio());
-
+        camionMapper.updateFromPutDto(dto, camion);
         camionRepository.save(camion);
-
-        return camionMapper.toResponse(camion);
     }
 
     @Override
@@ -71,9 +70,19 @@ public class CamionServiceImpl implements ICamionService {
 
     @Override
     public List<CamionResponseDto> obtenerTodos() {
-        return camionRepository.findAll()
-                .stream()
-                .map(camionMapper::toResponse)
-                .toList();
+        List<Camion> camiones = camionRepository.findAll();
+        return camionMapper.toResponseList(camiones);
+    }
+
+    @Override
+    public void actualizarDisponibilidad(String patente, PatchCamionDto patchCamionDto) {
+        Camion camion = camionRepository.findById(patente)
+                .orElseThrow(() -> {
+                    log.error("Camion {} no encontrado", patente);
+                    return new RuntimeException();
+                });
+
+        camion.setDisponibilidad(patchCamionDto.isDisponibilidad());
+        camionRepository.save(camion);
     }
 }

@@ -1,37 +1,33 @@
 package ar.edu.utn.frc.backend.personas.mapper;
 
-import org.springframework.stereotype.Component;
+import java.util.List;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 
 import ar.edu.utn.frc.backend.personas.dto.CamionRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.CamionResponseDto;
 import ar.edu.utn.frc.backend.personas.model.Camion;
 
-@Component
-public class CamionMapper implements GenericMapper<Camion, CamionResponseDto, CamionRequestDto> {
+@Mapper(
+    componentModel = "spring", 
+    unmappedTargetPolicy = ReportingPolicy.ERROR
+)
+public interface CamionMapper {
 
-    @Override
-    public Camion toEntity(CamionRequestDto dto) {
-        Camion camion = new Camion();
+    @Mapping(target = "disponibilidad", ignore = true)
+    @Mapping(target = "transportista", ignore = true)
+    Camion toEntity(CamionRequestDto dto);
 
-        camion.setPatente(dto.getPatente());
-        camion.setVolumen(dto.getVolumen());
-        camion.setPeso(dto.getPeso());
-        camion.setDisponibilidad(dto.isDisponibilidad());
-        camion.setCostoBaseKm(dto.getCostoBaseKm());
-        camion.setConsumoCombustiblePromedio(dto.getConsumoCombustiblePromedio());
+    @Mapping(target = "docTransportista", ignore = true)
+    @Mapping(target = "tipoDocTransportista", ignore = true)
+    CamionResponseDto toResponse(Camion entity);
 
-        return camion;
-    }
+    @Mapping(target = "disponibilidad", ignore = true)
+    @Mapping(target = "transportista", ignore = true)
+    void updateFromPutDto(CamionRequestDto dto, @MappingTarget Camion entity);
 
-    @Override
-    public CamionResponseDto toResponse(Camion entity) {
-        return CamionResponseDto.builder()
-                .patente(entity.getPatente())
-                .volumen(entity.getVolumen())
-                .peso(entity.getPeso())
-                .disponibilidad(entity.isDisponibilidad())
-                .costoBaseKm(entity.getCostoBaseKm())
-                .consumoCombustiblePromedio(entity.getConsumoCombustiblePromedio())
-                .build();
-    }   
+    List<CamionResponseDto> toResponseList(List<Camion> camiones);
 }

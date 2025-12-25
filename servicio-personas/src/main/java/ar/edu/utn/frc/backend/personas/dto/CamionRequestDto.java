@@ -11,7 +11,6 @@ public class CamionRequestDto {
     private String patente;
     private double volumen;
     private double peso;
-    private boolean disponibilidad;
     private double costoBaseKm;
     private double consumoCombustiblePromedio;
 }

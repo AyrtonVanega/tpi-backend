@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.utn.frc.backend.personas.dto.CamionRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.CamionResponseDto;
+import ar.edu.utn.frc.backend.personas.dto.PatchCamionDto;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ICamionService;
 import lombok.AllArgsConstructor;
 
@@ -26,30 +28,40 @@ public class CamionController {
     private final ICamionService camionService;
 
     @PostMapping()
-    public ResponseEntity<CamionResponseDto> crearCamion(@RequestBody CamionRequestDto camionRequestDto) {
-        CamionResponseDto camionCreado = camionService.crear(camionRequestDto);
-        
+    public ResponseEntity<Void> crearCamion(@RequestBody CamionRequestDto camionRequestDto) {
+        camionService.crear(camionRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(camionCreado);
+                .build();
     }
 
-    @PutMapping("/{idCamion}")
-    public ResponseEntity<CamionResponseDto> actualizarCamion(
-            @PathVariable String idCamion,
+    @PutMapping("/{patenteCamion}")
+    public ResponseEntity<Void> actualizarCamion(
+            @PathVariable String patenteCamion,
             @RequestBody CamionRequestDto camionRequestDto) {
-        return ResponseEntity.ok(camionService.actualizar(idCamion, camionRequestDto));
-    }
 
-    @DeleteMapping("/{idCamion}")
-    public ResponseEntity<Void> eliminarCamion(@PathVariable String idCamion) {
-        camionService.eliminar(idCamion);
+        camionService.actualizar(patenteCamion, camionRequestDto);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{idCamion}")
-    public ResponseEntity<CamionResponseDto> obtenerCamionPorId(@PathVariable String idCamion) {
-        return ResponseEntity.ok(camionService.obtenerPorId(idCamion));
+    @PatchMapping("/{patenteCamion}/disponibilidad")
+    public ResponseEntity<Void> actualizarDisponibilidadCamion(
+            @PathVariable String patenteCamion,
+            @RequestBody PatchCamionDto patchCamionDto) {
+
+        camionService.actualizarDisponibilidad(patenteCamion, patchCamionDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{patenteCamion}")
+    public ResponseEntity<Void> eliminarCamion(@PathVariable String patenteCamion) {
+        camionService.eliminar(patenteCamion);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{patenteCamion}")
+    public ResponseEntity<CamionResponseDto> obtenerCamionPorId(@PathVariable String patenteCamion) {
+        return ResponseEntity.ok(camionService.obtenerPorId(patenteCamion));
     }
 
     @GetMapping()
