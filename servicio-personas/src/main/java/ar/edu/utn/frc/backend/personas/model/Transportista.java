@@ -2,7 +2,9 @@ package ar.edu.utn.frc.backend.personas.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.PrimaryKeyJoinColumns;
 import jakarta.persistence.Table;
@@ -24,5 +26,10 @@ import lombok.experimental.SuperBuilder;
     @PrimaryKeyJoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
 })
 public class Transportista extends Persona {
+
+    @OneToOne(mappedBy = "transportista")
+    private Camion camion;
+
+    @Column(name = "vencimiento_licencia")
     private LocalDateTime vencimientoLicencia;
 }

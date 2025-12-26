@@ -18,6 +18,7 @@ import ar.edu.utn.frc.backend.personas.model.Transportista;
 public interface TransportistaMapper {
 
     @Mapping(target = "idPersona", ignore = true)
+    @Mapping(target = "camion", ignore = true)
     Transportista toEntity(TransportistaRequestDto dto);
 
     @Mapping(target = "docTransportista", ignore = true)
@@ -26,6 +27,7 @@ public interface TransportistaMapper {
     TransportistaResponseDto toResponse(Transportista entity);
 
     @Mapping(target = "idPersona", ignore = true)
+    @Mapping(target = "camion", ignore = true)
     void updateFromDto(TransportistaRequestDto dto, @MappingTarget Transportista entity);
 
     List<TransportistaResponseDto> toResponseList(List<Transportista> transportistas);
