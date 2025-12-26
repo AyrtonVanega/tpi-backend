@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
 import ar.edu.utn.frc.backend.personas.mapper.TransportistaMapper;
+import ar.edu.utn.frc.backend.personas.model.Camion;
 import ar.edu.utn.frc.backend.personas.model.PersonaId;
 import ar.edu.utn.frc.backend.personas.model.Transportista;
 import ar.edu.utn.frc.backend.personas.repository.TransportistaRepository;
@@ -26,21 +27,27 @@ public class TransportistaServiceImpl implements ITransportistaService {
 
     @Override
     public void crear(TransportistaRequestDto dto) {
+        // Mapea datos simples DTO -> Entity
         Transportista transportista = transportistaMapper.toEntity(dto);
 
+        // Crea y setea el id
         PersonaId id = new PersonaId(dto.getDocTransportista(), dto.getTipoDocTransportista());
         transportista.setIdPersona(id);
 
-        transportistaRepository.save(transportista);
-
         // Crea el camion si no existe
-        camionService.crearSiNoExiste(
+        Camion camion = camionService.crearSiNoExiste(
                 dto.getPatenteCamion(),
                 dto.getVolumenCamion(),
                 dto.getPesoCamion(),
                 dto.getCostoBaseKmCamion(),
                 dto.getConsumoCombustiblePromedioCamion(),
                 transportista);
+        
+        // Setea el Camion
+        transportista.setCamion(camion);
+
+        // Guarda en la BD
+        transportistaRepository.save(transportista);
     }
 
     @Override
