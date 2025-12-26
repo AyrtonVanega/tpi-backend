@@ -14,7 +14,6 @@ import ar.edu.utn.frc.backend.personas.model.Camion;
 import ar.edu.utn.frc.backend.personas.model.Transportista;
 import ar.edu.utn.frc.backend.personas.repository.CamionRepository;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ICamionService;
-import ar.edu.utn.frc.backend.personas.service.interfaces.ITransportistaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CamionServiceImpl implements ICamionService {
 
-    private final ITransportistaService transportistaService;
     private final CamionRepository camionRepository;
     private final CamionMapper camionMapper;
 
@@ -81,12 +79,11 @@ public class CamionServiceImpl implements ICamionService {
         // Mapea datos simples Entity -> DTO
         CamionResponseDto responseDto = camionMapper.toResponse(camion);
 
-        // Busca el Transportista perteneciente al Camion y lo setea al ResponseDto
+        // Setea doc y tipoDoc del Transportista al ResponseDto
         String docTransportista = camion.getTransportista().getIdPersona().getDoc();
         String tipoDocTransportista = camion.getTransportista().getIdPersona().getTipoDoc();
-        Transportista transportista = transportistaService.obtenerTransportistaPorId(docTransportista, tipoDocTransportista);
-        responseDto.setDocTransportista(transportista.getIdPersona().getDoc());
-        responseDto.setTipoDocTransportista(transportista.getIdPersona().getTipoDoc());
+        responseDto.setDocTransportista(docTransportista);
+        responseDto.setTipoDocTransportista(tipoDocTransportista);
 
         return responseDto;
     }
