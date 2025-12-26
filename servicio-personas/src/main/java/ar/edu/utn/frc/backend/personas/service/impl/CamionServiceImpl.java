@@ -46,13 +46,17 @@ public class CamionServiceImpl implements ICamionService {
 
     @Override
     public void actualizar(String patenteCamion, CamionRequestDto dto) {
+        // Busca el camion en la BD
         Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
                     log.error("Camion {} no encontrado", patenteCamion);
                     return new RuntimeException();
                 });
 
+        // Mapea datos simples
         camionMapper.updateFromPutDto(dto, camion);
+
+        // Guarda los cambios
         camionRepository.save(camion);
     }
 

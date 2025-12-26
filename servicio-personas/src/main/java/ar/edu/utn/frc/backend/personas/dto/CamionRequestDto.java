@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CamionRequestDto {
-    private String patente;
     private double volumen;
     private double peso;
     private double costoBaseKm;

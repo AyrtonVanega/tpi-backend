@@ -17,6 +17,7 @@ import ar.edu.utn.frc.backend.personas.model.Camion;
 )
 public interface CamionMapper {
 
+    @Mapping(target = "patente", ignore = true)
     @Mapping(target = "disponibilidad", ignore = true)
     @Mapping(target = "transportista", ignore = true)
     Camion toEntity(CamionRequestDto dto);
@@ -25,6 +26,7 @@ public interface CamionMapper {
     @Mapping(target = "tipoDocTransportista", ignore = true)
     CamionResponseDto toResponse(Camion entity);
 
+    @Mapping(target = "patente", ignore = true)
     @Mapping(target = "disponibilidad", ignore = true)
     @Mapping(target = "transportista", ignore = true)
     void updateFromPutDto(CamionRequestDto dto, @MappingTarget Camion entity);
