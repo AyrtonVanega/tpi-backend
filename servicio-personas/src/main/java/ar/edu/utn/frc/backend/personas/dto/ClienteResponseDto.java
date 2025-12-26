@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ClienteResponseDto {
     private String docCliente;
-    private char tipoDocCliente;
+    private String tipoDocCliente;
     private String nombre;
     private String apellido;
     private String telefono;
