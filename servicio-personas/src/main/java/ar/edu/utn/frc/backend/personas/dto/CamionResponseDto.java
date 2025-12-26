@@ -15,5 +15,5 @@ public class CamionResponseDto {
     private double costoBaseKm;
     private double consumoCombustiblePromedio;
     private String docTransportista;
-    private char tipoDocTransportista;
+    private String tipoDocTransportista;
 }

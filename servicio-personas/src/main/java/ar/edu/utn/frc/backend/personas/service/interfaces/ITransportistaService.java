@@ -4,6 +4,7 @@ import java.util.List;
 
 import ar.edu.utn.frc.backend.personas.dto.TransportistaRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
+import ar.edu.utn.frc.backend.personas.model.Transportista;
 
 public interface ITransportistaService {
 
@@ -16,4 +17,6 @@ public interface ITransportistaService {
     TransportistaResponseDto obtenerPorId(String docTransportista, String tipoDocTransportista);
 
     List<TransportistaResponseDto> obtenerTodos();
+
+    Transportista obtenerTransportistaPorId(String docTransportista, String tipoDocTransportista);
 }

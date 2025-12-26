@@ -140,4 +140,18 @@ public class TransportistaServiceImpl implements ITransportistaService {
 
         return responseDtoList;
     }
+
+    @Override
+    public Transportista obtenerTransportistaPorId(String docTransportista, String tipoDocTransportista) {
+        // Compone el id y busca el Transportista en la BD
+        PersonaId id = new PersonaId(docTransportista, tipoDocTransportista);
+        return transportistaRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error(
+                            "Transportista no encontrado - docTransportista:{}, tipoDocTransportista:{}",
+                            id.getDoc(),
+                            id.getTipoDoc());
+                    return new RuntimeException();
+                });
+    }
 }
