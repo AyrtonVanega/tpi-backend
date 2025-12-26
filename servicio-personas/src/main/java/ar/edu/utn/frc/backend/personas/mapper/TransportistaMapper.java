@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
+import ar.edu.utn.frc.backend.personas.dto.PutTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
 import ar.edu.utn.frc.backend.personas.model.Transportista;
@@ -28,7 +29,7 @@ public interface TransportistaMapper {
 
     @Mapping(target = "idPersona", ignore = true)
     @Mapping(target = "camion", ignore = true)
-    void updateFromDto(TransportistaRequestDto dto, @MappingTarget Transportista entity);
+    void updateFromPutDto(PutTransportistaDto dto, @MappingTarget Transportista entity);
 
     List<TransportistaResponseDto> toResponseList(List<Transportista> transportistas);
 }

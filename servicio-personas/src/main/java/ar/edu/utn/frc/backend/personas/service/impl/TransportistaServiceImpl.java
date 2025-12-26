@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.personas.dto.PutTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
 import ar.edu.utn.frc.backend.personas.mapper.TransportistaMapper;
@@ -51,23 +52,20 @@ public class TransportistaServiceImpl implements ITransportistaService {
     }
 
     @Override
-    public void actualizar(String docTransportista, String tipoDocTransportista, TransportistaRequestDto dto) {
+    public void actualizar(String docTransportista, String tipoDocTransportista, PutTransportistaDto dto) {
+        // Compone el id y busca el Transportista en la BD
         PersonaId id = new PersonaId(docTransportista, tipoDocTransportista);
-
         Transportista transportista = transportistaRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error(
-                            "Cliente no encontrado - docCliente:{}, tipoDocCliente:{}",
+                            "Transportista no encontrado - docTransportista:{}, tipoDocTransportista:{}",
                             id.getDoc(),
                             id.getTipoDoc());
                     return new RuntimeException();
                 });
         
         // Actualiza datos simples
-        transportistaMapper.updateFromDto(dto, transportista);
-
-        // Actualiza el doc y tipoDoc
-
+        transportistaMapper.updateFromPutDto(dto, transportista);
 
         // Guarda los cambios
         transportistaRepository.save(transportista);

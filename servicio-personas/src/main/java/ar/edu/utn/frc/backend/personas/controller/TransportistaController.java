@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frc.backend.personas.dto.PutTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ITransportistaService;
@@ -37,7 +38,7 @@ public class TransportistaController {
     public ResponseEntity<Void> actualizarTransportista(
             @PathVariable String docTransportista,
             @PathVariable String tipoDocTransportista,
-            @RequestBody TransportistaRequestDto transportistaRequestDto) {
+            @RequestBody PutTransportistaDto transportistaRequestDto) {
         transportistaService.actualizar(docTransportista, tipoDocTransportista, transportistaRequestDto);
         return ResponseEntity.noContent().build();
     }
