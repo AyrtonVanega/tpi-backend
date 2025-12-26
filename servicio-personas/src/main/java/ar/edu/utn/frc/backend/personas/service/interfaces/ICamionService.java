@@ -6,11 +6,12 @@ import ar.edu.utn.frc.backend.personas.dto.CamionRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.CamionResponseDto;
 import ar.edu.utn.frc.backend.personas.dto.PatchCamionDto;
 import ar.edu.utn.frc.backend.personas.model.Camion;
+import ar.edu.utn.frc.backend.personas.model.Transportista;
 
 public interface ICamionService {
 
     Camion crearSiNoExiste(String patente, double volumen, double peso, double costoBaseKm,
-            double consumoCombustiblePromedio);
+            double consumoCombustiblePromedio, Transportista transportista);
 
     void actualizar(String patenteCamion, CamionRequestDto dto);
 

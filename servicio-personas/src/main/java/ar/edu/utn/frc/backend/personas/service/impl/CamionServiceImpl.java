@@ -1,6 +1,8 @@
 package ar.edu.utn.frc.backend.personas.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import ar.edu.utn.frc.backend.personas.dto.CamionResponseDto;
 import ar.edu.utn.frc.backend.personas.dto.PatchCamionDto;
 import ar.edu.utn.frc.backend.personas.mapper.CamionMapper;
 import ar.edu.utn.frc.backend.personas.model.Camion;
+import ar.edu.utn.frc.backend.personas.model.Transportista;
 import ar.edu.utn.frc.backend.personas.repository.CamionRepository;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ICamionService;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +24,26 @@ public class CamionServiceImpl implements ICamionService {
 
     private final CamionRepository camionRepository;
     private final CamionMapper camionMapper;
-    
+
+    private final Map<String, Camion> camiones = new HashMap<>();
+
     @Override
     public Camion crearSiNoExiste(String patente, double volumen, double peso, double costoBaseKm,
-            double consumoCombustiblePromedio) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'crearSiNoExiste'");
+            double consumoCombustiblePromedio, Transportista transportista) {
+
+        return this.camiones.computeIfAbsent(patente, pat -> {
+            Camion c = new Camion(
+                    pat,
+                    volumen,
+                    peso,
+                    true,
+                    costoBaseKm,
+                    consumoCombustiblePromedio,
+                    transportista);
+            return camionRepository.save(c);
+        });
     }
-    
+
     @Override
     public void actualizar(String patenteCamion, CamionRequestDto dto) {
         Camion camion = camionRepository.findById(patenteCamion)
