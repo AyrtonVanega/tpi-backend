@@ -22,9 +22,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TramoId implements Serializable {
     
-    @Column(name = "id_ubicacion_origen")
-    private Long idUbicacionOrigen;
+    @Column(name = "id_ruta")
+    private Long idRuta;
 
-    @Column(name = "id_ubicacion_destino")
-    private Long idUbicacionDestino;
+    @Column
+    private Integer orden;
 }
