@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PutTransportistaDto {
-    private String docTransportista;
-    private String tipoDocTransportista;
     private String nombre;
     private String apellido;
     private String telefono;
