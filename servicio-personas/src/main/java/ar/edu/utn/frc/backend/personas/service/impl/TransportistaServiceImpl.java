@@ -91,18 +91,29 @@ public class TransportistaServiceImpl implements ITransportistaService {
 
     @Override
     public TransportistaResponseDto obtenerPorId(String docTransportista, String tipoDocTransportista) {
+        // Compone el id y busca el Transportista en la BD
         PersonaId id = new PersonaId(docTransportista, tipoDocTransportista);
-
         Transportista transportista = transportistaRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error(
-                            "Cliente no encontrado - docCliente:{}, tipoDocCliente:{}",
+                            "Transportista no encontrado - docTransportista:{}, tipoDocTransportista:{}",
                             id.getDoc(),
                             id.getTipoDoc());
                     return new RuntimeException();
                 });
 
-        return transportistaMapper.toResponse(transportista);
+        // Mapea datos simples Entity -> DTO
+        TransportistaResponseDto responseDto = transportistaMapper.toResponse(transportista);
+
+        // Setea el id al ResponseDto
+        responseDto.setDocTransportista(transportista.getIdPersona().getTipoDoc());
+        responseDto.setTipoDocTransportista(transportista.getIdPersona().getTipoDoc());
+
+        // Busca el camion perteneciente al transportista y lo setea al ResponseDto
+        Camion camion = camionService.buscarCamionPorId(transportista.getCamion().getPatente());
+        responseDto.setPatenteCamion(camion.getPatente());
+
+        return responseDto;
     }
 
     @Override

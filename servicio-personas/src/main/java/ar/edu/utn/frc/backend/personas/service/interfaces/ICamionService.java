@@ -22,4 +22,6 @@ public interface ICamionService {
     List<CamionResponseDto> obtenerCamionesDisponibles();
 
     void actualizarDisponibilidad(String patenteCamion, PatchCamionDto patchCamionDto);
+
+    Camion buscarCamionPorId(String patenteCamion);
 }

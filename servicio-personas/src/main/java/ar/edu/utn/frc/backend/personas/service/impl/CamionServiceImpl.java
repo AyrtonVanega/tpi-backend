@@ -95,4 +95,13 @@ public class CamionServiceImpl implements ICamionService {
         camion.setDisponibilidad(patchCamionDto.isDisponibilidad());
         camionRepository.save(camion);
     }
+
+    @Override
+    public Camion buscarCamionPorId(String patenteCamion) {
+        return camionRepository.findById(patenteCamion)
+                .orElseThrow(() -> {
+                    log.error("Camion {} no encontrado", patenteCamion);
+                    return new RuntimeException();
+                });
+    }
 }
