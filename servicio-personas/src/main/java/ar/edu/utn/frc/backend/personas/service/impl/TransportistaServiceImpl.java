@@ -73,17 +73,18 @@ public class TransportistaServiceImpl implements ITransportistaService {
 
     @Override
     public void eliminar(String docTransportista, String tipoDocTransportista) {
+        // Compone el id y busca el Transportista en la BD
         PersonaId id = new PersonaId(docTransportista, tipoDocTransportista);
-
         Transportista transportista = transportistaRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error(
-                            "Cliente no encontrado - docCliente:{}, tipoDocCliente:{}",
+                            "Transportista no encontrado - docTransportista:{}, tipoDocTransportista:{}",
                             id.getDoc(),
                             id.getTipoDoc());
                     return new RuntimeException();
                 });
 
+        // Elimina el Transportista de la BD
         transportistaRepository.delete(transportista);
     }
 
