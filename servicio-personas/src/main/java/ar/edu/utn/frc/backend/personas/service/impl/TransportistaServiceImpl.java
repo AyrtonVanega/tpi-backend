@@ -106,7 +106,7 @@ public class TransportistaServiceImpl implements ITransportistaService {
         TransportistaResponseDto responseDto = transportistaMapper.toResponse(transportista);
 
         // Setea el id al ResponseDto
-        responseDto.setDocTransportista(transportista.getIdPersona().getTipoDoc());
+        responseDto.setDocTransportista(transportista.getIdPersona().getDoc());
         responseDto.setTipoDocTransportista(transportista.getIdPersona().getTipoDoc());
 
         // Busca el camion perteneciente al transportista y lo setea al ResponseDto
