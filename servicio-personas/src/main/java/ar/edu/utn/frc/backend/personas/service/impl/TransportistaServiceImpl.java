@@ -118,7 +118,26 @@ public class TransportistaServiceImpl implements ITransportistaService {
 
     @Override
     public List<TransportistaResponseDto> obtenerTodos() {
+        // Obtiene todos los transportistas de la BD
         List<Transportista> transportistas = transportistaRepository.findAll();
-        return transportistaMapper.toResponseList(transportistas);
+
+        // Mapea datos simples Entity -> DTO
+        List<TransportistaResponseDto> responseDtoList = transportistaMapper.toResponseList(transportistas);
+
+        // Completa los campos faltantes en cada DTO
+        for (int i = 0; i < transportistas.size(); i++) {
+            Transportista transportista = transportistas.get(i);
+            TransportistaResponseDto dto = responseDtoList.get(i);
+
+            // Setea el id compuesto
+            dto.setDocTransportista(transportista.getIdPersona().getDoc());
+            dto.setTipoDocTransportista(transportista.getIdPersona().getTipoDoc());
+
+            // Setea la patente del camión
+            Camion camion = camionService.buscarCamionPorId(transportista.getCamion().getPatente());
+            dto.setPatenteCamion(camion.getPatente());
+        }
+
+        return responseDtoList;
     }
 }
