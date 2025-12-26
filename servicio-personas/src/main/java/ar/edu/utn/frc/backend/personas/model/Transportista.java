@@ -2,6 +2,7 @@ package ar.edu.utn.frc.backend.personas.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
@@ -27,7 +28,7 @@ import lombok.experimental.SuperBuilder;
 })
 public class Transportista extends Persona {
 
-    @OneToOne(mappedBy = "transportista")
+    @OneToOne(mappedBy = "transportista", cascade = CascadeType.ALL)
     private Camion camion;
 
     @Column(name = "vencimiento_licencia")

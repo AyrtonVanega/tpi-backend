@@ -40,7 +40,7 @@ public class CamionServiceImpl implements ICamionService {
                     costoBaseKm,
                     consumoCombustiblePromedio,
                     transportista);
-            return camionRepository.save(c);
+            return c;
         });
     }
 
