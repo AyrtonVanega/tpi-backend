@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frc.backend.personas.dto.CreateTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.PutTransportistaDto;
-import ar.edu.utn.frc.backend.personas.dto.TransportistaRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ITransportistaService;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class TransportistaController {
     private final ITransportistaService transportistaService;
 
     @PostMapping()
-    public ResponseEntity<Void> registrarTransportista(@RequestBody TransportistaRequestDto transportistaRequestDto) {
+    public ResponseEntity<Void> registrarTransportista(@RequestBody CreateTransportistaDto transportistaRequestDto) {
         transportistaService.crear(transportistaRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransportistaRequestDto {
+public class CreateTransportistaDto {
     private String docTransportista;
     private String tipoDocTransportista;
     private String nombre;

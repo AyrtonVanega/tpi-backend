@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.personas.dto.CreateTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.PutTransportistaDto;
-import ar.edu.utn.frc.backend.personas.dto.TransportistaRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
 import ar.edu.utn.frc.backend.personas.mapper.TransportistaMapper;
 import ar.edu.utn.frc.backend.personas.model.Camion;
@@ -27,7 +27,7 @@ public class TransportistaServiceImpl implements ITransportistaService {
     private final TransportistaMapper transportistaMapper;
 
     @Override
-    public void crear(TransportistaRequestDto dto) {
+    public void crear(CreateTransportistaDto dto) {
         // Mapea datos simples DTO -> Entity
         Transportista transportista = transportistaMapper.toEntity(dto);
 

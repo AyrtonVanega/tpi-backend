@@ -7,8 +7,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
+import ar.edu.utn.frc.backend.personas.dto.CreateTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.PutTransportistaDto;
-import ar.edu.utn.frc.backend.personas.dto.TransportistaRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
 import ar.edu.utn.frc.backend.personas.model.Transportista;
 
@@ -20,7 +20,7 @@ public interface TransportistaMapper {
 
     @Mapping(target = "idPersona", ignore = true)
     @Mapping(target = "camion", ignore = true)
-    Transportista toEntity(TransportistaRequestDto dto);
+    Transportista toEntity(CreateTransportistaDto dto);
 
     @Mapping(target = "docTransportista", ignore = true)
     @Mapping(target = "tipoDocTransportista", ignore = true)
