@@ -61,17 +61,6 @@ public class CamionServiceImpl implements ICamionService {
     }
 
     @Override
-    public void eliminar(String patenteCamion) {
-        Camion camion = camionRepository.findById(patenteCamion)
-                .orElseThrow(() -> {
-                    log.error("Camion {} no encontrado", patenteCamion);
-                    return new RuntimeException();
-                });
-
-        camionRepository.delete(camion);
-    }
-
-    @Override
     public CamionResponseDto obtenerPorId(String patenteCamion) {
         // Busca el camion en la BD
         Camion camion = camionRepository.findById(patenteCamion)

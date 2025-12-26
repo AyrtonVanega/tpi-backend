@@ -15,8 +15,6 @@ public interface ICamionService {
 
     void actualizar(String patenteCamion, CamionRequestDto dto);
 
-    void eliminar(String patenteCamion);
-
     CamionResponseDto obtenerPorId(String patenteCamion);
 
     List<CamionResponseDto> obtenerCamionesDisponibles();

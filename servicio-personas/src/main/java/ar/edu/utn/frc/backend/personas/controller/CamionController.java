@@ -3,7 +3,6 @@ package ar.edu.utn.frc.backend.personas.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,12 +39,6 @@ public class CamionController {
             @RequestBody PatchCamionDto patchCamionDto) {
 
         camionService.actualizarDisponibilidad(patenteCamion, patchCamionDto);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{patenteCamion}")
-    public ResponseEntity<Void> eliminarCamion(@PathVariable String patenteCamion) {
-        camionService.eliminar(patenteCamion);
         return ResponseEntity.noContent().build();
     }
 
