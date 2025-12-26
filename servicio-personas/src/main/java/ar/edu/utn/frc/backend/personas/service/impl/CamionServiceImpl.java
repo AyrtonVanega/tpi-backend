@@ -83,8 +83,24 @@ public class CamionServiceImpl implements ICamionService {
 
     @Override
     public List<CamionResponseDto> obtenerCamionesDisponibles() {
+        // Obtiene los camiones disponibles de la BD
         List<Camion> camiones = camionRepository.findByDisponibilidadTrue();
-        return camionMapper.toResponseList(camiones);
+
+        // Mapea datos simples Entity -> DTO
+        List<CamionResponseDto> responseDtoList = camionMapper.toResponseList(camiones);
+
+        // Setea doc y tipoDoc del Transportista a cada ResponseDto de la lista
+        for (int i = 0; i < camiones.size(); i++) {
+            Camion camion = camiones.get(i);
+            CamionResponseDto dto = responseDtoList.get(i);
+
+            String docTransportista = camion.getTransportista().getIdPersona().getDoc();
+            String tipoDocTransportista = camion.getTransportista().getIdPersona().getTipoDoc();
+            dto.setDocTransportista(docTransportista);
+            dto.setTipoDocTransportista(tipoDocTransportista);
+        }
+
+        return responseDtoList;
     }
 
     @Override
