@@ -24,5 +24,7 @@ import lombok.experimental.SuperBuilder;
     @PrimaryKeyJoinColumn(name = "tipo_doc", referencedColumnName = "tipo_doc")
 })
 public class Cliente extends Persona {
-    private List<Long> solicitudes;
+
+    
+    private List<Long> idSolicitudes;
 }

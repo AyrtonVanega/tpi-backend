@@ -19,16 +19,15 @@ import ar.edu.utn.frc.backend.personas.model.Cliente;
 public interface ClienteMapper {
 
     @Mapping(target = "idPersona", ignore = true)
-    @Mapping(target = "solicitudes", ignore = true)
+    @Mapping(target = "idSolicitudes", ignore = true)
     Cliente toEntity(ClienteRequestDto dto);
 
     @Mapping(target = "docCliente", ignore = true)
     @Mapping(target = "tipoDocCliente", ignore = true)
-    @Mapping(target = "idSolicitudes", ignore = true)
     ClienteResponseDto toResponse(Cliente entity);
 
     @Mapping(target = "idPersona", ignore = true)
-    @Mapping(target = "solicitudes", ignore = true)
+    @Mapping(target = "idSolicitudes", ignore = true)
     void updateFromPutDto(PutClienteDto dto, @MappingTarget Cliente entity);
 
     List<ClienteResponseDto> toResponseList(List<Cliente> clientes);

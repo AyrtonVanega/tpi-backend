@@ -74,8 +74,8 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     public ClienteResponseDto obtenerPorId(String docCliente, String tipoDocCliente) {
+        // Compone el id y busca el Transportista en la BD
         PersonaId id = new PersonaId(docCliente, tipoDocCliente);
-
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error(
@@ -84,8 +84,15 @@ public class ClienteServiceImpl implements IClienteService {
                             id.getTipoDoc());
                     return new RuntimeException();
                 });
-        
-        return clienteMapper.toResponse(cliente);
+
+        // Mapea datos simples Entity -> DTO
+        ClienteResponseDto responseDto = clienteMapper.toResponse(cliente);
+
+        // Setea el id al ResponseDto
+        responseDto.setDocCliente(cliente.getIdPersona().getDoc());
+        responseDto.setTipoDocCliente(cliente.getIdPersona().getTipoDoc());
+
+        return responseDto;
     }
 
     @Override
