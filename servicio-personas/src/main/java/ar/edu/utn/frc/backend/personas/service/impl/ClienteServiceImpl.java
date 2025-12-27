@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.personas.dto.ClienteRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.ClienteResponseDto;
+import ar.edu.utn.frc.backend.personas.dto.PutClienteDto;
 import ar.edu.utn.frc.backend.personas.mapper.ClienteMapper;
 import ar.edu.utn.frc.backend.personas.model.Cliente;
 import ar.edu.utn.frc.backend.personas.model.PersonaId;
@@ -36,9 +37,9 @@ public class ClienteServiceImpl implements IClienteService {
     }
 
     @Override
-    public void actualizar(String docCliente, String tipoDocCliente, ClienteRequestDto dto) {
+    public void actualizar(String docCliente, String tipoDocCliente, PutClienteDto dto) {
+        // Compone el id y busca el Cliente en la BD
         PersonaId id = new PersonaId(docCliente, tipoDocCliente);
-
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error(
@@ -49,10 +50,7 @@ public class ClienteServiceImpl implements IClienteService {
                 });
         
         // Actualiza datos simples
-        clienteMapper.updateFromDto(dto, cliente);
-
-        // Actualiza el doc y tipoDoc
-
+        clienteMapper.updateFromPutDto(dto, cliente);
 
         // Guarda los cambios
         clienteRepository.save(cliente);

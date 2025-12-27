@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.utn.frc.backend.personas.dto.ClienteRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.ClienteResponseDto;
+import ar.edu.utn.frc.backend.personas.dto.PutClienteDto;
 import ar.edu.utn.frc.backend.personas.service.interfaces.IClienteService;
 import lombok.AllArgsConstructor;
 
@@ -37,7 +38,7 @@ public class ClienteController {
     public ResponseEntity<Void> actualizarCliente(
             @PathVariable String docCliente,
             @PathVariable String tipoDocCliente,
-            @RequestBody ClienteRequestDto clienteRequestDto) {
+            @RequestBody PutClienteDto clienteRequestDto) {
         clienteService.actualizar(docCliente, tipoDocCliente, clienteRequestDto);
         return ResponseEntity.noContent().build();
     }

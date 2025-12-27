@@ -9,6 +9,7 @@ import org.mapstruct.ReportingPolicy;
 
 import ar.edu.utn.frc.backend.personas.dto.ClienteRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.ClienteResponseDto;
+import ar.edu.utn.frc.backend.personas.dto.PutClienteDto;
 import ar.edu.utn.frc.backend.personas.model.Cliente;
 
 @Mapper(
@@ -28,7 +29,7 @@ public interface ClienteMapper {
 
     @Mapping(target = "idPersona", ignore = true)
     @Mapping(target = "solicitudes", ignore = true)
-    void updateFromDto(ClienteRequestDto dto, @MappingTarget Cliente entity);
+    void updateFromPutDto(PutClienteDto dto, @MappingTarget Cliente entity);
 
     List<ClienteResponseDto> toResponseList(List<Cliente> clientes);
 }
