@@ -81,8 +81,29 @@ public class ContenedorServiceImpl implements IContenedorService {
 
     @Override
     public List<ContenedorResponseDto> obtenerTodos() {
+        // Obtiene todos los Contenedores de la BD
         List<Contenedor> contenedores = contenedorRepository.findAll();
-        return contenedorMapper.toResponseList(contenedores);
+
+        // Mapea datos simples Entity -> DTO
+        List<ContenedorResponseDto> responseDtoList = contenedorMapper.toResponseList(contenedores);
+
+        // Completa datos faltantes en cada DTO
+        for (int i = 0; i < contenedores.size(); i++) {
+            Contenedor contenedor = contenedores.get(i);
+            ContenedorResponseDto dto = responseDtoList.get(i);
+
+            // Setea el id de la solicitud al ResponseDto
+            Solicitud solicitud = contenedor.getSolicitud();
+            if (solicitud != null) {
+                dto.setIdSolicitud(solicitud.getIdSolicitud());
+            }
+
+            // Setea el estadoActual al ResponseDto
+            EstadoContenedor estadoActual = historialEstadoService.obtenerEstadoActual(contenedor.getIdContenedor());
+            dto.setEstadoActual(estadoActual.getCodigo());
+        }
+
+        return responseDtoList;
     }
 
     @Override
