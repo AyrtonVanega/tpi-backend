@@ -24,7 +24,14 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     public void crear(ClienteRequestDto dto) {
+        // Mapea datos simples DTO -> Entity
         Cliente cliente = clienteMapper.toEntity(dto);
+
+        // Crea y setea el id
+        PersonaId id = new PersonaId(dto.getDocCliente(), dto.getTipoDocCliente());
+        cliente.setIdPersona(id);
+
+        // Guarda en la BD
         clienteRepository.save(cliente);
     }
 
