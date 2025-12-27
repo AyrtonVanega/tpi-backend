@@ -1,10 +1,12 @@
 package ar.edu.utn.frc.backend.solicitudes.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContenedorResponseDto {
     private Long idContenedor;
     private double ancho;
@@ -12,4 +14,5 @@ public class ContenedorResponseDto {
     private double largo;
     private double peso;
     private Long idSolicitud;
+    private String estadoActual;
 }

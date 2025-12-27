@@ -20,13 +20,16 @@ public interface ContenedorMapper {
 
     @Mapping(target = "idContenedor", ignore = true)
     @Mapping(target = "historialesEstadoContenedor", ignore = true)
+    @Mapping(target = "solicitud", ignore = true)
     Contenedor toEntity(CreateContenedorDto dto);
 
     @Mapping(target = "idSolicitud", ignore = true)
+    @Mapping(target = "estadoActual", ignore = true)
     ContenedorResponseDto toResponse(Contenedor entity);
 
     @Mapping(target = "idContenedor", ignore = true)
     @Mapping(target = "historialesEstadoContenedor", ignore = true)
+    @Mapping(target = "solicitud", ignore = true)
     void updateFromPutDto(PutContenedorDto dto, @MappingTarget Contenedor entity);
 
     List<ContenedorResponseDto> toResponseList(List<Contenedor> contenedores);

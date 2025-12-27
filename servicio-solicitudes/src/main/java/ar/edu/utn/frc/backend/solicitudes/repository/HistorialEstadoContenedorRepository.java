@@ -1,5 +1,7 @@
 package ar.edu.utn.frc.backend.solicitudes.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -7,4 +9,7 @@ import ar.edu.utn.frc.backend.solicitudes.model.HistorialEstadoContenedor;
 
 @Repository
 public interface HistorialEstadoContenedorRepository extends JpaRepository<HistorialEstadoContenedor, Long> {
+
+    // Devuelve el último historial por fecha 
+    Optional<HistorialEstadoContenedor> findTopByContenedorIdContenedorOrderByFechaHoraDesc(Long idContenedor);
 }

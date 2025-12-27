@@ -24,7 +24,7 @@ public class HistorialEstadoContenedor {
     @Column(name = "fecha_hora")
     private LocalDateTime fechaHora;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_contenedor")
     private Contenedor contenedor;
 

@@ -18,10 +18,10 @@ import java.time.LocalDateTime;
 @Slf4j
 public class HistorialEstadoContenedorServiceImpl implements IHistorialEstadoContenedorService {
 
-    private final HistorialEstadoContenedorRepository historialEstadoContenedorRepository;
+    private final HistorialEstadoContenedorRepository historialRepository;
 
     private final IEstadoContenedorService estadoContenedorService;
-    
+
     @Override
     public void registarCambioEstado(Contenedor contenedor, String codigoEstadoNuevo) {
 
@@ -34,6 +34,16 @@ public class HistorialEstadoContenedorServiceImpl implements IHistorialEstadoCon
                 .estadoContenedor(estadoContenedor)
                 .build();
 
-        historialEstadoContenedorRepository.save(historial);
+        historialRepository.save(historial);
+    }
+
+    @Override
+    public EstadoContenedor obtenerEstadoActual(Long idContenedor) {
+        return historialRepository.findTopByContenedorIdContenedorOrderByFechaHoraDesc(idContenedor)
+                .map(HistorialEstadoContenedor::getEstadoContenedor)
+                .orElseThrow(() -> {
+                    log.error("No hay historial para el contenedor {}", idContenedor);
+                    return new RuntimeException();
+                });
     }
 }

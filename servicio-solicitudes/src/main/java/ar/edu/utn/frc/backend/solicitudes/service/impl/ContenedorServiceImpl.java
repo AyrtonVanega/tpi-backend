@@ -10,6 +10,8 @@ import ar.edu.utn.frc.backend.solicitudes.dto.PatchContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.mapper.ContenedorMapper;
 import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
+import ar.edu.utn.frc.backend.solicitudes.model.EstadoContenedor;
+import ar.edu.utn.frc.backend.solicitudes.model.Solicitud;
 import ar.edu.utn.frc.backend.solicitudes.repository.ContenedorRepository;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IContenedorService;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IHistorialEstadoContenedorService;
@@ -54,12 +56,27 @@ public class ContenedorServiceImpl implements IContenedorService {
 
     @Override
     public ContenedorResponseDto obtenerPorId(Long idContenedor) {
+        // Busca el Contenedor en la BD
         Contenedor contenedor = contenedorRepository.findById(idContenedor)
                 .orElseThrow(() -> {
                     log.error("Contenedor {} no encontrado", idContenedor);
                     return new RuntimeException();
                 });
-        return contenedorMapper.toResponse(contenedor);
+
+        // Mapea datos simples Entity -> DTO
+        ContenedorResponseDto responseDto = contenedorMapper.toResponse(contenedor);
+
+        // Setea el id de la solicitud al ResponseDto
+        Solicitud solicitud = contenedor.getSolicitud();
+        if (solicitud != null) {
+            responseDto.setIdSolicitud(solicitud.getIdSolicitud());
+        }
+
+        // Setea el estadoActual al ResponseDto
+        EstadoContenedor estadoActual = historialEstadoService.obtenerEstadoActual(idContenedor);
+        responseDto.setEstadoActual(estadoActual.getCodigo());
+
+        return responseDto;
     }
 
     @Override

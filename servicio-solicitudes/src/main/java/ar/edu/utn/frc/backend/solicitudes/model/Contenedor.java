@@ -36,6 +36,9 @@ public class Contenedor {
     @OneToMany(mappedBy = "contenedor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<HistorialEstadoContenedor> historialesEstadoContenedor;
 
+    @OneToOne(mappedBy = "contenedor")
+    private Solicitud solicitud;
+
     public double calcularVolumen() {
         return ancho * alto * largo;
     }
