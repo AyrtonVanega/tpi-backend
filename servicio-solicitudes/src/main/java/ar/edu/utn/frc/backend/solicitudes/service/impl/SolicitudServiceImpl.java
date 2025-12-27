@@ -106,8 +106,25 @@ public class SolicitudServiceImpl implements ISolicitudService {
 
     @Override
     public List<SolicitudResponseDto> obtenerTodos() {
+        // Obtiene todas las Solicitudes de la BD
         List<Solicitud> solicitudes = solicitudRepository.findAll();
-        return solicitudMapper.toResponseList(solicitudes);
+
+        // Mapea datos simples Entity -> DTO
+        List<SolicitudResponseDto> responseDtoList = solicitudMapper.toResponseList(solicitudes);
+
+        // Completa datos faltantes en cada DTo
+        for (int i = 0; i < solicitudes.size(); i++) {
+            Solicitud solicitud = solicitudes.get(i);
+            SolicitudResponseDto dto = responseDtoList.get(i);
+
+            // Setea el id del Contenedor al ResponseDto
+            dto.setIdContenedor(solicitud.getContenedor().getIdContenedor());
+
+            // Setea el estado de la Solicitud al ResponseDto
+            dto.setCodigoEstadoSolicitud(solicitud.getEstadoSolicitud().getCodigo());
+        }
+
+        return responseDtoList;
     }
 
     @Override
