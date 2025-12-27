@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frc.backend.personas.dto.ClienteRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.ClienteResponseDto;
+import ar.edu.utn.frc.backend.personas.dto.CreateClienteDto;
 import ar.edu.utn.frc.backend.personas.dto.PutClienteDto;
 import ar.edu.utn.frc.backend.personas.mapper.ClienteMapper;
 import ar.edu.utn.frc.backend.personas.model.Cliente;
@@ -24,7 +24,7 @@ public class ClienteServiceImpl implements IClienteService {
     private final ClienteMapper clienteMapper;
 
     @Override
-    public void crear(ClienteRequestDto dto) {
+    public void crear(CreateClienteDto dto) {
         // Mapea datos simples DTO -> Entity
         Cliente cliente = clienteMapper.toEntity(dto);
 

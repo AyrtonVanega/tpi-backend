@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.edu.utn.frc.backend.personas.dto.ClienteRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.ClienteResponseDto;
+import ar.edu.utn.frc.backend.personas.dto.CreateClienteDto;
 import ar.edu.utn.frc.backend.personas.dto.PutClienteDto;
 import ar.edu.utn.frc.backend.personas.service.interfaces.IClienteService;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class ClienteController {
     private final IClienteService clienteService;
 
     @PostMapping()
-    public ResponseEntity<Void> registrarCliente(@RequestBody ClienteRequestDto clienteRequestDto) {
+    public ResponseEntity<Void> registrarCliente(@RequestBody CreateClienteDto clienteRequestDto) {
         clienteService.crear(clienteRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

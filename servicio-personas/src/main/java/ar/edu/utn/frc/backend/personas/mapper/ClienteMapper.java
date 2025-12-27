@@ -7,8 +7,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
-import ar.edu.utn.frc.backend.personas.dto.ClienteRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.ClienteResponseDto;
+import ar.edu.utn.frc.backend.personas.dto.CreateClienteDto;
 import ar.edu.utn.frc.backend.personas.dto.PutClienteDto;
 import ar.edu.utn.frc.backend.personas.model.Cliente;
 
@@ -20,7 +20,7 @@ public interface ClienteMapper {
 
     @Mapping(target = "idPersona", ignore = true)
     @Mapping(target = "idSolicitudes", ignore = true)
-    Cliente toEntity(ClienteRequestDto dto);
+    Cliente toEntity(CreateClienteDto dto);
 
     @Mapping(target = "docCliente", ignore = true)
     @Mapping(target = "tipoDocCliente", ignore = true)
