@@ -74,7 +74,7 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     public ClienteResponseDto obtenerPorId(String docCliente, String tipoDocCliente) {
-        // Compone el id y busca el Transportista en la BD
+        // Compone el id y busca el Cliente en la BD
         PersonaId id = new PersonaId(docCliente, tipoDocCliente);
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> {
@@ -97,7 +97,21 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     public List<ClienteResponseDto> obtenerTodos() {
+        // Obtiene todos los clientes de la BD
         List<Cliente> clientes = clienteRepository.findAll();
-        return clienteMapper.toResponseList(clientes);
+
+        // Mapea datos simples Entity -> DTO
+        List<ClienteResponseDto> responseDtoList = clienteMapper.toResponseList(clientes);
+
+        // Setea doc y tipoDoc del Cliente a cada ResponseDto de la lista
+        for (int i = 0; i < clientes.size(); i++) {
+            Cliente cliente = clientes.get(i);
+            ClienteResponseDto dto = responseDtoList.get(i);
+
+            dto.setDocCliente(cliente.getIdPersona().getDoc());
+            dto.setTipoDocCliente(cliente.getIdPersona().getTipoDoc());
+        }
+
+        return responseDtoList;
     }
 }
