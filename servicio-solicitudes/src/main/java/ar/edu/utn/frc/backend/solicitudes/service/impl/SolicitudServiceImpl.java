@@ -85,12 +85,23 @@ public class SolicitudServiceImpl implements ISolicitudService {
 
     @Override
     public SolicitudResponseDto obtenerPorId(Long idSolicitud) {
+        // Busca la Solicitud en la BD
         Solicitud solicitud = solicitudRepository.findById(idSolicitud)
                 .orElseThrow(() -> {
                     log.error("Solicitud {} no encontrada", idSolicitud);
                     return new RuntimeException();
                 });
-        return solicitudMapper.toResponse(solicitud);
+
+        // Mapea datos simples Entity -> DTO
+        SolicitudResponseDto responseDto = solicitudMapper.toResponse(solicitud);
+
+        // Setea el id del contenedor correspondiente al ResponseDto
+        responseDto.setIdContenedor(solicitud.getContenedor().getIdContenedor());
+
+        // Setea el estado de la Solicitud al ResponseDto
+        responseDto.setCodigoEstadoSolicitud(solicitud.getEstadoSolicitud().getCodigo());
+
+        return responseDto;
     }
 
     @Override
