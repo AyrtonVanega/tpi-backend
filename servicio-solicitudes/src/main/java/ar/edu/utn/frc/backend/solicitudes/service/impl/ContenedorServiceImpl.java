@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorResponseDto;
-import ar.edu.utn.frc.backend.solicitudes.dto.CreateContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.mapper.ContenedorMapper;
@@ -30,16 +29,20 @@ public class ContenedorServiceImpl implements IContenedorService {
     private final ContenedorMapper contenedorMapper;
 
     @Override
-    public void crear(CreateContenedorDto contenedorRequestDto) {
-        // Mapea DTO a Entidad
-        Contenedor contenedor = contenedorMapper.toEntity(contenedorRequestDto);
+    public void crear(double ancho, double largo, double altura, double peso) {
+        // Crea el contenedor
+        Contenedor contenedor = Contenedor.builder()
+                .ancho(ancho)
+                .largo(largo)
+                .alto(altura)
+                .peso(peso)
+                .build();
 
         // Guarda el contenedor
         contenedor = contenedorRepository.save(contenedor);
 
         // Registra el estado inicial en el historial
         historialEstadoService.registarCambioEstado(contenedor, "EN_ORIGEN");
-
     }
 
     @Override
