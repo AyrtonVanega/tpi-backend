@@ -35,6 +35,7 @@ public class TarifaServiceImpl implements ITarifaService {
                     return new RuntimeException();
                 });
         tarifaMapper.updateFromDto(dto, tarifa);
+        tarifaRepository.save(tarifa);
     }
 
     @Override

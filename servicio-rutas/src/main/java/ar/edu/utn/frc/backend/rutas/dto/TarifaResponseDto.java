@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TarifaResponseDto {
+    private Long idTarifa;
     private double rangoPesoMin;
     private double rangoPesoMax;
     private double rangoVolumenMin;
