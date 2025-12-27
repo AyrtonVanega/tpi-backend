@@ -13,6 +13,7 @@ import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 import ar.edu.utn.frc.backend.solicitudes.model.EstadoSolicitud;
 import ar.edu.utn.frc.backend.solicitudes.model.Solicitud;
 import ar.edu.utn.frc.backend.solicitudes.repository.SolicitudRepository;
+import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IContenedorService;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IEstadoSolicitudService;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.ISolicitudService;
 
@@ -25,6 +26,7 @@ import java.util.List;
 public class SolicitudServiceImpl implements ISolicitudService {
 
     private final IEstadoSolicitudService estadoSolicitudService;
+    private final IContenedorService contenedorService;
 
     private final SolicitudRepository solicitudRepository;
 
@@ -35,8 +37,12 @@ public class SolicitudServiceImpl implements ISolicitudService {
 
         // Crea, si no existen, las ubicaciones de origen y destino
 
-        // Crea, si no existe, el contenedor
-        Contenedor contenedor = null;
+        // Crea el contenedor
+        double ancho = solicitudRequestDto.getAnchoContenedor();
+        double largo = solicitudRequestDto.getLargoContenedor();
+        double altura = solicitudRequestDto.getAlturaContenedor();
+        double peso = solicitudRequestDto.getPesoContenedor();
+        Contenedor contenedor = contenedorService.crear(ancho, largo, altura, peso);
 
         // Registra, si no esta registrado, el cliente
         //Cliente cliente = null;

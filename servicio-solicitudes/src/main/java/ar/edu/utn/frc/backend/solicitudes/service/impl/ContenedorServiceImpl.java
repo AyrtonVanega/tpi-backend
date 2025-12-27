@@ -29,7 +29,7 @@ public class ContenedorServiceImpl implements IContenedorService {
     private final ContenedorMapper contenedorMapper;
 
     @Override
-    public void crear(double ancho, double largo, double altura, double peso) {
+    public Contenedor crear(double ancho, double largo, double altura, double peso) {
         // Crea el contenedor
         Contenedor contenedor = Contenedor.builder()
                 .ancho(ancho)
@@ -43,6 +43,8 @@ public class ContenedorServiceImpl implements IContenedorService {
 
         // Registra el estado inicial en el historial
         historialEstadoService.registarCambioEstado(contenedor, "EN_ORIGEN");
+
+        return contenedor;
     }
 
     @Override
