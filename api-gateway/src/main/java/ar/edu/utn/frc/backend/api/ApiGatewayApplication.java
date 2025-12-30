@@ -36,10 +36,6 @@ public class ApiGatewayApplication {
                 .route("transportistas", r -> r.path("/api/transportistas/**")
                         .filters(f -> f.stripPrefix(1))
                         .uri("lb://personas"))
-                // ===== ROUTES DE SERVICIO RUTAS =====
-                .route("tarifas", r -> r.path("/api/tarifas/**")
-                        .filters(f -> f.stripPrefix(1))
-                        .uri("lb://rutas"))
                 // ===== ROUTES DE SERVICIO SOLICITUDES =====
                 .route("contenedores", r -> r.path("/api/contenedores/**")
                         .filters(f -> f.stripPrefix(1))
@@ -47,6 +43,13 @@ public class ApiGatewayApplication {
                 .route("solicitudes", r -> r.path("/api/solicitudes/**")
                         .filters(f -> f.stripPrefix(1))
                         .uri("lb://solicitudes"))
+                // ===== ROUTES DE SERVICIO TARIFAS =====
+                .route("parametro-global", r -> r.path("/api/parametro-global/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("lb://tarifas"))
+                .route("tarifas", r -> r.path("/api/tarifas/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("lb://tarifas"))
                 .build();
     }
 }

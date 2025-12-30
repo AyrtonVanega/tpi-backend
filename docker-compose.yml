@@ -163,6 +163,38 @@ services:
       POSTGRES_DB: db_solicitudes
     networks:
       - TP_Back
+  
+  # ----------------------------------------------------
+  # SERVICIO TARIFAS
+  # ----------------------------------------------------
+
+  servicio-tarifas:
+    build:
+      context: ./servicio-tarifas
+      dockerfile: Dockerfile
+    container_name: ms_tarifas
+    ports:
+      - "8084:8080"
+    depends_on:
+      - eureka-server
+      - db_tarifas
+    restart: on-failure
+    networks:
+      - TP_Back
+
+  db_tarifas:
+    image: postgres:16
+    container_name: db_tarifas
+    ports:
+      - "5437:5432"
+    volumes:
+      - tarifas_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_tarifas
+    networks:
+      - TP_Back
 
   # ----------------------------------------------------
   # KEYCLOAK
@@ -173,7 +205,7 @@ services:
     container_name: keycloak
     command: start-dev
     ports:
-      - "8084:8080"
+      - "8085:8080"
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
@@ -204,6 +236,7 @@ volumes:
   personas_data:
   rutas_data:
   solicitudes_data:
+  tarifas_data:
 
   # ----------------------------------------------------
   # DEFINICIÓN DE REDES

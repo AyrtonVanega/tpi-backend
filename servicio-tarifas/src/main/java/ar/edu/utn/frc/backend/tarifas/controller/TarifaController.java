@@ -1,4 +1,4 @@
-package ar.edu.utn.frc.backend.rutas.controller;
+package ar.edu.utn.frc.backend.tarifas.controller;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.edu.utn.frc.backend.rutas.dto.TarifaRequestDto;
-import ar.edu.utn.frc.backend.rutas.dto.TarifaResponseDto;
-import ar.edu.utn.frc.backend.rutas.service.interfaces.ITarifaService;
+import ar.edu.utn.frc.backend.tarifas.dto.TarifaRequestDto;
+import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
+import ar.edu.utn.frc.backend.tarifas.service.interfaces.ITarifaService;
 import lombok.AllArgsConstructor;
 
 @RestController

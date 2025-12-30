@@ -1,9 +1,9 @@
-package ar.edu.utn.frc.backend.rutas.repository;
+package ar.edu.utn.frc.backend.tarifas.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import ar.edu.utn.frc.backend.rutas.model.Tarifa;
+import ar.edu.utn.frc.backend.tarifas.model.Tarifa;
 
 @Repository
 public interface TarifaRepository extends JpaRepository<Tarifa, Long> {

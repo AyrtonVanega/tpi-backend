@@ -1,4 +1,4 @@
-package ar.edu.utn.frc.backend.rutas.dto;
+package ar.edu.utn.frc.backend.tarifas.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,5 @@ public class TarifaRequestDto {
     private double rangoPesoMax;
     private double rangoVolumenMin;
     private double rangoVolumenMax;
-    private double valorLitroCombustible;
-    private double costoGestionBase;
     private double costoBaseKmVolumen;
 }

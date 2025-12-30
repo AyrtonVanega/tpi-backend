@@ -1,4 +1,4 @@
-package ar.edu.utn.frc.backend.rutas.model;
+package ar.edu.utn.frc.backend.tarifas.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,12 +35,6 @@ public class Tarifa {
 
     @Column(name = "rango_volumen_max")
     private double rangoVolumenMax;
-
-    @Column(name = "valor_litro_combustible")
-    private double valorLitroCombustible;
-
-    @Column(name = "costo_gestion_base")
-    private double costoGestionBase;
 
     @Column(name = "costo_base_km_volumen")
     private double costoBaseKmVolumen;

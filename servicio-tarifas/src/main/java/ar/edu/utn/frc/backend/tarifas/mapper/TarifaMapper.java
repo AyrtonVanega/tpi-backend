@@ -1,4 +1,4 @@
-package ar.edu.utn.frc.backend.rutas.mapper;
+package ar.edu.utn.frc.backend.tarifas.mapper;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
-import ar.edu.utn.frc.backend.rutas.dto.TarifaRequestDto;
-import ar.edu.utn.frc.backend.rutas.dto.TarifaResponseDto;
-import ar.edu.utn.frc.backend.rutas.model.Tarifa;
+import ar.edu.utn.frc.backend.tarifas.dto.TarifaRequestDto;
+import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
+import ar.edu.utn.frc.backend.tarifas.model.Tarifa;
 
 @Mapper(
     componentModel = "spring", 

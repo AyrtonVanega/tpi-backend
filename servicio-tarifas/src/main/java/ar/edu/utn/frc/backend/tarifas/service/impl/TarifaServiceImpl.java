@@ -1,15 +1,15 @@
-package ar.edu.utn.frc.backend.rutas.service.impl;
+package ar.edu.utn.frc.backend.tarifas.service.impl;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frc.backend.rutas.dto.TarifaRequestDto;
-import ar.edu.utn.frc.backend.rutas.dto.TarifaResponseDto;
-import ar.edu.utn.frc.backend.rutas.mapper.TarifaMapper;
-import ar.edu.utn.frc.backend.rutas.model.Tarifa;
-import ar.edu.utn.frc.backend.rutas.repository.TarifaRepository;
-import ar.edu.utn.frc.backend.rutas.service.interfaces.ITarifaService;
+import ar.edu.utn.frc.backend.tarifas.dto.TarifaRequestDto;
+import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
+import ar.edu.utn.frc.backend.tarifas.mapper.TarifaMapper;
+import ar.edu.utn.frc.backend.tarifas.model.Tarifa;
+import ar.edu.utn.frc.backend.tarifas.repository.TarifaRepository;
+import ar.edu.utn.frc.backend.tarifas.service.interfaces.ITarifaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,5 +63,4 @@ public class TarifaServiceImpl implements ITarifaService {
         List<Tarifa> tarifas = tarifaRepository.findAll();
         return tarifaMapper.toResponseList(tarifas);
     }
-
 }
