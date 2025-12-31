@@ -1,6 +1,8 @@
 package ar.edu.utn.frc.backend.personas.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -23,17 +25,24 @@ public class ClienteServiceImpl implements IClienteService {
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
 
+    private final Map<PersonaId, Cliente> clientes = new HashMap<>();
+
     @Override
     public void crear(CreateClienteDto dto) {
-        // Mapea datos simples DTO -> Entity
-        Cliente cliente = clienteMapper.toEntity(dto);
+        // Compone el id
+        PersonaId personaId = new PersonaId(dto.getDocCliente(), dto.getTipoDocCliente());
 
-        // Crea y setea el id
-        PersonaId id = new PersonaId(dto.getDocCliente(), dto.getTipoDocCliente());
-        cliente.setIdPersona(id);
+        // Registra el cliente si no existe
+        this.clientes.computeIfAbsent(personaId, id -> {
+            // Mapea datos simples DTO -> Entity
+            Cliente cliente = clienteMapper.toEntity(dto);
 
-        // Guarda en la BD
-        clienteRepository.save(cliente);
+            // Setea el id
+            cliente.setIdPersona(personaId);
+
+            // Guarda en la BD
+            return clienteRepository.save(cliente);
+        });
     }
 
     @Override

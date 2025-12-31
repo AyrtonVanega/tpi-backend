@@ -31,6 +31,8 @@ public interface SolicitudMapper {
     @Mapping(target = "fechaHoraInicio", ignore = true)
     @Mapping(target = "estadoSolicitud", ignore = true)
     @Mapping(target = "contenedor", ignore = true)
+    @Mapping(target = "docCliente", ignore = true)
+    @Mapping(target = "tipoDocCliente", ignore = true)
     void updateFromPatchDto(PatchSolicitudDto dto, @MappingTarget Solicitud entity);
 
     List<SolicitudResponseDto> toResponseList(List<Solicitud> solicitudes);

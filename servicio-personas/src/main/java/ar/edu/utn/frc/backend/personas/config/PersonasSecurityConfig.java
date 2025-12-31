@@ -26,6 +26,7 @@ public class PersonasSecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/clientes/internal/**").hasRole("INTERNAL_CALL")
                 .anyRequest().authenticated())
             .oauth2ResourceServer(oauth2 -> 
                 oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
@@ -41,7 +42,7 @@ public class PersonasSecurityConfig {
             if (realmAccess != null && realmAccess.containsKey("roles")) {
                 var roles = (Collection<String>) realmAccess.get("roles");
                 roles.stream()
-                    .map(r -> "ROLE_" + r.toUpperCase())
+                    .map(r -> "ROLE_" + r.toUpperCase().replace("-", "_"))
                     .map(SimpleGrantedAuthority::new)
                     .forEach(authorities::add);
             }

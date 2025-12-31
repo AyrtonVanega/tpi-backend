@@ -47,7 +47,11 @@ public class Solicitud {
     @JoinColumn(name = "id_contenedor")
     private Contenedor contenedor;
 
+    @Column(name = "doc_cliente")
+    private String docCliente;
+    
+    @Column(name = "tipo_doc_cliente")
+    private String tipoDocCliente;
+    
     //private Long idRuta;
-    //private String docCliente;
-    //private Char tipoDocCliente;
 }

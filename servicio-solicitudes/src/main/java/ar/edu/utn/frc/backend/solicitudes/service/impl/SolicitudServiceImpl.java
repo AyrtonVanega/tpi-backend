@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.solicitudes.client.DepositoClient;
+import ar.edu.utn.frc.backend.solicitudes.client.PersonaClient;
 import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
@@ -34,6 +35,7 @@ public class SolicitudServiceImpl implements ISolicitudService {
     private final SolicitudMapper solicitudMapper;
 
     private final DepositoClient depositoClient;
+    private final PersonaClient personaClient;
 
     @Override
     public void crear(CreateSolicitudDto solicitudRequestDto) {
@@ -54,14 +56,22 @@ public class SolicitudServiceImpl implements ISolicitudService {
         );
 
         // Crea el contenedor
-        double ancho = solicitudRequestDto.getAnchoContenedor();
-        double largo = solicitudRequestDto.getLargoContenedor();
-        double altura = solicitudRequestDto.getAlturaContenedor();
-        double peso = solicitudRequestDto.getPesoContenedor();
-        Contenedor contenedor = contenedorService.crear(ancho, largo, altura, peso);
+        Contenedor contenedor = contenedorService.crear(
+            solicitudRequestDto.getAnchoContenedor(),
+            solicitudRequestDto.getLargoContenedor(),
+            solicitudRequestDto.getAlturaContenedor(),
+            solicitudRequestDto.getPesoContenedor()
+        );
 
         // Registra, si no esta registrado, el cliente
-        //Cliente cliente = null;
+        personaClient.registrarCliente(
+            solicitudRequestDto.getDocCliente(),
+            solicitudRequestDto.getTipoDocCliente(),
+            solicitudRequestDto.getNombreCliente(),
+            solicitudRequestDto.getApellidoCliente(),
+            solicitudRequestDto.getTelefonoCliente(),
+            solicitudRequestDto.getEmailCliente()
+        );
 
         // Busca el Estado inicial
         EstadoSolicitud estadoSolicitud = estadoSolicitudService.buscarPorCodigo("BORRADOR");
@@ -69,7 +79,8 @@ public class SolicitudServiceImpl implements ISolicitudService {
         // Crea la solicitud seteando Contenendor, Cliente, Estado y Fecha de Inicio
         Solicitud solicitud = Solicitud.builder()
                 .contenedor(contenedor)
-                //.cliente(cliente)
+                .docCliente(solicitudRequestDto.getDocCliente())
+                .tipoDocCliente(solicitudRequestDto.getTipoDocCliente())
                 .estadoSolicitud(estadoSolicitud)
                 .fechaHoraInicio(LocalDateTime.now())
                 .build();
