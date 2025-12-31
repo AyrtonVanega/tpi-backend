@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.solicitudes.client.DepositoClient;
 import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
@@ -32,10 +33,25 @@ public class SolicitudServiceImpl implements ISolicitudService {
 
     private final SolicitudMapper solicitudMapper;
 
+    private final DepositoClient depositoClient;
+
     @Override
     public void crear(CreateSolicitudDto solicitudRequestDto) {
 
         // Crea, si no existen, las ubicaciones de origen y destino
+        depositoClient.crearUbicacion(
+            solicitudRequestDto.getDireccionUbicacionOrigen(),
+            solicitudRequestDto.getLatitudUbicacionOrigen(),
+            solicitudRequestDto.getLongitudUbicacionOrigen(),
+            solicitudRequestDto.getNombreCiudadUbicacionOrigen()
+        );
+
+        depositoClient.crearUbicacion(
+            solicitudRequestDto.getDireccionUbicacionDestino(),
+            solicitudRequestDto.getLatitudUbicacionDestino(),
+            solicitudRequestDto.getLongitudUbicacionDestino(),
+            solicitudRequestDto.getNombreCiudadUbicacionDestino()
+        );
 
         // Crea el contenedor
         double ancho = solicitudRequestDto.getAnchoContenedor();

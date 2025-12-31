@@ -1,9 +1,19 @@
 package ar.edu.utn.frc.backend.depositos.service.interfaces;
 
+import java.util.List;
+
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionRequestDto;
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionResponseDto;
-import ar.edu.utn.frc.backend.depositos.service.base.CrudService;
 
-public interface IUbicacionService extends CrudService<UbicacionResponseDto, UbicacionRequestDto, Long> {
+public interface IUbicacionService {
     
+    void crearSiNoExiste(UbicacionRequestDto dto);
+
+    void actualizar(Long idUbicacion, UbicacionRequestDto dto);
+
+    void eliminar(Long idUbicacion);
+
+    UbicacionResponseDto obtenerPorId(Long idUbicacion);
+
+    List<UbicacionResponseDto> obtenerTodos();
 }

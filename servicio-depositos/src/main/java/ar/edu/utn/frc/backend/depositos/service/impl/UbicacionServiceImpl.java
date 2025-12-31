@@ -22,9 +22,19 @@ public class UbicacionServiceImpl implements IUbicacionService {
     private final UbicacionMapper ubicacionMapper;
 
     @Override
-    public void crear(UbicacionRequestDto ubicacionRequestDto) {
-        Ubicacion ubicacion = ubicacionMapper.toEntity(ubicacionRequestDto);
-        ubicacionRepository.save(ubicacion);
+    public void crearSiNoExiste(UbicacionRequestDto dto) {
+        // Busca en la BD la Ubicacion por coordenadas (latitud y longitud),
+        // si no la encuentra la crea
+        ubicacionRepository.buscarPorCoordenadasAprox(dto.getLatitud(), dto.getLongitud())
+                .orElseGet(() -> {
+                    Ubicacion u = Ubicacion.builder()
+                            .direccion(dto.getDireccion())
+                            .latitud(dto.getLatitud())
+                            .longitud(dto.getLongitud())
+                            .nombreCiudad(dto.getNombreCiudad())
+                            .build();
+                    return ubicacionRepository.save(u);
+                });
     }
 
     @Override

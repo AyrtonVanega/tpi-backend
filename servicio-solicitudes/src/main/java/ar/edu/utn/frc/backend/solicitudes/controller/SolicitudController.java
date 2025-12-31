@@ -19,7 +19,7 @@ public class SolicitudController {
 
     private final ISolicitudService solicitudService;
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<Void> crearSolicitud(@RequestBody CreateSolicitudDto solicitudRequestDto) {
         solicitudService.crear(solicitudRequestDto);
         return ResponseEntity
