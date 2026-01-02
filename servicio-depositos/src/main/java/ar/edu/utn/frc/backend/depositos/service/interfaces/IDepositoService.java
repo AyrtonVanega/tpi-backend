@@ -12,4 +12,6 @@ public interface IDepositoService extends CrudService<DepositoResponseDto, Depos
     Deposito buscarDepositoPorId(Long idDeposito);
 
     List<Deposito> buscarDepositos();
+
+    List<DepositoResponseDto> obtenerDepositosEnBoundingBox(double minLat, double maxLat, double minLon, double maxLon);
 }

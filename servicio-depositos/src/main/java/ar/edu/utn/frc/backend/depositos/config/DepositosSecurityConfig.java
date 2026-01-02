@@ -27,13 +27,13 @@ public class DepositosSecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/ubicaciones/internal/**").hasRole("INTERNAL_CALL")
+                .requestMatchers("/depositos/internal/**").hasRole("INTERNAL_CALL")
                 .anyRequest().authenticated())
             .oauth2ResourceServer(oauth2 -> 
                 oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
         return http.build();
     }
 
-    @SuppressWarnings("unchecked")
     @Bean
     public Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter() {
         return jwt -> {

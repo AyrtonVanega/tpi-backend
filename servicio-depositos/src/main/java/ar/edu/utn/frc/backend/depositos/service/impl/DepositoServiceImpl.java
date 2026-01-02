@@ -80,4 +80,12 @@ public class DepositoServiceImpl implements IDepositoService {
     public List<Deposito> buscarDepositos() {
         return depositoRepository.findAll();
     }
+
+    @Override
+    public List<DepositoResponseDto> obtenerDepositosEnBoundingBox(double minLat, double maxLat, double minLon,
+            double maxLon) {
+
+        List<Deposito> depositos = depositoRepository.findDepositosEnBoundingBox(minLat, maxLat, minLon, maxLon);
+        return depositoMapper.toResponseList(depositos);
+    }
 }
