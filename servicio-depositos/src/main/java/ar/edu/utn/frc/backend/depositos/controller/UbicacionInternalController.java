@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionRequestDto;
+import ar.edu.utn.frc.backend.depositos.dto.UbicacionResponseDto;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IUbicacionService;
 import lombok.RequiredArgsConstructor;
 
@@ -21,10 +22,10 @@ public class UbicacionInternalController {
 
     @PreAuthorize("hasRole('INTERNAL_CALL')")
     @PostMapping()
-    public ResponseEntity<Void> crear(@RequestBody UbicacionRequestDto dto) {
-        ubicacionService.crearSiNoExiste(dto);
+    public ResponseEntity<UbicacionResponseDto> crear(@RequestBody UbicacionRequestDto dto) {
+        UbicacionResponseDto ubicacion = ubicacionService.crearSiNoExiste(dto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .build();
+                .body(ubicacion);
     }
 }

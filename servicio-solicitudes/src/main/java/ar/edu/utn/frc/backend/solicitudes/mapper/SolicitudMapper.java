@@ -33,6 +33,8 @@ public interface SolicitudMapper {
     @Mapping(target = "contenedor", ignore = true)
     @Mapping(target = "docCliente", ignore = true)
     @Mapping(target = "tipoDocCliente", ignore = true)
+    @Mapping(target = "idUbicacionOrigen", ignore = true)
+    @Mapping(target = "idUbicacionDestino", ignore = true)
     void updateFromPatchDto(PatchSolicitudDto dto, @MappingTarget Solicitud entity);
 
     List<SolicitudResponseDto> toResponseList(List<Solicitud> solicitudes);

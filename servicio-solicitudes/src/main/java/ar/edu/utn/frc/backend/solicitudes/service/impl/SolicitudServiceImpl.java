@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.solicitudes.client.DepositoClient;
 import ar.edu.utn.frc.backend.solicitudes.client.PersonaClient;
+import ar.edu.utn.frc.backend.solicitudes.client.dto.UbicacionResponseDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
@@ -41,43 +42,42 @@ public class SolicitudServiceImpl implements ISolicitudService {
     public void crear(CreateSolicitudDto solicitudRequestDto) {
 
         // Crea, si no existen, las ubicaciones de origen y destino
-        depositoClient.crearUbicacion(
-            solicitudRequestDto.getDireccionUbicacionOrigen(),
-            solicitudRequestDto.getLatitudUbicacionOrigen(),
-            solicitudRequestDto.getLongitudUbicacionOrigen(),
-            solicitudRequestDto.getNombreCiudadUbicacionOrigen()
-        );
+        UbicacionResponseDto origen = depositoClient.crearUbicacion(
+                solicitudRequestDto.getDireccionUbicacionOrigen(),
+                solicitudRequestDto.getLatitudUbicacionOrigen(),
+                solicitudRequestDto.getLongitudUbicacionOrigen(),
+                solicitudRequestDto.getNombreCiudadUbicacionOrigen());
 
-        depositoClient.crearUbicacion(
-            solicitudRequestDto.getDireccionUbicacionDestino(),
-            solicitudRequestDto.getLatitudUbicacionDestino(),
-            solicitudRequestDto.getLongitudUbicacionDestino(),
-            solicitudRequestDto.getNombreCiudadUbicacionDestino()
-        );
+        UbicacionResponseDto destino = depositoClient.crearUbicacion(
+                solicitudRequestDto.getDireccionUbicacionDestino(),
+                solicitudRequestDto.getLatitudUbicacionDestino(),
+                solicitudRequestDto.getLongitudUbicacionDestino(),
+                solicitudRequestDto.getNombreCiudadUbicacionDestino());
 
         // Crea el contenedor
         Contenedor contenedor = contenedorService.crear(
-            solicitudRequestDto.getAnchoContenedor(),
-            solicitudRequestDto.getLargoContenedor(),
-            solicitudRequestDto.getAlturaContenedor(),
-            solicitudRequestDto.getPesoContenedor()
-        );
+                solicitudRequestDto.getAnchoContenedor(),
+                solicitudRequestDto.getLargoContenedor(),
+                solicitudRequestDto.getAlturaContenedor(),
+                solicitudRequestDto.getPesoContenedor());
 
         // Registra, si no esta registrado, el cliente
         personaClient.registrarCliente(
-            solicitudRequestDto.getDocCliente(),
-            solicitudRequestDto.getTipoDocCliente(),
-            solicitudRequestDto.getNombreCliente(),
-            solicitudRequestDto.getApellidoCliente(),
-            solicitudRequestDto.getTelefonoCliente(),
-            solicitudRequestDto.getEmailCliente()
-        );
+                solicitudRequestDto.getDocCliente(),
+                solicitudRequestDto.getTipoDocCliente(),
+                solicitudRequestDto.getNombreCliente(),
+                solicitudRequestDto.getApellidoCliente(),
+                solicitudRequestDto.getTelefonoCliente(),
+                solicitudRequestDto.getEmailCliente());
 
         // Busca el Estado inicial
         EstadoSolicitud estadoSolicitud = estadoSolicitudService.buscarPorCodigo("BORRADOR");
 
-        // Crea la solicitud seteando Contenendor, Cliente, Estado y Fecha de Inicio
+        // Crea la solicitud seteando Ubicaciones de origen y destino, Contenendor,
+        // Cliente, Estado y Fecha de Inicio
         Solicitud solicitud = Solicitud.builder()
+                .idUbicacionOrigen(origen.getIdUbicacion())
+                .idUbicacionDestino(destino.getIdUbicacion())
                 .contenedor(contenedor)
                 .docCliente(solicitudRequestDto.getDocCliente())
                 .tipoDocCliente(solicitudRequestDto.getTipoDocCliente())

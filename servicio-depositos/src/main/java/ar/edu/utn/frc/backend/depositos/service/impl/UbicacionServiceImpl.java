@@ -22,10 +22,10 @@ public class UbicacionServiceImpl implements IUbicacionService {
     private final UbicacionMapper ubicacionMapper;
 
     @Override
-    public void crearSiNoExiste(UbicacionRequestDto dto) {
+    public UbicacionResponseDto crearSiNoExiste(UbicacionRequestDto dto) {
         // Busca en la BD la Ubicacion por coordenadas (latitud y longitud),
         // si no la encuentra la crea
-        ubicacionRepository.buscarPorCoordenadasAprox(dto.getLatitud(), dto.getLongitud())
+        Ubicacion ubicacion = ubicacionRepository.buscarPorCoordenadasAprox(dto.getLatitud(), dto.getLongitud())
                 .orElseGet(() -> {
                     Ubicacion u = Ubicacion.builder()
                             .direccion(dto.getDireccion())
@@ -35,6 +35,7 @@ public class UbicacionServiceImpl implements IUbicacionService {
                             .build();
                     return ubicacionRepository.save(u);
                 });
+        return ubicacionMapper.toResponse(ubicacion);
     }
 
     @Override

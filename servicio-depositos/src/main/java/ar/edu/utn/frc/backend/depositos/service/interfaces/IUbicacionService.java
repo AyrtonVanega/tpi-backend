@@ -7,7 +7,7 @@ import ar.edu.utn.frc.backend.depositos.dto.UbicacionResponseDto;
 
 public interface IUbicacionService {
     
-    void crearSiNoExiste(UbicacionRequestDto dto);
+    UbicacionResponseDto crearSiNoExiste(UbicacionRequestDto dto);
 
     void actualizar(Long idUbicacion, UbicacionRequestDto dto);
 

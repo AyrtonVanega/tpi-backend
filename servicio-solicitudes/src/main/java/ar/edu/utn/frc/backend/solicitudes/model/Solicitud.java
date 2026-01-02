@@ -21,6 +21,12 @@ public class Solicitud {
     @Column(name = "id_solicitud")
     private Long idSolicitud;
 
+    @Column(name = "id_ubicacion_origen")
+    private Long idUbicacionOrigen;
+    
+    @Column(name = "id_ubicacion_destino")
+    private Long idUbicacionDestino;
+
     @Column(name = "fecha_hora_inicio")
     private LocalDateTime fechaHoraInicio;
 
