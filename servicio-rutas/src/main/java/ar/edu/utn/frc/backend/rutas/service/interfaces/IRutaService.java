@@ -5,7 +5,7 @@ import java.util.List;
 import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
 
 public interface IRutaService {
-    
-    List<RutaTentativaDto> obtenerRutasTentativas(double latitudOrigen, double longitudOrigen, double latitudDestino,
-            double longitudDestino);
+
+    List<RutaTentativaDto> obtenerRutasTentativas(Long idOrigen, double latitudOrigen, double longitudOrigen,
+            Long idDestino, double latitudDestino, double longitudDestino);
 }
