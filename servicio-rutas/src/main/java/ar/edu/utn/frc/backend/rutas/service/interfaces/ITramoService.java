@@ -9,5 +9,9 @@ import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
 public interface ITramoService {
 
     List<TramoTentativoDto> calcularTramosTentativos(OsrmRouteDto route, Long idOrigen, Long idDestino,
-            List<DepositoDto> depositos);
+            List<DepositoDto> depositos, double costoKmBase, double consumoCombustibleAprox,
+            double valorLitroCombustible);
+
+    double calcularCostoEstimado(double distancia, double costoKmBase, double consumoCombustibleAprox,
+            double valorLitroCombustible);
 }

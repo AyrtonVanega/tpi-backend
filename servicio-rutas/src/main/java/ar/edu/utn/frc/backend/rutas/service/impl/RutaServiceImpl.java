@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.rutas.client.DepositoClient;
 import ar.edu.utn.frc.backend.rutas.client.OsrmClient;
+import ar.edu.utn.frc.backend.rutas.client.TarifaClient;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
@@ -25,11 +26,13 @@ public class RutaServiceImpl implements IRutaService {
 
         private final OsrmClient osrmClient;
         private final DepositoClient depositoClient;
+        private final TarifaClient tarifaClient;
         private final ITramoService tramoService;
 
         @Override
         public List<RutaTentativaDto> obtenerRutasTentativas(Long idOrigen, double latOrigen, double lonOrigen,
-                        Long idDestino, double latDestino, double lonDestino) {
+                        Long idDestino, double latDestino, double lonDestino, double costoKmBase,
+                        double consumoCombustibleAprox) {
 
                 List<RutaTentativaDto> rutasTentativas = new ArrayList<>();
 
@@ -49,7 +52,7 @@ public class RutaServiceImpl implements IRutaService {
                 // -------------------------------------------------
                 // Crea ruta directa
                 RutaTentativaDto rutaDirecta = calcularRutaTentativa(idOrigen, latOrigen, lonOrigen, idDestino,
-                                latDestino, lonDestino, new ArrayList<>());
+                                latDestino, lonDestino, new ArrayList<>(), costoKmBase, consumoCombustibleAprox);
 
                 // Agrega la ruta directa a rutasTentativas
                 rutasTentativas.add(rutaDirecta);
@@ -64,7 +67,8 @@ public class RutaServiceImpl implements IRutaService {
 
                 // Crea la ruta mediana
                 RutaTentativaDto rutaMediana = calcularRutaTentativa(idOrigen, latOrigen, lonOrigen, idDestino,
-                                latDestino, lonDestino, depositosEnRutaTentativaMediana);
+                                latDestino, lonDestino, depositosEnRutaTentativaMediana, costoKmBase,
+                                consumoCombustibleAprox);
 
                 // Si es distinta a la ruta directa la agrega a rutasTentativas
                 if (!rutaMediana.equals(rutaDirecta)) {
@@ -80,7 +84,8 @@ public class RutaServiceImpl implements IRutaService {
 
                 // Crea la ruta larga
                 RutaTentativaDto rutaLarga = calcularRutaTentativa(idOrigen, latOrigen, lonOrigen, idDestino,
-                                latDestino, lonDestino, depositosEnRutaTentativaLarga);
+                                latDestino, lonDestino, depositosEnRutaTentativaLarga, costoKmBase,
+                                consumoCombustibleAprox);
 
                 // Si es distinta a la ruta mediana la agrega a rutasTentativas
                 if (!rutaLarga.equals(rutaMediana)) {
@@ -91,7 +96,8 @@ public class RutaServiceImpl implements IRutaService {
         }
 
         public RutaTentativaDto calcularRutaTentativa(Long idOrigen, double latOrigen, double lonOrigen, Long idDestino,
-                        double latDestino, double lonDestino, List<DepositoDto> depositosEnRuta) {
+                        double latDestino, double lonDestino, List<DepositoDto> depositosEnRuta,
+                        double costoKmBase, double consumoCombustibleAprox) {
 
                 // Arma las coordenadas
                 List<String> waypoints = new ArrayList<>();
@@ -109,14 +115,25 @@ public class RutaServiceImpl implements IRutaService {
                 // Crea la Ruta
                 RutaTentativaDto ruta = new RutaTentativaDto();
 
+                // Obtiene el Valor del Litro de Combustible
+                double valorLitroCombustible = tarifaClient.obtenerParametrosGlobales().getValorLitroCombustible();
+
                 // Calcula los Tramos
                 List<TramoTentativoDto> tramos = tramoService.calcularTramosTentativos(route, idOrigen, idDestino,
-                                depositosEnRuta);
+                                depositosEnRuta, costoKmBase, consumoCombustibleAprox, valorLitroCombustible);
+
+                // Suma el Costo Estimado de todos los Tramos
+                double costoEstimadoTramos = 0.0;
+
+                for (TramoTentativoDto tramo : tramos) {
+                        costoEstimadoTramos += tramo.getCostoEstimado();
+                }
 
                 // Setea los valores de Ruta
                 ruta.setCantidadTramos(tramos.size());
                 ruta.setCantidadDepositos(depositosEnRuta.size());
                 ruta.setDistanciaTotal(route.getDistance() / 1000.0);
+                ruta.setCostoEstimado(calcularCostoEstimadoTotal(tramos.size(), costoEstimadoTramos));
                 ruta.setTiempoEstimado(route.getDuration() / 3600.0);
                 ruta.setTramos(tramos);
 
@@ -162,5 +179,11 @@ public class RutaServiceImpl implements IRutaService {
                                 .sorted(Comparator.comparingDouble(d -> Math.hypot(d.getLongitud() - lonOrigen,
                                                 d.getLatitud() - latOrigen)))
                                 .collect(Collectors.toList());
+        }
+
+        @Override
+        public double calcularCostoEstimadoTotal(int cantTramos, double costoEstimadoTramos) {
+                double costoGestionBase = tarifaClient.obtenerParametrosGlobales().getCostoGestionBase();
+                return costoGestionBase * cantTramos + costoEstimadoTramos;
         }
 }

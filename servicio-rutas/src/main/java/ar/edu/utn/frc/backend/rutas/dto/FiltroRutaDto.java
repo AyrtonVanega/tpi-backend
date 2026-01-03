@@ -11,4 +11,7 @@ public class FiltroRutaDto {
     private Long idUbicacionDestino;
     private Double latitudDestino;
     private Double longitudDestino;
+
+    private Double costoKmBase;
+    private Double consumoCombustibleAprox;
 }

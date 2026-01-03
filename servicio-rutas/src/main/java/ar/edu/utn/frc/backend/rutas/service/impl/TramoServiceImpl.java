@@ -20,11 +20,13 @@ public class TramoServiceImpl implements ITramoService {
 
     @Override
     public List<TramoTentativoDto> calcularTramosTentativos(OsrmRouteDto route, Long idOrigen, Long idDestino,
-            List<DepositoDto> depositos) {
+            List<DepositoDto> depositos, double costoKmBase, double consumoCombustibleAprox,
+            double valorLitroCombustible) {
 
         List<TramoTentativoDto> tramos = new ArrayList<>();
         List<OsrmLegDto> legs = route.getLegs();
         int totalLegs = legs.size();
+        double distancia = 0.0;
 
         for (int i = 0; i < totalLegs; i++) {
             OsrmLegDto leg = legs.get(i);
@@ -32,7 +34,8 @@ public class TramoServiceImpl implements ITramoService {
 
             // Setea Orden y Distancia
             tramo.setOrden(i + 1);
-            tramo.setDistancia(leg.getDistance() / 1000.0);
+            distancia = leg.getDistance() / 1000.0;
+            tramo.setDistancia(distancia);
 
             // Setea las Ubicaciones de Origen y Destino
             // Ubicacion de Origen
@@ -53,7 +56,8 @@ public class TramoServiceImpl implements ITramoService {
             tramo.setTipo(determinarTipoTramo(i, totalLegs));
 
             // Calcula el Costo Estimado
-            // tramo.setCostoEstimado();
+            tramo.setCostoEstimado(
+                    calcularCostoEstimado(distancia, costoKmBase, consumoCombustibleAprox, valorLitroCombustible));
 
             // Agrega el Tramo a la lista
             tramos.add(tramo);
@@ -73,5 +77,12 @@ public class TramoServiceImpl implements ITramoService {
             return "DEPOSITO_DESTINO";
         }
         return "DEPOSITO_DEPOSITO";
+    }
+
+    @Override
+    public double calcularCostoEstimado(double distancia, double costoKmBase, double consumoCombustibleAprox,
+            double valorLitroCombustible) {
+
+        return distancia * (costoKmBase + consumoCombustibleAprox * valorLitroCombustible);
     }
 }

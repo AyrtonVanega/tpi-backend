@@ -29,7 +29,9 @@ public class RutaController {
                 filtro.getLongitudOrigen(),
                 filtro.getIdUbicacionDestino(),
                 filtro.getLatitudDestino(),
-                filtro.getLongitudDestino());
+                filtro.getLongitudDestino(),
+                filtro.getCostoKmBase(),
+                filtro.getConsumoCombustibleAprox());
 
         return ResponseEntity.ok(rutasTentativas);
     }

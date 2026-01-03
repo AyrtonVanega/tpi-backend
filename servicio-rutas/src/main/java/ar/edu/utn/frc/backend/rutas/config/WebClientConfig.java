@@ -39,4 +39,20 @@ public class WebClientConfig {
                 .apply(oauth.oauth2Configuration())
                 .build();
     }
+
+    @Bean
+    public WebClient tarifaWebClient(
+            WebClient.Builder builder,
+            ClientRegistrationRepository repo,
+            OAuth2AuthorizedClientRepository authRepo) {
+
+        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
+                repo, authRepo);
+
+        oauth.setDefaultClientRegistrationId("tarifas-client");
+
+        return builder
+                .apply(oauth.oauth2Configuration())
+                .build();
+    }
 }
