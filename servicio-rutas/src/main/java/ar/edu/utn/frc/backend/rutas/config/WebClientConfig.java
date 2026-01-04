@@ -10,49 +10,62 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfig {
-    
-    @Bean
-    @LoadBalanced
-    public WebClient.Builder webClientBuilder() {
-        return WebClient.builder();
-    }
 
-    @Bean
-    public WebClient osrmWebClient() {
-        return WebClient.builder()
-                .baseUrl("http://osrm:5000")
-                .build();
-    }
+        @Bean
+        @LoadBalanced
+        public WebClient.Builder webClientBuilder() {
+                return WebClient.builder();
+        }
 
-    @Bean
-    public WebClient depositoWebClient(
-            WebClient.Builder builder,
-            ClientRegistrationRepository repo,
-            OAuth2AuthorizedClientRepository authRepo) {
+        @Bean
+        public WebClient osrmWebClient() {
+                return WebClient.builder()
+                                .baseUrl("http://osrm:5000")
+                                .build();
+        }
 
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
-                repo, authRepo);
+        @Bean
+        public WebClient depositoWebClient(
+                        WebClient.Builder builder,
+                        ClientRegistrationRepository repo,
+                        OAuth2AuthorizedClientRepository authRepo) {
 
-        oauth.setDefaultClientRegistrationId("depositos-client");
+                ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
+                                repo, authRepo);
 
-        return builder
-                .apply(oauth.oauth2Configuration())
-                .build();
-    }
+                oauth.setDefaultClientRegistrationId("depositos-client");
 
-    @Bean
-    public WebClient tarifaWebClient(
-            WebClient.Builder builder,
-            ClientRegistrationRepository repo,
-            OAuth2AuthorizedClientRepository authRepo) {
+                return builder.apply(oauth.oauth2Configuration())
+                                .build();
+        }
 
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
-                repo, authRepo);
+        @Bean
+        public WebClient tarifaWebClient(
+                        WebClient.Builder builder,
+                        ClientRegistrationRepository repo,
+                        OAuth2AuthorizedClientRepository authRepo) {
 
-        oauth.setDefaultClientRegistrationId("tarifas-client");
+                ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
+                                repo, authRepo);
 
-        return builder
-                .apply(oauth.oauth2Configuration())
-                .build();
-    }
+                oauth.setDefaultClientRegistrationId("tarifas-client");
+
+                return builder.apply(oauth.oauth2Configuration())
+                                .build();
+        }
+
+        @Bean
+        public WebClient solicitudWebClient(
+                        WebClient.Builder builder,
+                        ClientRegistrationRepository repo,
+                        OAuth2AuthorizedClientRepository authRepo) {
+
+                ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
+                                repo, authRepo);
+
+                oauth.setDefaultClientRegistrationId("solicitudes-client");
+
+                return builder.apply(oauth.oauth2Configuration())
+                                .build();
+        }
 }

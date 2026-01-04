@@ -9,11 +9,16 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.rutas.client.DepositoClient;
 import ar.edu.utn.frc.backend.rutas.client.OsrmClient;
+import ar.edu.utn.frc.backend.rutas.client.SolicitudClient;
 import ar.edu.utn.frc.backend.rutas.client.TarifaClient;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
+import ar.edu.utn.frc.backend.rutas.dto.CreateRutaDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
+import ar.edu.utn.frc.backend.rutas.mapper.RutaMapper;
+import ar.edu.utn.frc.backend.rutas.model.Ruta;
+import ar.edu.utn.frc.backend.rutas.repository.RutaRepository;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.IRutaService;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.ITramoService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +32,10 @@ public class RutaServiceImpl implements IRutaService {
         private final OsrmClient osrmClient;
         private final DepositoClient depositoClient;
         private final TarifaClient tarifaClient;
+        private final SolicitudClient solicitudClient;
         private final ITramoService tramoService;
+        private final RutaRepository rutaRepository;
+        private final RutaMapper rutaMapper;
 
         @Override
         public List<RutaTentativaDto> obtenerRutasTentativas(Long idOrigen, double latOrigen, double lonOrigen,
@@ -185,5 +193,21 @@ public class RutaServiceImpl implements IRutaService {
         public double calcularCostoEstimadoTotal(int cantTramos, double costoEstimadoTramos) {
                 double costoGestionBase = tarifaClient.obtenerParametrosGlobales().getCostoGestionBase();
                 return costoGestionBase * cantTramos + costoEstimadoTramos;
+        }
+
+        @Override
+        public void crear(CreateRutaDto dto) {
+                // Mapea datos simples DTO -> Entity
+                Ruta ruta = rutaMapper.toEntity(dto.getRutaSeleccionada());
+
+                // Guarda en la BD
+                rutaRepository.save(ruta);
+
+                // Crea los Tramos
+                tramoService.crearTramos(ruta, dto.getRutaSeleccionada().getTramos());
+
+                // Asigna la Ruta a la Solicitud
+                solicitudClient.asignarRuta(dto.getIdSolicitud(), ruta.getIdRuta(), ruta.getCostoEstimado(),
+                                ruta.getTiempoEstimado());
         }
 }

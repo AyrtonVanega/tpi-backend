@@ -23,7 +23,7 @@ public class Solicitud {
 
     @Column(name = "id_ubicacion_origen")
     private Long idUbicacionOrigen;
-    
+
     @Column(name = "id_ubicacion_destino")
     private Long idUbicacionDestino;
 
@@ -55,9 +55,10 @@ public class Solicitud {
 
     @Column(name = "doc_cliente")
     private String docCliente;
-    
+
     @Column(name = "tipo_doc_cliente")
     private String tipoDocCliente;
-    
-    //private Long idRuta;
+
+    @Column(name = "id_ruta")
+    private Long idRuta;
 }

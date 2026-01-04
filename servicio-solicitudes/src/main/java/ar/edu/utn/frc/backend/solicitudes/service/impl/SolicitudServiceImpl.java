@@ -9,6 +9,7 @@ import ar.edu.utn.frc.backend.solicitudes.client.DepositoClient;
 import ar.edu.utn.frc.backend.solicitudes.client.PersonaClient;
 import ar.edu.utn.frc.backend.solicitudes.client.dto.UbicacionResponseDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.PatchAsignarRutadDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
 import ar.edu.utn.frc.backend.solicitudes.mapper.SolicitudMapper;
@@ -164,6 +165,24 @@ public class SolicitudServiceImpl implements ISolicitudService {
         
         EstadoSolicitud estadoCancelado = estadoSolicitudService.buscarPorCodigo("CANCELADA");
         solicitud.setEstadoSolicitud(estadoCancelado);
+
+        solicitudRepository.save(solicitud);
+    }
+
+    @Override
+    public void asignarRuta(Long idSolicitud, PatchAsignarRutadDto asignarRutadDto) {
+        Solicitud solicitud = solicitudRepository.findById(idSolicitud)
+                .orElseThrow(() -> {
+                    log.error("Solicitud {} no encontrada", idSolicitud);
+                    return new RuntimeException();
+                });
+
+        solicitud.setIdRuta(asignarRutadDto.getIdRuta());
+        solicitud.setCostoEstimado(asignarRutadDto.getCostoEstimado());
+        solicitud.setTiempoEstimado(asignarRutadDto.getTiempoEstimado());
+
+        EstadoSolicitud estado = estadoSolicitudService.buscarPorCodigo("PROGRAMADA");
+        solicitud.setEstadoSolicitud(estado);
 
         solicitudRepository.save(solicitud);
     }

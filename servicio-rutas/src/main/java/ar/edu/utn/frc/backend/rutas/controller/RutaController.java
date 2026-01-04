@@ -2,12 +2,16 @@ package ar.edu.utn.frc.backend.rutas.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frc.backend.rutas.dto.CreateRutaDto;
 import ar.edu.utn.frc.backend.rutas.dto.FiltroRutaDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.IRutaService;
@@ -34,5 +38,13 @@ public class RutaController {
                 filtro.getConsumoCombustibleAprox());
 
         return ResponseEntity.ok(rutasTentativas);
+    }
+
+    @PostMapping()
+    public ResponseEntity<Void> crearRuta(@RequestBody CreateRutaDto dto) {
+        rutaService.crear(dto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 }

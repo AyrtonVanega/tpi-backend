@@ -2,6 +2,7 @@ package ar.edu.utn.frc.backend.rutas.service.interfaces;
 
 import java.util.List;
 
+import ar.edu.utn.frc.backend.rutas.dto.CreateRutaDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
 
 public interface IRutaService {
@@ -10,4 +11,6 @@ public interface IRutaService {
             double latDestino, double lonDestino, double costoKmBase, double consumoCombustibleAprox);
 
     double calcularCostoEstimadoTotal(int cantTramos, double costoEstimadoTramos);
+
+    void crear(CreateRutaDto dto);
 }

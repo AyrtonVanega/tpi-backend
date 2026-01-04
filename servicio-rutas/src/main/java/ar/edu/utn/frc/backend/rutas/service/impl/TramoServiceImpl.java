@@ -9,6 +9,13 @@ import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmLegDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
+import ar.edu.utn.frc.backend.rutas.mapper.TramoMapper;
+import ar.edu.utn.frc.backend.rutas.model.EstadoTramo;
+import ar.edu.utn.frc.backend.rutas.model.Ruta;
+import ar.edu.utn.frc.backend.rutas.model.Tramo;
+import ar.edu.utn.frc.backend.rutas.model.TramoId;
+import ar.edu.utn.frc.backend.rutas.repository.TramoRepository;
+import ar.edu.utn.frc.backend.rutas.service.interfaces.IEstadoTramoService;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.ITramoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class TramoServiceImpl implements ITramoService {
+
+    private final IEstadoTramoService estadoTramoService;
+    private final TramoRepository tramoRepository;
+    private final TramoMapper tramoMapper;
 
     @Override
     public List<TramoTentativoDto> calcularTramosTentativos(OsrmRouteDto route, Long idOrigen, Long idDestino,
@@ -84,5 +95,28 @@ public class TramoServiceImpl implements ITramoService {
             double valorLitroCombustible) {
 
         return distancia * (costoKmBase + consumoCombustibleAprox * valorLitroCombustible);
+    }
+
+    @Override
+    public void crearTramos(Ruta ruta, List<TramoTentativoDto> tramosDtos) {
+
+        // Busca el estado Inicial
+        EstadoTramo estado = estadoTramoService.buscarPorCodigo("ESTIMADO");
+
+        for (TramoTentativoDto dto : tramosDtos) {
+            // Mapea datos simples DTO -> Entity
+            Tramo tramo = tramoMapper.toEntity(dto);
+
+            // Arma y setea el id
+            TramoId idTramo = new TramoId(ruta.getIdRuta(), dto.getOrden());
+            tramo.setIdTramo(idTramo);
+            tramo.setRuta(ruta);
+
+            // Setea el estado inicial
+            tramo.setEstado(estado);
+
+            // Guarda en la BD
+            tramoRepository.save(tramo);
+        }
     }
 }
