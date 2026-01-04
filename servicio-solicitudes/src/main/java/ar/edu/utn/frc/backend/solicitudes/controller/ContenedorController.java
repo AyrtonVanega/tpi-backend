@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorResponseDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.SeguimientoContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IContenedorService;
 
 import java.util.List;
@@ -44,5 +45,10 @@ public class ContenedorController {
 
         contenedorService.actualizarEstado(idContenedor, contenedorRequestDto);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{idContenedor}/estados")
+    public ResponseEntity<SeguimientoContenedorDto> obtenerEstadosContenedor(@PathVariable Long idContenedor) {
+        return ResponseEntity.ok(contenedorService.obtenerEstadosContenedor(idContenedor));
     }
 }

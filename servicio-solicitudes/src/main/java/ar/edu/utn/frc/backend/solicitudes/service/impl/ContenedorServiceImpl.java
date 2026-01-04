@@ -5,16 +5,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorResponseDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.HistorialContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.SeguimientoContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.mapper.ContenedorMapper;
 import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 import ar.edu.utn.frc.backend.solicitudes.model.EstadoContenedor;
+import ar.edu.utn.frc.backend.solicitudes.model.HistorialEstadoContenedor;
 import ar.edu.utn.frc.backend.solicitudes.model.Solicitud;
 import ar.edu.utn.frc.backend.solicitudes.repository.ContenedorRepository;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IContenedorService;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IHistorialEstadoContenedorService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -121,5 +125,36 @@ public class ContenedorServiceImpl implements IContenedorService {
 
         // Registra el cambio de estado en el historial
         historialEstadoService.registarCambioEstado(contenedor, contenedorRequestDto.getCodigoEstadoContenedor());
+    }
+
+    @Override
+    public SeguimientoContenedorDto obtenerEstadosContenedor(Long idContenedor) {
+        Contenedor contenedor = contenedorRepository.findById(idContenedor)
+                .orElseThrow(() -> {
+                    log.error("Contenedor {} no encontrado", idContenedor);
+                    return new RuntimeException();
+                });
+
+        SeguimientoContenedorDto estados = new SeguimientoContenedorDto();
+        estados.setIdContenedor(contenedor.getIdContenedor());
+        estados.setIdSolicitud(contenedor.getSolicitud().getIdSolicitud());
+
+        List<HistorialEstadoContenedor> historiales = contenedor.getHistorialesEstadoContenedor();
+
+        List<HistorialContenedorDto> historialEstadosDto = new ArrayList<>();
+
+        for (int i = 0; i < historiales.size(); i++) {
+            HistorialEstadoContenedor historial = historiales.get(i);
+            HistorialContenedorDto dto = new HistorialContenedorDto();
+
+            dto.setFechaHora(historial.getFechaHora());
+            dto.setEstado(historial.getEstadoContenedor().getCodigo());
+
+            historialEstadosDto.add(dto);
+        }
+
+        estados.setHistorialEstados(historialEstadosDto);
+
+        return estados;
     }
 }
