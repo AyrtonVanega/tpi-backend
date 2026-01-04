@@ -21,7 +21,6 @@ public interface SolicitudMapper {
 
     @Mapping(target = "codigoEstadoSolicitud", ignore = true)
     @Mapping(target = "idContenedor", ignore = true)
-    @Mapping(target = "idRuta", ignore = true)
     @Mapping(target = "docCliente", ignore = true)
     @Mapping(target = "tipoDocCliente", ignore = true)
     SolicitudResponseDto toResponse(Solicitud entity);
