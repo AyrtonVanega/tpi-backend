@@ -51,8 +51,8 @@ public class EstadiaDepositoController {
         return ResponseEntity.ok(estadiaDepositoService.obtenerPorId(idDeposito, idSolicitud));
     }
 
-    @GetMapping()
-    public ResponseEntity<List<EstadiaDepositoResponseDto>> listarEstadiasActivas() {
-        return ResponseEntity.ok(estadiaDepositoService.obtenerEstadiasActivas());
+    @GetMapping("/activas")
+    public ResponseEntity<List<EstadiaDepositoResponseDto>> listarEstadiasActivas(@RequestParam Long idDeposito) {
+        return ResponseEntity.ok(estadiaDepositoService.obtenerEstadiasActivas(idDeposito));
     }
 }

@@ -16,5 +16,5 @@ public interface IEstadiaDepositoService {
 
         EstadiaDepositoResponseDto obtenerPorId(Long idDeposito, Long idSolicitud);
 
-        List<EstadiaDepositoResponseDto> obtenerEstadiasActivas();
+        List<EstadiaDepositoResponseDto> obtenerEstadiasActivas(Long idDeposito);
 }

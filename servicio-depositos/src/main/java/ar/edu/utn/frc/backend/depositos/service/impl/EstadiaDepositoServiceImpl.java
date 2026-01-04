@@ -108,13 +108,9 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
     }
 
     @Override
-    public List<EstadiaDepositoResponseDto> obtenerEstadiasActivas() {
+    public List<EstadiaDepositoResponseDto> obtenerEstadiasActivas(Long idDeposito) {
         List<EstadiaDeposito> estadiasActivas = estadiaDepositoRepository
-                .findAllByEstado_Codigo("ACTIVA")
-                .orElseThrow(() -> {
-                    log.error("No se encontraron estadias activas");
-                    return new RuntimeException();
-                });
+                .buscarPorDepositoYEstado(idDeposito, "ACTIVA");
         
         return estadiaMapper.toResponseList(estadiasActivas);
     }
