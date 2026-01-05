@@ -21,4 +21,6 @@ public interface IContenedorService {
     void actualizarEstado(Long idContenedor, PatchContenedorDto contenedorRequestDto);
 
     SeguimientoContenedorDto obtenerEstadosContenedor(Long idContenedor);
+
+    List<ContenedorResponseDto> obtenerContenedoresPendientes(String estado);
 }

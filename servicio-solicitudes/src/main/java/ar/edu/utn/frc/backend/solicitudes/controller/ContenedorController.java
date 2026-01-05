@@ -51,4 +51,11 @@ public class ContenedorController {
     public ResponseEntity<SeguimientoContenedorDto> obtenerEstadosContenedor(@PathVariable Long idContenedor) {
         return ResponseEntity.ok(contenedorService.obtenerEstadosContenedor(idContenedor));
     }
+
+    @GetMapping("/pendientes")
+    public ResponseEntity<List<ContenedorResponseDto>> obtenerContenedoresPendientes(
+            @RequestParam String estado) {
+
+        return ResponseEntity.ok(contenedorService.obtenerContenedoresPendientes(estado));
+    }
 }

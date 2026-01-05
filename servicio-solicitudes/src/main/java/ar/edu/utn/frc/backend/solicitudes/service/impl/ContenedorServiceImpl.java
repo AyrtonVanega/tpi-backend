@@ -157,4 +157,33 @@ public class ContenedorServiceImpl implements IContenedorService {
 
         return estados;
     }
+
+    @Override
+    public List<ContenedorResponseDto> obtenerContenedoresPendientes(String estado) {
+        List<Contenedor> contenedores = contenedorRepository.buscarPorEstadoActualQueNoSea("ENTREGADO");
+
+        List<Contenedor> contenedoresFiltrados = contenedores.stream()
+                .filter(c -> historialEstadoService.obtenerEstadoActual(c.getIdContenedor()).getCodigo().equals(estado))
+                .toList();
+
+        // Mapea datos simples Entity -> DTO
+        List<ContenedorResponseDto> responseDtoList = contenedorMapper.toResponseList(contenedoresFiltrados);
+
+        // Completa datos faltantes en cada DTO
+        for (int i = 0; i < contenedoresFiltrados.size(); i++) {
+            Contenedor contenedorFiltrado = contenedoresFiltrados.get(i);
+            ContenedorResponseDto dto = responseDtoList.get(i);
+
+            // Setea el id de la solicitud al ResponseDto
+            Solicitud solicitud = contenedorFiltrado.getSolicitud();
+            if (solicitud != null) {
+                dto.setIdSolicitud(solicitud.getIdSolicitud());
+            }
+
+            // Setea el estado al ResponseDto
+            dto.setEstadoActual(estado);
+        }
+
+        return responseDtoList;
+    }
 }
