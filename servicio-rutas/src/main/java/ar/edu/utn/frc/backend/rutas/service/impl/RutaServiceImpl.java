@@ -14,7 +14,9 @@ import ar.edu.utn.frc.backend.rutas.client.TarifaClient;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
 import ar.edu.utn.frc.backend.rutas.dto.CreateRutaDto;
+import ar.edu.utn.frc.backend.rutas.dto.RutaResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
+import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
 import ar.edu.utn.frc.backend.rutas.mapper.RutaMapper;
 import ar.edu.utn.frc.backend.rutas.model.Ruta;
@@ -209,5 +211,22 @@ public class RutaServiceImpl implements IRutaService {
                 // Asigna la Ruta a la Solicitud
                 solicitudClient.asignarRuta(dto.getIdSolicitud(), ruta.getIdRuta(), ruta.getCostoEstimado(),
                                 ruta.getTiempoEstimado());
+        }
+
+        @Override
+        public RutaResponseDto obtenerRutaPorId(Long idRuta) {
+                Ruta ruta = rutaRepository.findById(idRuta)
+                                .orElseThrow(() -> {
+                                        log.error("Ruta {} no encontrada", idRuta);
+                                        return new RuntimeException();
+                                });
+
+                RutaResponseDto rutaDto = rutaMapper.toResponse(ruta);
+
+                List<TramoResponseDto> tramosDto = tramoService.obtenerTodos(ruta);
+                
+                rutaDto.setTramos(tramosDto);
+
+                return rutaDto;
         }
 }

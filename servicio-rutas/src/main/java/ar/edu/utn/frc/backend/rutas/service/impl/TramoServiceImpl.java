@@ -10,6 +10,7 @@ import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmLegDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
 import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
+import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
 import ar.edu.utn.frc.backend.rutas.mapper.TramoMapper;
 import ar.edu.utn.frc.backend.rutas.model.EstadoTramo;
@@ -147,9 +148,30 @@ public class TramoServiceImpl implements ITramoService {
                 });
 
         tramo.setPatenteCamion(dto.getPatenteCamion());
-        
+
+        EstadoTramo estado = estadoTramoService.buscarPorCodigo("ASIGNADO");
+        tramo.setEstado(estado);
+
         personaClient.actualizarDisponibilidadCamion(dto.getPatenteCamion(), !dto.isDisponibilidad());
 
         tramoRepository.save(tramo);
+    }
+
+    @Override
+    public List<TramoResponseDto> obtenerTodos(Ruta ruta) {
+        List<Tramo> tramos = ruta.getTramos();
+
+        List<TramoResponseDto> responseList = tramoMapper.toResponseList(tramos);
+
+        for (int i = 0; i < tramos.size(); i++) {
+            Tramo tramo = tramos.get(i);
+            TramoResponseDto dto = responseList.get(i);
+
+            dto.setOrden(tramo.getIdTramo().getOrden());
+            dto.setTipo(null);
+            dto.setCodigoEstado(tramo.getEstado().getCodigo());
+        }
+
+        return responseList;
     }
 }

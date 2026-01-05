@@ -1,9 +1,12 @@
 package ar.edu.utn.frc.backend.rutas.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
 import ar.edu.utn.frc.backend.rutas.model.Tramo;
 
@@ -20,5 +23,13 @@ public interface TramoMapper {
     @Mapping(target = "fechaHoraFin", ignore = true)
     @Mapping(target = "estado", ignore = true)
     @Mapping(target = "patenteCamion", ignore = true)
+    @Mapping(target = "costoReal", ignore = true)
     Tramo toEntity(TramoTentativoDto dto);
+
+    @Mapping(target = "orden", ignore = true)
+    @Mapping(target = "tipo", ignore = true)
+    @Mapping(target = "codigoEstado", ignore = true)
+    TramoResponseDto toResponse(Tramo entity);
+
+    List<TramoResponseDto> toResponseList(List<Tramo> tramos);
 }

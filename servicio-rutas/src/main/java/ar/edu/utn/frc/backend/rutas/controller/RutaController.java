@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.utn.frc.backend.rutas.dto.CreateRutaDto;
 import ar.edu.utn.frc.backend.rutas.dto.FiltroRutaDto;
+import ar.edu.utn.frc.backend.rutas.dto.RutaResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.IRutaService;
 import lombok.AllArgsConstructor;
@@ -46,5 +48,10 @@ public class RutaController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
+    }
+
+    @GetMapping("/{idRuta}")
+    public ResponseEntity<RutaResponseDto> obtenerRutaPorId(@PathVariable Long idRuta) {
+        return ResponseEntity.ok(rutaService.obtenerRutaPorId(idRuta));
     }
 }

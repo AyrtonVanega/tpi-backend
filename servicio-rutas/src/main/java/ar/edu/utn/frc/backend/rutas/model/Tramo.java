@@ -49,6 +49,12 @@ public class Tramo {
     @Column(name = "fecha_hora_fin")
     private LocalDateTime fechaHoraFin;
 
+    @Column(name = "costo_estimado")
+    private double costoEstimado;
+
+    @Column(name = "costo_real")
+    private double costoReal;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_estado")
     private EstadoTramo estado;
@@ -56,7 +62,7 @@ public class Tramo {
     @Column(name = "patente_camion")
     private String patenteCamion;
 
-    private enum TipoTramo {
+    public enum TipoTramo {
         ORIGEN_DEPOSITO,
         DEPOSITO_DEPOSITO,
         DEPOSITO_DESTINO,
