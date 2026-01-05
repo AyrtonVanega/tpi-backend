@@ -68,4 +68,19 @@ public class WebClientConfig {
                 return builder.apply(oauth.oauth2Configuration())
                                 .build();
         }
+
+        @Bean
+        public WebClient personaWebClient(
+                        WebClient.Builder builder,
+                        ClientRegistrationRepository repo,
+                        OAuth2AuthorizedClientRepository authRepo) {
+
+                ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
+                                repo, authRepo);
+
+                oauth.setDefaultClientRegistrationId("personas-client");
+
+                return builder.apply(oauth.oauth2Configuration())
+                                .build();
+        }
 }

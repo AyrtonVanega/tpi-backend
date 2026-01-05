@@ -40,6 +40,9 @@ public class ApiGatewayApplication {
                 .route("rutas", r -> r.path("/api/rutas/**")
                         .filters(f -> f.stripPrefix(1))
                         .uri("lb://rutas"))
+                .route("tramos", r -> r.path("/api/tramos/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("lb://rutas"))
                 // ===== ROUTES DE SERVICIO SOLICITUDES =====
                 .route("contenedores", r -> r.path("/api/contenedores/**")
                         .filters(f -> f.stripPrefix(1))

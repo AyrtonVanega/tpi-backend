@@ -4,6 +4,7 @@ import java.util.List;
 
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
+import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
 import ar.edu.utn.frc.backend.rutas.model.Ruta;
 
@@ -17,4 +18,6 @@ public interface ITramoService {
                         double valorLitroCombustible);
 
         void crearTramos(Ruta ruta, List<TramoTentativoDto> tramosDtos);
+
+        void asignarCamion(Long idRuta, int orden, PatchTramoDto dto);
 }

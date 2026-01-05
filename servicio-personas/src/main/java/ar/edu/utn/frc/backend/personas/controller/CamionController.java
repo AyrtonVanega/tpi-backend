@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.utn.frc.backend.personas.dto.CamionRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.CamionResponseDto;
-import ar.edu.utn.frc.backend.personas.dto.PatchCamionDto;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ICamionService;
 import lombok.AllArgsConstructor;
 
@@ -30,15 +28,6 @@ public class CamionController {
             @RequestBody CamionRequestDto camionRequestDto) {
 
         camionService.actualizar(patenteCamion, camionRequestDto);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PatchMapping("/{patenteCamion}/disponibilidad")
-    public ResponseEntity<Void> actualizarDisponibilidadCamion(
-            @PathVariable String patenteCamion,
-            @RequestBody PatchCamionDto patchCamionDto) {
-
-        camionService.actualizarDisponibilidad(patenteCamion, patchCamionDto);
         return ResponseEntity.noContent().build();
     }
 

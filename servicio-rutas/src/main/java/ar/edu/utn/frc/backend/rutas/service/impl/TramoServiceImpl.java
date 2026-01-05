@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.rutas.client.PersonaClient;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmLegDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
+import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
 import ar.edu.utn.frc.backend.rutas.mapper.TramoMapper;
 import ar.edu.utn.frc.backend.rutas.model.EstadoTramo;
@@ -25,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TramoServiceImpl implements ITramoService {
 
+    private final PersonaClient personaClient;
     private final IEstadoTramoService estadoTramoService;
     private final TramoRepository tramoRepository;
     private final TramoMapper tramoMapper;
@@ -118,5 +121,35 @@ public class TramoServiceImpl implements ITramoService {
             // Guarda en la BD
             tramoRepository.save(tramo);
         }
+    }
+
+    @Override
+    public void asignarCamion(Long idRuta, int orden, PatchTramoDto dto) {
+
+        if (!dto.isDisponibilidad()) {
+            log.error("El Camion {} no esta disponible", dto.getPatenteCamion());
+            throw new RuntimeException();
+        }
+
+        if (dto.getVolumenCamion() < dto.getVolumenContenedor() || dto.getPesoCamion() < dto.getPesoContenedor()) {
+            log.error("El Camion {} no puede transportar el contenedor", dto.getPatenteCamion());
+            throw new RuntimeException();
+        }
+
+        TramoId idTramo = new TramoId(idRuta, orden);
+
+        Tramo tramo = tramoRepository.findById(idTramo)
+                .orElseThrow(() -> {
+                    log.error("Tramo no encontrado - idRuta:{}, orden:{}",
+                            idTramo.getIdRuta(),
+                            idTramo.getOrden());
+                    return new RuntimeException();
+                });
+
+        tramo.setPatenteCamion(dto.getPatenteCamion());
+        
+        personaClient.actualizarDisponibilidadCamion(dto.getPatenteCamion(), !dto.isDisponibilidad());
+
+        tramoRepository.save(tramo);
     }
 }
