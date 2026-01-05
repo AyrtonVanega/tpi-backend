@@ -17,6 +17,7 @@ import ar.edu.utn.frc.backend.rutas.model.EstadoTramo;
 import ar.edu.utn.frc.backend.rutas.model.Ruta;
 import ar.edu.utn.frc.backend.rutas.model.Tramo;
 import ar.edu.utn.frc.backend.rutas.model.TramoId;
+import ar.edu.utn.frc.backend.rutas.model.Tramo.TipoTramo;
 import ar.edu.utn.frc.backend.rutas.repository.TramoRepository;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.IEstadoTramoService;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.ITramoService;
@@ -119,6 +120,9 @@ public class TramoServiceImpl implements ITramoService {
             // Setea el estado inicial
             tramo.setEstado(estado);
 
+            // Setea el tipo de tramo
+            tramo.setTipoTramo(TipoTramo.valueOf(dto.getTipo()));
+
             // Guarda en la BD
             tramoRepository.save(tramo);
         }
@@ -168,7 +172,7 @@ public class TramoServiceImpl implements ITramoService {
             TramoResponseDto dto = responseList.get(i);
 
             dto.setOrden(tramo.getIdTramo().getOrden());
-            dto.setTipo(null);
+            dto.setTipo(tramo.getTipoTramo().toString());
             dto.setCodigoEstado(tramo.getEstado().getCodigo());
         }
 
