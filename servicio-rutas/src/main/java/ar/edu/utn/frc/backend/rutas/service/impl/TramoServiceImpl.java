@@ -199,9 +199,9 @@ public class TramoServiceImpl implements ITramoService {
 
         // Validaciones
         Ruta ruta = tramo.getRuta();
-        List<Tramo> tramos = ruta.getTramos();
 
-        boolean anteriorIniciado = tramos.stream()
+        boolean anteriorIniciado = ruta.getTramos()
+                .stream()
                 .filter(t -> t.getIdTramo().getOrden() < orden)
                 .anyMatch(t -> t.getFechaHoraFin() == null);
 
@@ -229,14 +229,12 @@ public class TramoServiceImpl implements ITramoService {
         EstadoTramo estado = estadoTramoService.buscarPorCodigo("INICIADO");
         tramo.setEstado(estado);
 
-        // Finaliza la estadia en caso de que haya estado en un deposito
         Long idSolicitud = ruta.getIdSolicitud();
-        if (orden > 1 && orden != tramos.size()) {
+        if (orden > 1) {
+            // En caso de no ser el primer Tramo, finaliza la estadia del deposito en el que estuvo
             depositoClient.finalizarEstadia(tramo.getIdUbicacionOrigen(), idSolicitud, LocalDateTime.now());
-        }
-
-        // En caso de ser el primer Tramo, cambia el estado de la solicitud
-        if (orden == 1) {
+        } else {
+            // En caso de ser el primer Tramo, cambia el estado de la solicitud
             solicitudClient.actualizarEstadoSolicitud(idSolicitud, "EN_TRANSITO");
         }
 
@@ -283,10 +281,10 @@ public class TramoServiceImpl implements ITramoService {
 
         // Calcula y setea el costo real
         double costoReal = calcularCostoReal(
-            tramo.getDistancia(),
-            dto.getCostoKmBase(),
-            dto.getConsumoCombustiblePromedio(),
-            dto.getValorLitroCombustible());
+                tramo.getDistancia(),
+                dto.getCostoKmBase(),
+                dto.getConsumoCombustiblePromedio(),
+                dto.getValorLitroCombustible());
         tramo.setCostoReal(costoReal);
 
         Long idSolicitud = ruta.getIdSolicitud();
