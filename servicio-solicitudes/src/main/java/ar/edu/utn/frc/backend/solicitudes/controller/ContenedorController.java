@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorResponseDto;
-import ar.edu.utn.frc.backend.solicitudes.dto.PatchContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SeguimientoContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IContenedorService;
@@ -36,15 +35,6 @@ public class ContenedorController {
     @GetMapping()
     public ResponseEntity<List<ContenedorResponseDto>> obtenerContenedores() {
         return ResponseEntity.ok(contenedorService.obtenerTodos());
-    }
-
-    @PatchMapping("/{idContenedor}/estado")
-    public ResponseEntity<Void> actualizarEstadoContenedor(
-            @PathVariable Long idContenedor,
-            @RequestBody PatchContenedorDto contenedorRequestDto) {
-
-        contenedorService.actualizarEstado(idContenedor, contenedorRequestDto);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{idContenedor}/estados")

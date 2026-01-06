@@ -25,4 +25,10 @@ public class TramoController {
         tramoService.asignarCamion(idRuta, orden, dto);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{idRuta}/{orden}/iniciar")
+    public ResponseEntity<Void> iniciarTramo(@PathVariable Long idRuta, @PathVariable int orden) {
+        tramoService.iniciarTramo(idRuta, orden);
+        return ResponseEntity.noContent().build();
+    }
 }

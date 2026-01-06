@@ -1,4 +1,4 @@
-package ar.edu.utn.frc.backend.depositos.dto;
+package ar.edu.utn.frc.backend.rutas.client.dto;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatchEstadiaDepositoDto {
+public class FinalizarEstadiaDto {
     private LocalDateTime fechaHoraSalida;
 }

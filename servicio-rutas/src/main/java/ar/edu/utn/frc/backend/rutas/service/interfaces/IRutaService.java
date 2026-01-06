@@ -15,5 +15,5 @@ public interface IRutaService {
 
     void crear(CreateRutaDto dto);
 
-    RutaResponseDto obtenerRutaPorId(Long idRuta);
+    RutaResponseDto obtenerPorId(Long idRuta);
 }

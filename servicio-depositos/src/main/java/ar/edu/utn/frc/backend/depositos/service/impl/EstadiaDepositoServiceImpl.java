@@ -52,7 +52,7 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
     }
 
     @Override
-    public void actualizarParcial(Long idDeposito, Long idSolicitud, PatchEstadiaDepositoDto dto) {
+    public void finalizarEstadia(Long idDeposito, Long idSolicitud, PatchEstadiaDepositoDto dto) {
         EstadiaDepositoId idEstadiaDeposito = new EstadiaDepositoId(idDeposito, idSolicitud);
 
         EstadiaDeposito estadiaDeposito = estadiaDepositoRepository.findById(idEstadiaDeposito)
@@ -65,11 +65,11 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
                     return new RuntimeException();
                 });
 
-        // Actualiza campos simples con el mapper
-        estadiaMapper.updateFromPatchDto(dto, estadiaDeposito);
+        // Setea la fecha de finalizacion
+        estadiaDeposito.setFechaHoraSalida(dto.getFechaHoraSalida());
 
-        // Actualiza estado si es necesario
-        EstadoEstadiaDeposito estado = estadoEstadiaService.buscarPorCodigo(dto.getCodigoEstado());
+        // Actualiza estado
+        EstadoEstadiaDeposito estado = estadoEstadiaService.buscarPorCodigo("FINALIZADA");
         estadiaDeposito.setEstado(estado);
 
         estadiaDepositoRepository.save(estadiaDeposito);

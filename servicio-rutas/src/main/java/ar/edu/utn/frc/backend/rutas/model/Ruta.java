@@ -35,6 +35,9 @@ public class Ruta {
     @Column(name = "cantidad_depositos")
     private int cantidadDepositos;
 
+    @Column(name = "id_solicitud")
+    private Long idSolicitud;
+
     @Column(name = "distancia_total")
     private double distanciaTotal;
 

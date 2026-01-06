@@ -52,6 +52,6 @@ public class RutaController {
 
     @GetMapping("/{idRuta}")
     public ResponseEntity<RutaResponseDto> obtenerRutaPorId(@PathVariable Long idRuta) {
-        return ResponseEntity.ok(rutaService.obtenerRutaPorId(idRuta));
+        return ResponseEntity.ok(rutaService.obtenerPorId(idRuta));
     }
 }

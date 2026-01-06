@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
-import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.ISolicitudService;
 
@@ -25,15 +24,6 @@ public class SolicitudController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
-    }
-
-    @PatchMapping("/{idSolicitud}")
-    public ResponseEntity<Void> actualizarSolicitud(
-            @PathVariable Long idSolicitud,
-            @RequestBody PatchSolicitudDto solicitudRequestDto) {
-
-        solicitudService.actualizarParcial(idSolicitud, solicitudRequestDto);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{idSolicitud}")

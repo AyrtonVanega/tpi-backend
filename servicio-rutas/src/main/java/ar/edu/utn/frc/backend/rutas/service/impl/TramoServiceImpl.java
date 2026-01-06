@@ -1,11 +1,14 @@
 package ar.edu.utn.frc.backend.rutas.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.rutas.client.DepositoClient;
 import ar.edu.utn.frc.backend.rutas.client.PersonaClient;
+import ar.edu.utn.frc.backend.rutas.client.SolicitudClient;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmLegDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
@@ -29,6 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TramoServiceImpl implements ITramoService {
 
+    private final SolicitudClient solicitudClient;
+    private final DepositoClient depositoClient;
     private final PersonaClient personaClient;
     private final IEstadoTramoService estadoTramoService;
     private final TramoRepository tramoRepository;
@@ -177,5 +182,68 @@ public class TramoServiceImpl implements ITramoService {
         }
 
         return responseList;
+    }
+
+    @Override
+    public void iniciarTramo(Long idRuta, int orden) {
+        TramoId idTramo = new TramoId(idRuta, orden);
+
+        Tramo tramo = tramoRepository.findById(idTramo)
+                .orElseThrow(() -> {
+                    log.error("Tramo no encontrado - idRuta:{}, orden:{}",
+                            idTramo.getIdRuta(),
+                            idTramo.getOrden());
+                    return new RuntimeException();
+                });
+
+        // Validaciones
+        Ruta ruta = tramo.getRuta();
+        List<Tramo> tramos = ruta.getTramos();
+
+        boolean anteriorIniciado = tramos.stream()
+                .filter(t -> t.getIdTramo().getOrden() < orden)
+                .anyMatch(t -> t.getFechaHoraFin() == null);
+
+        if (anteriorIniciado) {
+            log.error("Todavia hay un Tramo en curso");
+            throw new RuntimeException();
+        }
+
+        if (tramo.getFechaHoraInicio() != null) {
+            log.error("Este Tramo ya ha iniciado");
+            throw new RuntimeException();
+        }
+
+        if (tramo.getPatenteCamion() == null) {
+            log.error("El Tramo no tiene camion asignado - idRuta:{}, orden:{}",
+                    idTramo.getIdRuta(),
+                    idTramo.getOrden());
+            throw new RuntimeException();
+        }
+
+        // Setea la fecha y hora de inicio
+        tramo.setFechaHoraInicio(LocalDateTime.now());
+
+        // Cambia el Estado del Tramo
+        EstadoTramo estado = estadoTramoService.buscarPorCodigo("INICIADO");
+        tramo.setEstado(estado);
+
+        // Finaliza la estadia en caso de que haya estado en un deposito
+        Long idSolicitud = ruta.getIdSolicitud();
+        if (orden > 1 && orden != tramos.size()) {
+            depositoClient.finalizarEstadia(tramo.getIdUbicacionOrigen(), idSolicitud, LocalDateTime.now());
+        }
+
+        // En caso de ser el primer Tramo, cambia el estado de la solicitud
+        if (orden == 1) {
+            solicitudClient.actualizarEstadoSolicitud(idSolicitud, "EN_TRANSITO");
+        }
+
+        // Actualiza el estado del contenedor
+        // El id de la solicitud es el mismo q el id del contenedor
+        solicitudClient.actualizarEstadoContenedor(idSolicitud, "EN_TRANSITO");
+
+        // Guarda los cambios en la BD
+        tramoRepository.save(tramo);
     }
 }

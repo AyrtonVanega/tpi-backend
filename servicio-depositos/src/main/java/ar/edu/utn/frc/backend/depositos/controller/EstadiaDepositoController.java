@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import ar.edu.utn.frc.backend.depositos.dto.CreateEstadiaDepositoDto;
 import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoResponseDto;
-import ar.edu.utn.frc.backend.depositos.dto.PatchEstadiaDepositoDto;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IEstadiaDepositoService;
 
 import java.util.List;
@@ -25,15 +24,6 @@ public class EstadiaDepositoController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
-    }
-
-    @PatchMapping("/{idDeposito}/{idSolicitud}")
-    public ResponseEntity<Void> actualizarParcialEstadia(
-            @PathVariable Long idDeposito,
-            @PathVariable Long idSolicitud,
-            @RequestBody PatchEstadiaDepositoDto dto) {
-        estadiaDepositoService.actualizarParcial(idDeposito, idSolicitud, dto);
-        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{idDeposito}/{idSolicitud}")

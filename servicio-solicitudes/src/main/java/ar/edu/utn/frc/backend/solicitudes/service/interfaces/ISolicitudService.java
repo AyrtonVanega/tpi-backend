@@ -11,7 +11,7 @@ public interface ISolicitudService {
 
     void crear(CreateSolicitudDto solicitudRequestDto);
 
-    void actualizarParcial(Long idSolicitud, PatchSolicitudDto solicitudRequestDto);
+    void actualizarEstado(Long idSolicitud, PatchSolicitudDto solicitudRequestDto);
 
     SolicitudResponseDto obtenerPorId(Long idSolicitud);
 

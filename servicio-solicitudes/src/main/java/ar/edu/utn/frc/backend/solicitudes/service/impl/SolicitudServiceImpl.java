@@ -90,23 +90,16 @@ public class SolicitudServiceImpl implements ISolicitudService {
     }
 
     @Override
-    public void actualizarParcial(Long idSolicitud, PatchSolicitudDto solicitudRequestDto) {
+    public void actualizarEstado(Long idSolicitud, PatchSolicitudDto dto) {
         Solicitud solicitud = solicitudRepository.findById(idSolicitud)
                 .orElseThrow(() -> {
                     log.error("Solicitud {} no encontrada", idSolicitud);
                     return new RuntimeException();
                 });
-        // Mapea los campos simples no nulos
-        solicitudMapper.updateFromPatchDto(solicitudRequestDto, solicitud);
 
-        // Busca el estado si se actualiza
-        EstadoSolicitud nuevoEstado = estadoSolicitudService
-                .buscarPorCodigo(solicitudRequestDto.getCodigoEstadoSolicitud());
+        // Actualiza el estado
+        EstadoSolicitud nuevoEstado = estadoSolicitudService.buscarPorCodigo(dto.getCodigoEstadoSolicitud());
         solicitud.setEstadoSolicitud(nuevoEstado);
-
-        // Busca la ruta si se actualiza
-        //Ruta nuevaRuta = null;
-        //solicitud.setRuta(nuevaRuta);
 
         solicitudRepository.save(solicitud);
     }

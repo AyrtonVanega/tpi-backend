@@ -10,7 +10,7 @@ public interface IEstadiaDepositoService {
 
         void crear(CreateEstadiaDepositoDto dto);
 
-        void actualizarParcial(Long idDeposito, Long idSolicitud, PatchEstadiaDepositoDto dto);
+        void finalizarEstadia(Long idDeposito, Long idSolicitud, PatchEstadiaDepositoDto dto);
 
         void eliminar(Long idDeposito, Long idSolicitud);
 

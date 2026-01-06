@@ -201,6 +201,7 @@ public class RutaServiceImpl implements IRutaService {
         public void crear(CreateRutaDto dto) {
                 // Mapea datos simples DTO -> Entity
                 Ruta ruta = rutaMapper.toEntity(dto.getRutaSeleccionada());
+                ruta.setIdSolicitud(dto.getIdSolicitud());
 
                 // Guarda en la BD
                 rutaRepository.save(ruta);
@@ -214,7 +215,7 @@ public class RutaServiceImpl implements IRutaService {
         }
 
         @Override
-        public RutaResponseDto obtenerRutaPorId(Long idRuta) {
+        public RutaResponseDto obtenerPorId(Long idRuta) {
                 Ruta ruta = rutaRepository.findById(idRuta)
                                 .orElseThrow(() -> {
                                         log.error("Ruta {} no encontrada", idRuta);

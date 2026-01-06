@@ -18,6 +18,7 @@ public interface RutaMapper {
     @Mapping(target = "tramos", ignore = true)
     @Mapping(target = "costoReal", ignore = true)
     @Mapping(target = "tiempoReal", ignore = true)
+    @Mapping(target = "idSolicitud", ignore = true)
     Ruta toEntity(RutaTentativaDto dto);
 
     @Mapping(target = "tramos", ignore = true)

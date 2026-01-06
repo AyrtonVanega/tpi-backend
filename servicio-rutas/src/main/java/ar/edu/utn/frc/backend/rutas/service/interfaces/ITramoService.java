@@ -23,4 +23,6 @@ public interface ITramoService {
         void asignarCamion(Long idRuta, int orden, PatchTramoDto dto);
 
         List<TramoResponseDto> obtenerTodos(Ruta ruta);
+
+        void iniciarTramo(Long idRuta, int orden);
 }

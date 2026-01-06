@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchAsignarRutadDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.ISolicitudService;
 import lombok.AllArgsConstructor;
 
@@ -24,6 +25,15 @@ public class SolicitudInternalController {
             @RequestBody PatchAsignarRutadDto asignarRutadDto) {
 
         solicitudService.asignarRuta(idSolicitud, asignarRutadDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{idSolicitud}/estado")
+    public ResponseEntity<Void> actualizarEstadoSolicitud(
+            @PathVariable Long idSolicitud,
+            @RequestBody PatchSolicitudDto solicitudRequestDto) {
+
+        solicitudService.actualizarEstado(idSolicitud, solicitudRequestDto);
         return ResponseEntity.noContent().build();
     }
 }
