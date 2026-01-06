@@ -9,6 +9,7 @@ import ar.edu.utn.frc.backend.solicitudes.client.DepositoClient;
 import ar.edu.utn.frc.backend.solicitudes.client.PersonaClient;
 import ar.edu.utn.frc.backend.solicitudes.client.dto.UbicacionResponseDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.FinalizarSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchAsignarRutadDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
@@ -183,6 +184,24 @@ public class SolicitudServiceImpl implements ISolicitudService {
         solicitud.setTiempoEstimado(asignarRutadDto.getTiempoEstimado());
 
         EstadoSolicitud estado = estadoSolicitudService.buscarPorCodigo("PROGRAMADA");
+        solicitud.setEstadoSolicitud(estado);
+
+        solicitudRepository.save(solicitud);
+    }
+
+    @Override
+    public void finalizarSolicitud(Long idSolicitud, FinalizarSolicitudDto dto) {
+        Solicitud solicitud = solicitudRepository.findById(idSolicitud)
+                .orElseThrow(() -> {
+                    log.error("Solicitud {} no encontrada", idSolicitud);
+                    return new RuntimeException();
+                });
+        
+        solicitud.setFechaHoraFin(dto.getFechaHoraFin());
+        solicitud.setCostoReal(dto.getCostoReal());
+        solicitud.setTiempoReal(dto.getTiempoReal());
+
+        EstadoSolicitud estado = estadoSolicitudService.buscarPorCodigo("ENTREGADA");
         solicitud.setEstadoSolicitud(estado);
 
         solicitudRepository.save(solicitud);

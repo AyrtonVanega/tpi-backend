@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frc.backend.solicitudes.dto.FinalizarSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchAsignarRutadDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.ISolicitudService;
@@ -34,6 +35,15 @@ public class SolicitudInternalController {
             @RequestBody PatchSolicitudDto solicitudRequestDto) {
 
         solicitudService.actualizarEstado(idSolicitud, solicitudRequestDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{idSolicitud}/finalizar")
+    public ResponseEntity<Void> finalizarSolicitud(
+            @PathVariable Long idSolicitud,
+            @RequestBody FinalizarSolicitudDto solicitudRequestDto) {
+
+        solicitudService.finalizarSolicitud(idSolicitud, solicitudRequestDto);
         return ResponseEntity.noContent().build();
     }
 }

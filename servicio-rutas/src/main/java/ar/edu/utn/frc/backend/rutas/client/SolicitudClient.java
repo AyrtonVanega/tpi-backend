@@ -1,8 +1,11 @@
 package ar.edu.utn.frc.backend.rutas.client;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import ar.edu.utn.frc.backend.rutas.client.dto.FinalizarSolicitudDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.PatchAsignarRutadDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.PatchContenedorDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.PatchSolicitudDto;
@@ -36,6 +39,15 @@ public class SolicitudClient {
         solicitudWebClient.patch()
                 .uri("http://solicitudes/solicitudes/internal/{idSolicitud}/estado", idSolicitud)
                 .bodyValue(new PatchSolicitudDto(codigoEstadoSolicitud))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
+    public void finalizarSolicitud(Long idSolicitud, LocalDateTime fechaHoraFin, double tiempoReal, double costoReal) {
+        solicitudWebClient.patch()
+                .uri("http://solicitudes/solicitudes/internal/{idSolicitud}/finalizar", idSolicitud)
+                .bodyValue(new FinalizarSolicitudDto(fechaHoraFin, tiempoReal, costoReal))
                 .retrieve()
                 .toBodilessEntity()
                 .block();

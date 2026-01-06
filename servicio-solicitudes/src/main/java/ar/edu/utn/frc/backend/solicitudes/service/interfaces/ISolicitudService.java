@@ -3,6 +3,7 @@ package ar.edu.utn.frc.backend.solicitudes.service.interfaces;
 import java.util.List;
 
 import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.FinalizarSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchAsignarRutadDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
@@ -20,4 +21,6 @@ public interface ISolicitudService {
     void cancelarSolicitud(Long idSolicitud);
 
     void asignarRuta(Long idSolicitud, PatchAsignarRutadDto asignarRutadDto);
+
+    void finalizarSolicitud(Long idSolicitud, FinalizarSolicitudDto dto);
 }

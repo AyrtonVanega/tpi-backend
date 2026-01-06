@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frc.backend.rutas.dto.FinalizarTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.ITramoService;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,14 @@ public class TramoController {
     @PatchMapping("/{idRuta}/{orden}/iniciar")
     public ResponseEntity<Void> iniciarTramo(@PathVariable Long idRuta, @PathVariable int orden) {
         tramoService.iniciarTramo(idRuta, orden);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{idRuta}/{orden}/finalizar")
+    public ResponseEntity<Void> finalizarTramo(@PathVariable Long idRuta, @PathVariable int orden,
+            @RequestBody FinalizarTramoDto finalizarTramoDto) {
+
+        tramoService.finalizarTramo(idRuta, orden, finalizarTramoDto);
         return ResponseEntity.noContent().build();
     }
 }

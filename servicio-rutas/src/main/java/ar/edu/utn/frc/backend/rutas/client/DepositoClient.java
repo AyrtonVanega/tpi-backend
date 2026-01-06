@@ -7,6 +7,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import ar.edu.utn.frc.backend.rutas.client.dto.CreateEstadiaDepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.FinalizarEstadiaDto;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,15 @@ public class DepositoClient {
         depositoWebClient.patch()
                 .uri("http://depositos/estadias-deposito/internal/{idDeposito}/{idSolicitud}", idDeposito, idSolicitud)
                 .bodyValue(new FinalizarEstadiaDto(fechaHoraSalida))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
+    public void crearEstadia(Long idDeposito, Long idSolicitud, LocalDateTime fechaHoraEntrada) {
+        depositoWebClient.post()
+                .uri("http://depositos/estadias-deposito/internal")
+                .bodyValue(new CreateEstadiaDepositoDto(idDeposito, idSolicitud, fechaHoraEntrada))
                 .retrieve()
                 .toBodilessEntity()
                 .block();

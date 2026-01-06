@@ -1,11 +1,9 @@
 package ar.edu.utn.frc.backend.depositos.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ar.edu.utn.frc.backend.depositos.dto.CreateEstadiaDepositoDto;
 import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoResponseDto;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IEstadiaDepositoService;
 
@@ -17,14 +15,6 @@ import java.util.List;
 public class EstadiaDepositoController {
 
     private final IEstadiaDepositoService estadiaDepositoService;
-
-    @PostMapping()
-    public ResponseEntity<Void> crearEstadia(@RequestBody CreateEstadiaDepositoDto dto) {
-        estadiaDepositoService.crear(dto);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
-    }
 
     @DeleteMapping("/{idDeposito}/{idSolicitud}")
     public ResponseEntity<Void> eliminarEstadia(
