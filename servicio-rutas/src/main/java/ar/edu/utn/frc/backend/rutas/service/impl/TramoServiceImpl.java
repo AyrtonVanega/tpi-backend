@@ -6,13 +6,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frc.backend.rutas.client.DepositoClient;
 import ar.edu.utn.frc.backend.rutas.client.PersonaClient;
-import ar.edu.utn.frc.backend.rutas.client.SolicitudClient;
+import ar.edu.utn.frc.backend.rutas.client.dto.CamionDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmLegDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
-import ar.edu.utn.frc.backend.rutas.dto.FinalizarTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
@@ -33,8 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TramoServiceImpl implements ITramoService {
 
-    private final SolicitudClient solicitudClient;
-    private final DepositoClient depositoClient;
     private final PersonaClient personaClient;
     private final IEstadoTramoService estadoTramoService;
     private final TramoRepository tramoRepository;
@@ -236,20 +232,7 @@ public class TramoServiceImpl implements ITramoService {
     }
 
     @Override
-    public void finalizarTramo(Long idRuta, int orden, FinalizarTramoDto dto) {
-        TramoId idTramo = new TramoId(idRuta, orden);
-
-        Tramo tramo = tramoRepository.findById(idTramo)
-                .orElseThrow(() -> {
-                    log.error("Tramo no encontrado - idRuta:{}, orden:{}",
-                            idTramo.getIdRuta(),
-                            idTramo.getOrden());
-                    return new RuntimeException();
-                });
-
-        // Validaciones
-        Ruta ruta = tramo.getRuta();
-
+    public void validarFinalizacionTramo(Tramo tramo) {
         if (tramo.getFechaHoraInicio() == null) {
             log.error("Este Tramo todavia no ha iniciado");
             throw new RuntimeException();
@@ -259,44 +242,22 @@ public class TramoServiceImpl implements ITramoService {
             log.error("Este Tramo ya ha finalizado");
             throw new RuntimeException();
         }
+    }
 
-        // Setea la fecha y hora de inicio
-        LocalDateTime fechaHora = LocalDateTime.now();
+    @Override
+    public void finalizarTramo(Tramo tramo, LocalDateTime fechaHora, double valorLitroCombustible, CamionDto camion) {
         tramo.setFechaHoraFin(fechaHora);
 
-        // Cambia el Estado del Tramo
         EstadoTramo estado = estadoTramoService.buscarPorCodigo("FINALIZADO");
         tramo.setEstado(estado);
 
-        // Calcula y setea el costo real
         double costoReal = calcularCostoReal(
                 tramo.getDistancia(),
-                dto.getCostoKmBase(),
-                dto.getConsumoCombustiblePromedio(),
-                dto.getValorLitroCombustible());
+                camion.getCostoBaseKm(),
+                camion.getConsumoCombustiblePromedio(),
+                valorLitroCombustible);
         tramo.setCostoReal(costoReal);
 
-        Long idSolicitud = ruta.getIdSolicitud();
-        if (orden != ruta.getTramos().size()) {
-            // En caso de no ser el ultimo Tramo, crea la estadia y cambia el estado del
-            // contenedor
-            depositoClient.crearEstadia(tramo.getIdUbicacionDestino(), idSolicitud, fechaHora);
-            solicitudClient.actualizarEstadoContenedor(idSolicitud, "EN_DEPOSITO");
-        } else {
-            // En caso de ser el ultimo Tramo
-            // Calcula costo y tiempo real
-            double costoRealTotal = 0.0;
-            double tiempoReal = 0.0;
-
-            // Cambia el estado del contenedor y finaliza la solicitud
-            solicitudClient.actualizarEstadoContenedor(idSolicitud, "ENTREGADO");
-            solicitudClient.finalizarSolicitud(idSolicitud, fechaHora, costoRealTotal, tiempoReal);
-        }
-
-        // Setea true la disponibilidad del camion
-        personaClient.actualizarDisponibilidadCamion(dto.getPatenteCamion(), true);
-
-        // Guarda los cambios en la BD
         tramoRepository.save(tramo);
     }
 

@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.edu.utn.frc.backend.rutas.dto.FinalizarTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.ITramoService;
+import ar.edu.utn.frc.backend.rutas.workflow.FinalizarTramoWorkflow;
 import ar.edu.utn.frc.backend.rutas.workflow.IniciarTramoWorkflow;
 import lombok.AllArgsConstructor;
 
@@ -20,6 +20,7 @@ public class TramoController {
 
     private final ITramoService tramoService;
     private final IniciarTramoWorkflow iniciarTramoWorkflow;
+    private final FinalizarTramoWorkflow finalizarTramoWorkflow;
 
     @PatchMapping("/{idRuta}/{orden}/asignar-camion")
     public ResponseEntity<Void> asignarCamionATramo(@PathVariable Long idRuta, @PathVariable int orden,
@@ -36,10 +37,8 @@ public class TramoController {
     }
 
     @PatchMapping("/{idRuta}/{orden}/finalizar")
-    public ResponseEntity<Void> finalizarTramo(@PathVariable Long idRuta, @PathVariable int orden,
-            @RequestBody FinalizarTramoDto finalizarTramoDto) {
-
-        tramoService.finalizarTramo(idRuta, orden, finalizarTramoDto);
+    public ResponseEntity<Void> finalizarTramo(@PathVariable Long idRuta, @PathVariable int orden) {
+        finalizarTramoWorkflow.finalizarTramo(idRuta, orden);
         return ResponseEntity.noContent().build();
     }
 }

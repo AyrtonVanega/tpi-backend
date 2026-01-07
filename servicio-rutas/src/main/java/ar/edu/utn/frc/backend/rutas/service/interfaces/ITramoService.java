@@ -1,10 +1,11 @@
 package ar.edu.utn.frc.backend.rutas.service.interfaces;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import ar.edu.utn.frc.backend.rutas.client.dto.CamionDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
-import ar.edu.utn.frc.backend.rutas.dto.FinalizarTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
@@ -28,7 +29,7 @@ public interface ITramoService {
 
         void iniciarTramo(Tramo tramo);
 
-        void finalizarTramo(Long idRuta, int orden, FinalizarTramoDto dto);
+        void finalizarTramo(Tramo tramo, LocalDateTime fechaHora, double valorLitroCombustible, CamionDto camion);
 
         double calcularCostoReal(double distancia, double costoKmBase, double consumoCombustiblePromedio,
                         double valorLitroCombustible);
@@ -36,4 +37,6 @@ public interface ITramoService {
         Tramo obtenerTramoPorId(Long idRuta, int orden);
 
         void validarInicioTramo(Tramo tramo);
+
+        void validarFinalizacionTramo(Tramo tramo);
 }
