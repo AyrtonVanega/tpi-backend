@@ -186,23 +186,25 @@ public class TramoServiceImpl implements ITramoService {
     }
 
     @Override
-    public void iniciarTramo(Long idRuta, int orden) {
+    public Tramo obtenerTramoPorId(Long idRuta, int orden) {
         TramoId idTramo = new TramoId(idRuta, orden);
 
-        Tramo tramo = tramoRepository.findById(idTramo)
+        return tramoRepository.findById(idTramo)
                 .orElseThrow(() -> {
                     log.error("Tramo no encontrado - idRuta:{}, orden:{}",
                             idTramo.getIdRuta(),
                             idTramo.getOrden());
                     return new RuntimeException();
                 });
+    }
 
-        // Validaciones
+    @Override
+    public void validarInicioTramo(Tramo tramo) {
         Ruta ruta = tramo.getRuta();
 
         boolean anteriorIniciado = ruta.getTramos()
                 .stream()
-                .filter(t -> t.getIdTramo().getOrden() < orden)
+                .filter(t -> t.getIdTramo().getOrden() < tramo.getIdTramo().getOrden())
                 .anyMatch(t -> t.getFechaHoraFin() == null);
 
         if (anteriorIniciado) {
@@ -217,32 +219,19 @@ public class TramoServiceImpl implements ITramoService {
 
         if (tramo.getPatenteCamion() == null) {
             log.error("El Tramo no tiene camion asignado - idRuta:{}, orden:{}",
-                    idTramo.getIdRuta(),
-                    idTramo.getOrden());
+                    tramo.getIdTramo().getIdRuta(),
+                    tramo.getIdTramo().getOrden());
             throw new RuntimeException();
         }
+    }
 
-        // Setea la fecha y hora de inicio
+    @Override
+    public void iniciarTramo(Tramo tramo) {
         tramo.setFechaHoraInicio(LocalDateTime.now());
 
-        // Cambia el Estado del Tramo
         EstadoTramo estado = estadoTramoService.buscarPorCodigo("INICIADO");
         tramo.setEstado(estado);
 
-        Long idSolicitud = ruta.getIdSolicitud();
-        if (orden > 1) {
-            // En caso de no ser el primer Tramo, finaliza la estadia del deposito en el que estuvo
-            depositoClient.finalizarEstadia(tramo.getIdUbicacionOrigen(), idSolicitud, LocalDateTime.now());
-        } else {
-            // En caso de ser el primer Tramo, cambia el estado de la solicitud
-            solicitudClient.actualizarEstadoSolicitud(idSolicitud, "EN_TRANSITO");
-        }
-
-        // Actualiza el estado del contenedor
-        // El id de la solicitud es el mismo q el id del contenedor
-        solicitudClient.actualizarEstadoContenedor(idSolicitud, "EN_TRANSITO");
-
-        // Guarda los cambios en la BD
         tramoRepository.save(tramo);
     }
 

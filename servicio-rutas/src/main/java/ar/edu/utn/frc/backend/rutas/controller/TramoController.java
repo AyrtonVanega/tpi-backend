@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ar.edu.utn.frc.backend.rutas.dto.FinalizarTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.ITramoService;
+import ar.edu.utn.frc.backend.rutas.workflow.IniciarTramoWorkflow;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -18,6 +19,7 @@ import lombok.AllArgsConstructor;
 public class TramoController {
 
     private final ITramoService tramoService;
+    private final IniciarTramoWorkflow iniciarTramoWorkflow;
 
     @PatchMapping("/{idRuta}/{orden}/asignar-camion")
     public ResponseEntity<Void> asignarCamionATramo(@PathVariable Long idRuta, @PathVariable int orden,
@@ -29,7 +31,7 @@ public class TramoController {
 
     @PatchMapping("/{idRuta}/{orden}/iniciar")
     public ResponseEntity<Void> iniciarTramo(@PathVariable Long idRuta, @PathVariable int orden) {
-        tramoService.iniciarTramo(idRuta, orden);
+        iniciarTramoWorkflow.iniciarTramo(idRuta, orden);
         return ResponseEntity.noContent().build();
     }
 
