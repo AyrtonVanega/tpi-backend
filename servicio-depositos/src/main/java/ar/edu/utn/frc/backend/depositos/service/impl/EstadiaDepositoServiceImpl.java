@@ -3,6 +3,7 @@ package ar.edu.utn.frc.backend.depositos.service.impl;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,22 +36,29 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
 
     @Override
     public void crear(CreateEstadiaDepositoDto dto) {
-        // Mapea campos simples
-        EstadiaDeposito estadiaDeposito = estadiaMapper.toEntity(dto);
-
-        // Setea la PK embebida
         EstadiaDepositoId id = new EstadiaDepositoId(dto.getIdDeposito(), dto.getIdSolicitud());
-        estadiaDeposito.setIdEstadiaDeposito(id);
+        Optional<EstadiaDeposito> estadiaDeposito = estadiaDepositoRepository.findById(id);
 
-        // Resuelve la relación con Deposito
-        Deposito deposito = depositoService.buscarDepositoPorId(dto.getIdDeposito());
-        estadiaDeposito.setDeposito(deposito);
+        if (estadiaDeposito != null) {
+            log.error(
+                    "Esta Estadia Deposito ya existe - idDeposito:{}, idSolicitud:{}",
+                    id.getIdDeposito(),
+                    id.getIdSolicitud());
+            throw new RuntimeException();
+        } else {
+            EstadiaDeposito nuevaEstadia = estadiaMapper.toEntity(dto);
+            nuevaEstadia.setIdEstadiaDeposito(id);
 
-        // Setea el estado inicial
-        EstadoEstadiaDeposito estado = estadoEstadiaService.buscarPorCodigo("ACTIVA");
-        estadiaDeposito.setEstado(estado);
+            // Resuelve la relación con Deposito
+            Deposito deposito = depositoService.buscarDepositoPorId(dto.getIdDeposito());
+            nuevaEstadia.setDeposito(deposito);
 
-        estadiaDepositoRepository.save(estadiaDeposito);
+            // Setea el estado inicial
+            EstadoEstadiaDeposito estado = estadoEstadiaService.buscarPorCodigo("ACTIVA");
+            nuevaEstadia.setEstado(estado);
+
+            estadiaDepositoRepository.save(nuevaEstadia);
+        }
     }
 
     @Override
@@ -68,6 +76,11 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
                 });
 
         // Setea la fecha de finalizacion
+        if (estadiaDeposito.getFechaHoraEntrada().isAfter(dto.getFechaHoraSalida())) {
+            log.error("La fecha y hora de salida no puede ser anterior a la de ingreso");
+            throw new RuntimeException();
+        }
+
         estadiaDeposito.setFechaHoraSalida(dto.getFechaHoraSalida());
 
         // Actualiza estado
