@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.ISolicitudService;
+import ar.edu.utn.frc.backend.solicitudes.workflow.CrearSolicitudWorkflow;
 
 import java.util.List;
 
@@ -17,10 +18,11 @@ import java.util.List;
 public class SolicitudController {
 
     private final ISolicitudService solicitudService;
+    private final CrearSolicitudWorkflow crearSolicitudWorkflow;
 
     @PostMapping()
     public ResponseEntity<Void> crearSolicitud(@RequestBody CreateSolicitudDto solicitudRequestDto) {
-        solicitudService.crear(solicitudRequestDto);
+        crearSolicitudWorkflow.crearSolicitud(solicitudRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
