@@ -5,9 +5,18 @@ import java.util.List;
 import ar.edu.utn.frc.backend.depositos.dto.DepositoRequestDto;
 import ar.edu.utn.frc.backend.depositos.dto.DepositoResponseDto;
 import ar.edu.utn.frc.backend.depositos.model.Deposito;
-import ar.edu.utn.frc.backend.depositos.service.base.CrudService;
 
-public interface IDepositoService extends CrudService<DepositoResponseDto, DepositoRequestDto, Long> {
+public interface IDepositoService {
+
+    void crear(DepositoRequestDto depositoRequestDto);
+
+    void actualizar(Long idDeposito, DepositoRequestDto depositoRequestDto);
+
+    void eliminar(Long idDeposito);
+
+    DepositoResponseDto obtenerPorId(Long idDeposito);
+
+    List<DepositoResponseDto> obtenerTodos();
 
     Deposito buscarDepositoPorId(Long idDeposito);
 
