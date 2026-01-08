@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TarifaRequestDto {
+public class CreateTarifaDto {
     private double rangoPesoMin;
     private double rangoPesoMax;
     private double rangoVolumenMin;

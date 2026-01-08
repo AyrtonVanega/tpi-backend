@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frc.backend.tarifas.dto.TarifaRequestDto;
+import ar.edu.utn.frc.backend.tarifas.dto.CreateTarifaDto;
+import ar.edu.utn.frc.backend.tarifas.dto.PatchTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
 import ar.edu.utn.frc.backend.tarifas.mapper.TarifaMapper;
 import ar.edu.utn.frc.backend.tarifas.model.Tarifa;
@@ -31,20 +32,28 @@ public class TarifaServiceImpl implements ITarifaService {
     }
 
     @Override
-    public void crear(TarifaRequestDto dto, double consumoCombustibleGralAprox) {
+    public void crear(CreateTarifaDto dto, double consumoCombustibleGralAprox) {
         Tarifa tarifa = tarifaMapper.toEntity(dto);
         tarifa.setConsumoCombustibleGralAprox(consumoCombustibleGralAprox);
         tarifaRepository.save(tarifa);
     }
 
     @Override
-    public void actualizar(Long idTarifa, TarifaRequestDto dto) {
+    public void actualizarParcial(Long idTarifa, PatchTarifaDto dto) {
         Tarifa tarifa = tarifaRepository.findById(idTarifa)
                 .orElseThrow(() -> {
                     log.error("Tarifa {} no encontrada", idTarifa);
                     return new RuntimeException();
                 });
-        tarifaMapper.updateFromDto(dto, tarifa);
+
+        if (dto.getConsumoCombustibleGralAprox() != null) {
+            tarifa.setConsumoCombustibleGralAprox(dto.getConsumoCombustibleGralAprox());
+        }
+
+        if (dto.getCostoBaseKmVolumen() != null) {
+            tarifa.setCostoBaseKmVolumen(dto.getCostoBaseKmVolumen());
+        }
+
         tarifaRepository.save(tarifa);
     }
 

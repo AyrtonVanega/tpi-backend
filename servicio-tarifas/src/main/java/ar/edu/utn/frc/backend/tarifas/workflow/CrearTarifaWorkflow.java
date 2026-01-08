@@ -3,7 +3,7 @@ package ar.edu.utn.frc.backend.tarifas.workflow;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.tarifas.client.PersonaClient;
-import ar.edu.utn.frc.backend.tarifas.dto.TarifaRequestDto;
+import ar.edu.utn.frc.backend.tarifas.dto.CreateTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.service.interfaces.ITarifaService;
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +14,7 @@ public class CrearTarifaWorkflow {
     private final ITarifaService tarifaService;
     private final PersonaClient personaClient;
 
-    public void crearTarifa(TarifaRequestDto dto) {
+    public void crearTarifa(CreateTarifaDto dto) {
 
         double pesoMin = dto.getRangoPesoMin();
         double pesoMax = dto.getRangoPesoMax();
