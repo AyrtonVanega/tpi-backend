@@ -22,4 +22,6 @@ public interface ICamionService {
     void actualizarDisponibilidad(String patenteCamion, PatchCamionDto patchCamionDto);
 
     Camion buscarCamionPorId(String patenteCamion);
+
+    double calcularConsumoPromedio(double pesoMin, double pesoMax, double volMin, double volMax);
 }

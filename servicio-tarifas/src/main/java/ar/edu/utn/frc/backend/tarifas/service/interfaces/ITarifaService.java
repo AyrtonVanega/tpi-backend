@@ -6,8 +6,10 @@ import ar.edu.utn.frc.backend.tarifas.dto.TarifaRequestDto;
 import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
 
 public interface ITarifaService {
-    
-    void crear(TarifaRequestDto dto);
+
+    void validarRangosTarifa(double pesoMin, double pesoMax, double volMin, double volMax);
+
+    void crear(TarifaRequestDto dto, double consumoCombustibleGralAprox);
 
     void actualizar(Long idTarifa, TarifaRequestDto dto);
 

@@ -22,8 +22,18 @@ public class TarifaServiceImpl implements ITarifaService {
     private final TarifaMapper tarifaMapper;
 
     @Override
-    public void crear(TarifaRequestDto dto) {
+    public void validarRangosTarifa(double pesoMin, double pesoMax, double volMin, double volMax) {
+        boolean existeSolapamiento = tarifaRepository.existeSolapamiento(pesoMin, pesoMax, volMin, volMax);
+        if (existeSolapamiento) {
+            log.error("No se puede crear la Tarifa porque existe un solapamiento entre los rangos");
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public void crear(TarifaRequestDto dto, double consumoCombustibleGralAprox) {
         Tarifa tarifa = tarifaMapper.toEntity(dto);
+        tarifa.setConsumoCombustibleGralAprox(consumoCombustibleGralAprox);
         tarifaRepository.save(tarifa);
     }
 

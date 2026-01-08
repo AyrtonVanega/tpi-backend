@@ -68,7 +68,7 @@ public class CamionServiceImpl implements ICamionService {
                     log.error("Camion {} no encontrado", patenteCamion);
                     return new RuntimeException();
                 });
-        
+
         // Mapea datos simples Entity -> DTO
         CamionResponseDto responseDto = camionMapper.toResponse(camion);
 
@@ -122,5 +122,14 @@ public class CamionServiceImpl implements ICamionService {
                     log.error("Camion {} no encontrado", patenteCamion);
                     return new RuntimeException();
                 });
+    }
+
+    @Override
+    public double calcularConsumoPromedio(double pesoMin, double pesoMax, double volMin, double volMax) {
+        List<Camion> camiones = camionRepository.buscarCamionesPorCapacidad(pesoMin, pesoMax, volMin, volMax);
+        return camiones.stream()
+                .mapToDouble(Camion::getConsumoCombustiblePromedio)
+                .average()
+                .orElse(0.0);
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ar.edu.utn.frc.backend.tarifas.dto.TarifaRequestDto;
 import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
 import ar.edu.utn.frc.backend.tarifas.service.interfaces.ITarifaService;
+import ar.edu.utn.frc.backend.tarifas.workflow.CrearTarifaWorkflow;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -24,10 +25,11 @@ import lombok.AllArgsConstructor;
 public class TarifaController {
     
     private final ITarifaService tarifaService;
+    private final CrearTarifaWorkflow crearTarifaWorkflow;
 
     @PostMapping()
     public ResponseEntity<Void> crearTarifa(@RequestBody TarifaRequestDto tarifaRequestDto) {
-        tarifaService.crear(tarifaRequestDto);
+        crearTarifaWorkflow.crearTarifa(tarifaRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
