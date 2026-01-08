@@ -15,12 +15,14 @@ import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
 import ar.edu.utn.frc.backend.rutas.mapper.TramoMapper;
+import ar.edu.utn.frc.backend.rutas.model.DetalleCostoTramo;
 import ar.edu.utn.frc.backend.rutas.model.EstadoTramo;
 import ar.edu.utn.frc.backend.rutas.model.Ruta;
 import ar.edu.utn.frc.backend.rutas.model.Tramo;
 import ar.edu.utn.frc.backend.rutas.model.TramoId;
 import ar.edu.utn.frc.backend.rutas.model.Tramo.TipoTramo;
 import ar.edu.utn.frc.backend.rutas.repository.TramoRepository;
+import ar.edu.utn.frc.backend.rutas.service.interfaces.IDetalleCostoTramoService;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.IEstadoTramoService;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.ITramoService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TramoServiceImpl implements ITramoService {
 
     private final PersonaClient personaClient;
+    private final IDetalleCostoTramoService detalleTramoService;
     private final IEstadoTramoService estadoTramoService;
     private final TramoRepository tramoRepository;
     private final TramoMapper tramoMapper;
@@ -245,26 +248,24 @@ public class TramoServiceImpl implements ITramoService {
     }
 
     @Override
-    public void finalizarTramo(Tramo tramo, LocalDateTime fechaHora, double valorLitroCombustible, CamionDto camion) {
+    public void finalizarTramo(Tramo tramo, LocalDateTime fechaHora, CamionDto camion, double valorLitroCombustible) {
         tramo.setFechaHoraFin(fechaHora);
 
         EstadoTramo estado = estadoTramoService.buscarPorCodigo("FINALIZADO");
         tramo.setEstado(estado);
 
-        double costoReal = calcularCostoReal(
-                tramo.getDistancia(),
-                camion.getCostoBaseKm(),
-                camion.getConsumoCombustiblePromedio(),
-                valorLitroCombustible);
-        tramo.setCostoReal(costoReal);
+        List<DetalleCostoTramo> detalles = detalleTramoService.crearDetalles(tramo, camion, valorLitroCombustible);
+        tramo.setDetallesCostoTramo(detalles);
+
+        tramo.setCostoReal(calcularCostoReal(detalles));
 
         tramoRepository.save(tramo);
     }
 
     @Override
-    public double calcularCostoReal(double distancia, double costoKmBase, double consumoCombustiblePromedio,
-            double valorLitroCombustible) {
-
-        return distancia * (costoKmBase + consumoCombustiblePromedio * valorLitroCombustible);
+    public double calcularCostoReal(List<DetalleCostoTramo> detallesCostoTramo) {
+        return detallesCostoTramo.stream()
+                .mapToDouble(DetalleCostoTramo::getSubTotal)
+                .sum();
     }
 }

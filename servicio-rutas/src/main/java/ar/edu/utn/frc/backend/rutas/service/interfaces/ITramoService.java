@@ -9,6 +9,7 @@ import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
 import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
+import ar.edu.utn.frc.backend.rutas.model.DetalleCostoTramo;
 import ar.edu.utn.frc.backend.rutas.model.Ruta;
 import ar.edu.utn.frc.backend.rutas.model.Tramo;
 
@@ -29,14 +30,13 @@ public interface ITramoService {
 
         void iniciarTramo(Tramo tramo);
 
-        void finalizarTramo(Tramo tramo, LocalDateTime fechaHora, double valorLitroCombustible, CamionDto camion);
-
-        double calcularCostoReal(double distancia, double costoKmBase, double consumoCombustiblePromedio,
-                        double valorLitroCombustible);
+        void finalizarTramo(Tramo tramo, LocalDateTime fechaHora, CamionDto camion, double valorLitroCombustible);
 
         Tramo obtenerTramoPorId(Long idRuta, int orden);
 
         void validarInicioTramo(Tramo tramo);
 
         void validarFinalizacionTramo(Tramo tramo);
+
+        double calcularCostoReal(List<DetalleCostoTramo> detallesCostoTramo);
 }

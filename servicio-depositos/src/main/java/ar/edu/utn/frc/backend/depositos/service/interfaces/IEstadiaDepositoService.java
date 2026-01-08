@@ -17,4 +17,6 @@ public interface IEstadiaDepositoService {
         EstadiaDepositoResponseDto obtenerPorId(Long idDeposito, Long idSolicitud);
 
         List<EstadiaDepositoResponseDto> obtenerEstadiasActivas(Long idDeposito);
+
+        double calcularCostoTotal(Long idSolicitud);
 }

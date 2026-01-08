@@ -55,4 +55,7 @@ public class Ruta {
 
     @OneToMany(mappedBy = "ruta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Tramo> tramos;
+
+    @OneToMany(mappedBy = "ruta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<DetalleCostoRuta> detallesCostoRuta;
 }

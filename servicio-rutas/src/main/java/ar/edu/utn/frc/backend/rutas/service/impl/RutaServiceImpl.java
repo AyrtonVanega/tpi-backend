@@ -1,5 +1,7 @@
 package ar.edu.utn.frc.backend.rutas.service.impl;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -19,8 +21,11 @@ import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
 import ar.edu.utn.frc.backend.rutas.mapper.RutaMapper;
+import ar.edu.utn.frc.backend.rutas.model.DetalleCostoRuta;
 import ar.edu.utn.frc.backend.rutas.model.Ruta;
+import ar.edu.utn.frc.backend.rutas.model.Tramo;
 import ar.edu.utn.frc.backend.rutas.repository.RutaRepository;
+import ar.edu.utn.frc.backend.rutas.service.interfaces.IDetalleCostoRutaService;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.IRutaService;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.ITramoService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +41,7 @@ public class RutaServiceImpl implements IRutaService {
         private final TarifaClient tarifaClient;
         private final SolicitudClient solicitudClient;
         private final ITramoService tramoService;
+        private final IDetalleCostoRutaService detalleRutaService;
         private final RutaRepository rutaRepository;
         private final RutaMapper rutaMapper;
 
@@ -225,9 +231,48 @@ public class RutaServiceImpl implements IRutaService {
                 RutaResponseDto rutaDto = rutaMapper.toResponse(ruta);
 
                 List<TramoResponseDto> tramosDto = tramoService.obtenerTodos(ruta);
-                
+
                 rutaDto.setTramos(tramosDto);
 
                 return rutaDto;
+        }
+
+        @Override
+        public void finalizarRuta(Ruta ruta, double costoGestionBase, double costoTotalEstadias) {
+                List<DetalleCostoRuta> detalles = detalleRutaService.crearDetalles(ruta, costoGestionBase, costoTotalEstadias);
+                ruta.setDetallesCostoRuta(detalles);
+
+                ruta.setCostoReal(calcularCostoRealTotal(ruta.getDetallesCostoRuta()));
+                ruta.setTiempoReal(calcularTiempoReal(ruta));
+
+                rutaRepository.save(ruta);
+        }
+
+        @Override
+        public double calcularCostoRealTotal(List<DetalleCostoRuta> detallesCostoRuta) {
+                return detallesCostoRuta.stream()
+                                .mapToDouble(DetalleCostoRuta::getSubTotal)
+                                .sum();
+        }
+
+        @Override
+        public double calcularTiempoReal(Ruta ruta) {
+                List<Tramo> tramos = ruta.getTramos();
+
+                LocalDateTime inicio = tramos.stream()
+                                .map(Tramo::getFechaHoraInicio)
+                                .min(LocalDateTime::compareTo)
+                                .orElse(null);
+
+                LocalDateTime fin = tramos.stream()
+                                .map(Tramo::getFechaHoraFin)
+                                .max(LocalDateTime::compareTo)
+                                .orElse(null);
+
+                if (inicio == null || fin == null) {
+                        return 0.0;
+                }
+
+                return Duration.between(inicio, fin).toMinutes() / 60.0;
         }
 }

@@ -24,6 +24,7 @@ public interface TramoMapper {
     @Mapping(target = "estado", ignore = true)
     @Mapping(target = "patenteCamion", ignore = true)
     @Mapping(target = "costoReal", ignore = true)
+    @Mapping(target = "detallesCostoTramo", ignore = true)
     Tramo toEntity(TramoTentativoDto dto);
 
     @Mapping(target = "orden", ignore = true)

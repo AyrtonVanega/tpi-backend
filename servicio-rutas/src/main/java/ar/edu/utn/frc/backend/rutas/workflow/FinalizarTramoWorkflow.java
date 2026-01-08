@@ -9,15 +9,19 @@ import ar.edu.utn.frc.backend.rutas.client.PersonaClient;
 import ar.edu.utn.frc.backend.rutas.client.SolicitudClient;
 import ar.edu.utn.frc.backend.rutas.client.TarifaClient;
 import ar.edu.utn.frc.backend.rutas.client.dto.CamionDto;
+import ar.edu.utn.frc.backend.rutas.client.dto.ParametroGlobalDto;
+import ar.edu.utn.frc.backend.rutas.model.Ruta;
 import ar.edu.utn.frc.backend.rutas.model.Tramo;
+import ar.edu.utn.frc.backend.rutas.service.interfaces.IRutaService;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.ITramoService;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class FinalizarTramoWorkflow {
-    
+
     private final ITramoService tramoService;
+    private final IRutaService rutaService;
     private final DepositoClient depositoClient;
     private final SolicitudClient solicitudClient;
     private final PersonaClient personaClient;
@@ -30,11 +34,14 @@ public class FinalizarTramoWorkflow {
 
         LocalDateTime fechaHora = LocalDateTime.now();
         CamionDto camion = personaClient.obtenerCamionPorId(tramo.getPatenteCamion());
-        double valorLitroCombustible = tarifaClient.obtenerParametrosGlobales().getValorLitroCombustible();
-        tramoService.finalizarTramo(tramo, fechaHora, valorLitroCombustible, camion);
+        ParametroGlobalDto parametroGlobal = tarifaClient.obtenerParametrosGlobales();
 
-        Long idSolicitud = tramo.getRuta().getIdSolicitud();
-        if (orden != tramo.getRuta().getTramos().size()) {
+        // Finaliza el tramo
+        tramoService.finalizarTramo(tramo, fechaHora, camion, parametroGlobal.getValorLitroCombustible());
+
+        Ruta ruta = tramo.getRuta();
+        Long idSolicitud = ruta.getIdSolicitud();
+        if (orden != ruta.getTramos().size()) {
             // En caso de no ser el ultimo Tramo, crea la estadia y cambia el estado del
             // contenedor
             depositoClient.crearEstadia(tramo.getIdUbicacionDestino(), idSolicitud, fechaHora);
@@ -42,12 +49,14 @@ public class FinalizarTramoWorkflow {
         } else {
             // En caso de ser el ultimo Tramo
             // Calcula costo y tiempo real
-            double costoRealTotal = 0.0;
-            double tiempoReal = 0.0;
+            double costoTotalEstadias = depositoClient.calcularCostoEstadiaDiario(idSolicitud);
+
+            // Finaliza la ruta
+            rutaService.finalizarRuta(ruta, parametroGlobal.getCostoGestionBase(), costoTotalEstadias);
 
             // Cambia el estado del contenedor y finaliza la solicitud
             solicitudClient.actualizarEstadoContenedor(idSolicitud, "ENTREGADO");
-            solicitudClient.finalizarSolicitud(idSolicitud, fechaHora, costoRealTotal, tiempoReal);
+            solicitudClient.finalizarSolicitud(idSolicitud, fechaHora, ruta.getTiempoReal(), ruta.getCostoReal());
         }
 
         // Setea true la disponibilidad del camion

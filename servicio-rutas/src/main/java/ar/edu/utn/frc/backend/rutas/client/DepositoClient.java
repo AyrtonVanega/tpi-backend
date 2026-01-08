@@ -45,4 +45,12 @@ public class DepositoClient {
                 .toBodilessEntity()
                 .block();
     }
+
+    public Double calcularCostoEstadiaDiario(Long idSolicitud) {
+        return depositoWebClient.get()
+                .uri("http://depositos/estadias-deposito/internal/costo-total?idSolicitud={idSolicitud}", idSolicitud)
+                .retrieve()
+                .bodyToMono(Double.class)
+                .block();
+    }
 }

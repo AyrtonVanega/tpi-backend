@@ -1,5 +1,7 @@
 package ar.edu.utn.frc.backend.depositos.service.impl;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -111,7 +113,45 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
     public List<EstadiaDepositoResponseDto> obtenerEstadiasActivas(Long idDeposito) {
         List<EstadiaDeposito> estadiasActivas = estadiaDepositoRepository
                 .buscarPorDepositoYEstado(idDeposito, "ACTIVA");
-        
+
         return estadiaMapper.toResponseList(estadiasActivas);
+    }
+
+    @Override
+    public double calcularCostoTotal(Long idSolicitud) {
+        List<EstadiaDeposito> estadias = estadiaDepositoRepository.findByIdSolicitud(idSolicitud);
+        return estadias.stream()
+                .mapToDouble(estadia -> {
+                    LocalDateTime entrada = estadia.getFechaHoraEntrada();
+                    LocalDateTime salida = estadia.getFechaHoraSalida();
+
+                    if (entrada == null || salida == null) {
+                        return 0;
+                    }
+
+                    long minutosTotales = ChronoUnit.MINUTES.between(entrada, salida);
+
+                    // Menos de 3 horas no se cobra estadia
+                    if (minutosTotales < 180) {
+                        return 0.0;
+                    }
+
+                    long minutosPorDia = 24 * 60;
+                    long diasCompletos = minutosTotales / minutosPorDia;
+                    long minutosRestantes = minutosTotales % minutosPorDia;
+
+                    long diasCobrados = diasCompletos;
+
+                    // Primer dia minimo
+                    if (diasCobrados == 0) {
+                        diasCobrados = 1;
+                    } else if (minutosRestantes > 180) {
+                        diasCobrados++;
+                    }
+
+                    // Calcula el costo final de la estadia
+                    return diasCobrados * estadia.getDeposito().getCostoEstadiaDiaria();
+                })
+                .sum();
     }
 }

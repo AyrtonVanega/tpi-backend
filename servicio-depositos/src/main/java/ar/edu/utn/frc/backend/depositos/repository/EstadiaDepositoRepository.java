@@ -20,4 +20,8 @@ public interface EstadiaDepositoRepository extends JpaRepository<EstadiaDeposito
             @Param("idDeposito") Long idDeposito, 
             @Param("codigoEstado") String codigoEstado
     );
+
+    @Query("SELECT e FROM EstadiaDeposito e " +
+           "WHERE e.idEstadiaDeposito.idSolicitud = :idSolicitud")
+    List<EstadiaDeposito> findByIdSolicitud(@Param("idSolicitud") Long idSolicitud);
 }
