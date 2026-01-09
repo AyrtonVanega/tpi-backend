@@ -39,4 +39,6 @@ public interface ITramoService {
         void validarFinalizacionTramo(Tramo tramo);
 
         double calcularCostoReal(List<DetalleCostoTramo> detallesCostoTramo);
+
+        List<TramoResponseDto> obtenerTramosPorPatenteCamionYEstado(String patenteCamion, String estado);
 }

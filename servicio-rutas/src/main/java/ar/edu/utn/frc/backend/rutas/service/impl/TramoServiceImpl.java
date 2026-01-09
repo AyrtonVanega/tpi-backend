@@ -268,4 +268,22 @@ public class TramoServiceImpl implements ITramoService {
                 .mapToDouble(DetalleCostoTramo::getSubTotal)
                 .sum();
     }
+
+    @Override
+    public List<TramoResponseDto> obtenerTramosPorPatenteCamionYEstado(String patente, String estado) {
+        List<Tramo> tramos = tramoRepository.findByPatenteCamionAndEstado_Codigo(patente, estado);
+
+        List<TramoResponseDto> responseList = tramoMapper.toResponseList(tramos);
+
+        for (int i = 0; i < tramos.size(); i++) {
+            Tramo tramo = tramos.get(i);
+            TramoResponseDto dto = responseList.get(i);
+
+            dto.setOrden(tramo.getIdTramo().getOrden());
+            dto.setTipo(tramo.getTipoTramo().toString());
+            dto.setCodigoEstado(tramo.getEstado().getCodigo());
+        }
+
+        return responseList;
+    }
 }

@@ -13,18 +13,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frc.backend.personas.client.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.personas.dto.CreateTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.PutTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ITransportistaService;
+import ar.edu.utn.frc.backend.personas.workflow.ConsultarTramosAsignadosWorkflow;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/transportistas")
 public class TransportistaController {
-    
+
     private final ITransportistaService transportistaService;
+    private final ConsultarTramosAsignadosWorkflow consultarTramosAsignadosWorkflow;
 
     @PostMapping()
     public ResponseEntity<Void> registrarTransportista(@RequestBody CreateTransportistaDto transportistaRequestDto) {
@@ -61,5 +64,14 @@ public class TransportistaController {
     @GetMapping()
     public ResponseEntity<List<TransportistaResponseDto>> obtenerTransportistas() {
         return ResponseEntity.ok(transportistaService.obtenerTodos());
+    }
+
+    @GetMapping("/{docTransportista}/{tipoDocTransportista}/tramos-asignados")
+    public ResponseEntity<List<TramoResponseDto>> obtenerTramosAsignados(
+            @PathVariable String docTransportista,
+            @PathVariable String tipoDocTransportista) {
+
+        return ResponseEntity
+                .ok(consultarTramosAsignadosWorkflow.consultarTramosAsignados(docTransportista, tipoDocTransportista));
     }
 }
