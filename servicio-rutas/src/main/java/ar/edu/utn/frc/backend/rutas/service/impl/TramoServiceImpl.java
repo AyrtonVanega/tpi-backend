@@ -135,6 +135,22 @@ public class TramoServiceImpl implements ITramoService {
 
     @Override
     public void asignarCamion(Long idRuta, int orden, PatchTramoDto dto) {
+        TramoId idTramo = new TramoId(idRuta, orden);
+
+        Tramo tramo = tramoRepository.findById(idTramo)
+                .orElseThrow(() -> {
+                    log.error("Tramo no encontrado - idRuta:{}, orden:{}",
+                            idTramo.getIdRuta(),
+                            idTramo.getOrden());
+                    return new RuntimeException();
+                });
+
+        if (!tramo.getEstado().getCodigo().equals("ESTIMADO")) {
+            log.error("El Tramo tiene que estar en estado 'ESTIMADO' - idRuta:{}, orden:{}",
+                    tramo.getIdTramo().getIdRuta(),
+                    tramo.getIdTramo().getOrden());
+            throw new RuntimeException();
+        }
 
         if (!dto.isDisponibilidad()) {
             log.error("El Camion {} no esta disponible", dto.getPatenteCamion());
@@ -145,16 +161,6 @@ public class TramoServiceImpl implements ITramoService {
             log.error("El Camion {} no puede transportar el contenedor", dto.getPatenteCamion());
             throw new RuntimeException();
         }
-
-        TramoId idTramo = new TramoId(idRuta, orden);
-
-        Tramo tramo = tramoRepository.findById(idTramo)
-                .orElseThrow(() -> {
-                    log.error("Tramo no encontrado - idRuta:{}, orden:{}",
-                            idTramo.getIdRuta(),
-                            idTramo.getOrden());
-                    return new RuntimeException();
-                });
 
         tramo.setPatenteCamion(dto.getPatenteCamion());
 
