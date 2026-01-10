@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.rutas.dto.DetalleCostoRutaDto;
+import ar.edu.utn.frc.backend.rutas.mapper.DetalleCostoRutaMapper;
 import ar.edu.utn.frc.backend.rutas.model.DetalleCostoRuta;
 import ar.edu.utn.frc.backend.rutas.model.Ruta;
 import ar.edu.utn.frc.backend.rutas.model.Tramo;
@@ -16,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class DetalleCostoRutaServiceImpl implements IDetalleCostoRutaService {
+
+    private final DetalleCostoRutaMapper detalleRutaMapper;
 
     @Override
     public List<DetalleCostoRuta> crearDetalles(Ruta ruta, double costoGestionBase, double costoTotalEstadias) {
@@ -32,6 +36,7 @@ public class DetalleCostoRutaServiceImpl implements IDetalleCostoRutaService {
     public DetalleCostoRuta calcularCostoGestion(Ruta ruta, double costoGestionBase) {
         double costo = costoGestionBase * ruta.getCantidadTramos();
         return DetalleCostoRuta.builder()
+                .concepto("Costo De Gestion")
                 .subTotal(costo)
                 .ruta(ruta)
                 .build();
@@ -45,6 +50,7 @@ public class DetalleCostoRutaServiceImpl implements IDetalleCostoRutaService {
                 .sum();
 
         return DetalleCostoRuta.builder()
+                .concepto("Costo Por Tramos")
                 .subTotal(costo)
                 .ruta(ruta)
                 .build();
@@ -53,8 +59,14 @@ public class DetalleCostoRutaServiceImpl implements IDetalleCostoRutaService {
     @Override
     public DetalleCostoRuta calcularCostoEstadias(Ruta ruta, double costoTotalEstadias) {
         return DetalleCostoRuta.builder()
+                .concepto("Costos Por Estadias")
                 .subTotal(costoTotalEstadias)
                 .ruta(ruta)
                 .build();
+    }
+
+    @Override
+    public List<DetalleCostoRutaDto> obtenerDetalles(Ruta ruta) {
+        return detalleRutaMapper.toResponseList(ruta.getDetallesCostoRuta());
     }
 }

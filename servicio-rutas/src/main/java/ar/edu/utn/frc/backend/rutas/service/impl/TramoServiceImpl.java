@@ -10,6 +10,8 @@ import ar.edu.utn.frc.backend.rutas.client.dto.CamionDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmLegDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
+import ar.edu.utn.frc.backend.rutas.dto.CostoTramoResponseDto;
+import ar.edu.utn.frc.backend.rutas.dto.DetalleCostoTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
@@ -280,5 +282,14 @@ public class TramoServiceImpl implements ITramoService {
         }
 
         return responseList;
+    }
+
+    @Override
+    public CostoTramoResponseDto mostrarCostos(Tramo tramo) {
+        int orden = tramo.getIdTramo().getOrden();
+        String patente = tramo.getPatenteCamion();
+        List<DetalleCostoTramoDto> detallesCostoTramo = detalleTramoService.obtenerDetalles(tramo);
+
+        return new CostoTramoResponseDto(orden, patente, detallesCostoTramo);
     }
 }

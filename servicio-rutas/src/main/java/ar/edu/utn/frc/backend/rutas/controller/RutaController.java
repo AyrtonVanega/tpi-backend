@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frc.backend.rutas.dto.CostoRutaResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.CreateRutaDto;
 import ar.edu.utn.frc.backend.rutas.dto.FiltroRutaDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaResponseDto;
@@ -53,5 +54,10 @@ public class RutaController {
     @GetMapping("/{idRuta}")
     public ResponseEntity<RutaResponseDto> obtenerRutaPorId(@PathVariable Long idRuta) {
         return ResponseEntity.ok(rutaService.obtenerPorId(idRuta));
+    }
+
+    @GetMapping("/{idRuta}/costos")
+    public ResponseEntity<CostoRutaResponseDto> mostrarCostos(@PathVariable Long idRuta) {
+        return ResponseEntity.ok(rutaService.mostrarCostos(idRuta));
     }
 }

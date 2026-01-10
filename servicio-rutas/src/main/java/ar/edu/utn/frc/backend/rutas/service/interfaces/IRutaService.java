@@ -2,6 +2,7 @@ package ar.edu.utn.frc.backend.rutas.service.interfaces;
 
 import java.util.List;
 
+import ar.edu.utn.frc.backend.rutas.dto.CostoRutaResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.CreateRutaDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
@@ -24,4 +25,6 @@ public interface IRutaService {
     double calcularCostoRealTotal(List<DetalleCostoRuta> detallesCostoRuta);
 
     double calcularTiempoReal(Ruta ruta);
+
+    CostoRutaResponseDto mostrarCostos(Long idRuta);
 }

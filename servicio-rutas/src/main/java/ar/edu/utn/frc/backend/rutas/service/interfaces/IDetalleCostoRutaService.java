@@ -2,6 +2,7 @@ package ar.edu.utn.frc.backend.rutas.service.interfaces;
 
 import java.util.List;
 
+import ar.edu.utn.frc.backend.rutas.dto.DetalleCostoRutaDto;
 import ar.edu.utn.frc.backend.rutas.model.DetalleCostoRuta;
 import ar.edu.utn.frc.backend.rutas.model.Ruta;
 
@@ -14,4 +15,6 @@ public interface IDetalleCostoRutaService {
     DetalleCostoRuta calcularCostoTramos(Ruta ruta);
 
     DetalleCostoRuta calcularCostoEstadias(Ruta ruta, double costoTotalEstadias);
+
+    List<DetalleCostoRutaDto> obtenerDetalles(Ruta ruta);
 }

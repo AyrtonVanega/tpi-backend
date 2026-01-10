@@ -15,7 +15,10 @@ import ar.edu.utn.frc.backend.rutas.client.SolicitudClient;
 import ar.edu.utn.frc.backend.rutas.client.TarifaClient;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
+import ar.edu.utn.frc.backend.rutas.dto.CostoRutaResponseDto;
+import ar.edu.utn.frc.backend.rutas.dto.CostoTramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.CreateRutaDto;
+import ar.edu.utn.frc.backend.rutas.dto.DetalleCostoRutaDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
@@ -274,5 +277,24 @@ public class RutaServiceImpl implements IRutaService {
                 }
 
                 return Duration.between(inicio, fin).toMinutes() / 60.0;
+        }
+
+        @Override
+        public CostoRutaResponseDto mostrarCostos(Long idRuta) {
+                Ruta ruta = rutaRepository.findById(idRuta)
+                                .orElseThrow(() -> {
+                                        log.error("Ruta {} no encontrada", idRuta);
+                                        return new RuntimeException();
+                                });
+
+                List<DetalleCostoRutaDto> costosRuta = detalleRutaService.obtenerDetalles(ruta);
+
+                List<CostoTramoResponseDto> costosPorTramo = new ArrayList<>();
+                for (Tramo tramo : ruta.getTramos()) {
+                        CostoTramoResponseDto costoTramo = tramoService.mostrarCostos(tramo);
+                        costosPorTramo.add(costoTramo);
+                }
+
+                return new CostoRutaResponseDto(costosRuta, costosPorTramo);
         }
 }

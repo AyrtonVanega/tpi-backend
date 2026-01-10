@@ -6,6 +6,7 @@ import java.util.List;
 import ar.edu.utn.frc.backend.rutas.client.dto.CamionDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmRouteDto;
+import ar.edu.utn.frc.backend.rutas.dto.CostoTramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
@@ -41,4 +42,6 @@ public interface ITramoService {
         double calcularCostoReal(List<DetalleCostoTramo> detallesCostoTramo);
 
         List<TramoResponseDto> obtenerTramosPorPatenteCamionYEstado(String patenteCamion, String estado);
+
+        CostoTramoResponseDto mostrarCostos(Tramo tramo);
 }
