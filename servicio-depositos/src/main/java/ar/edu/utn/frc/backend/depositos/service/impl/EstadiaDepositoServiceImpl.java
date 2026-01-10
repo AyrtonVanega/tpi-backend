@@ -91,22 +91,6 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
     }
 
     @Override
-    public void eliminar(Long idDeposito, Long idSolicitud) {
-        EstadiaDepositoId idEstadiaDeposito = new EstadiaDepositoId(idDeposito, idSolicitud);
-
-        EstadiaDeposito estadiaDeposito = estadiaDepositoRepository.findById(idEstadiaDeposito)
-                .orElseThrow(() -> {
-                    log.error(
-                            "Estadia Deposito no encontrada - idDeposito:{}, idSolicitud:{}",
-                            idEstadiaDeposito.getIdDeposito(),
-                            idEstadiaDeposito.getIdSolicitud()
-                    );
-                    return new RuntimeException();
-                });
-        estadiaDepositoRepository.delete(estadiaDeposito);
-    }
-
-    @Override
     public EstadiaDepositoResponseDto obtenerPorId(Long idDeposito, Long idSolicitud) {
         EstadiaDepositoId idEstadiaDeposito = new EstadiaDepositoId(idDeposito, idSolicitud);
 

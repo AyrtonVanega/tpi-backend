@@ -16,14 +16,6 @@ public class EstadiaDepositoController {
 
     private final IEstadiaDepositoService estadiaDepositoService;
 
-    @DeleteMapping("/{idDeposito}/{idSolicitud}")
-    public ResponseEntity<Void> eliminarEstadia(
-            @PathVariable Long idDeposito,
-            @PathVariable Long idSolicitud) {
-        estadiaDepositoService.eliminar(idDeposito, idSolicitud);
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping("/{idDeposito}/{idSolicitud}")
     public ResponseEntity<EstadiaDepositoResponseDto> obtenerEstadiaPorId(
             @PathVariable Long idDeposito,

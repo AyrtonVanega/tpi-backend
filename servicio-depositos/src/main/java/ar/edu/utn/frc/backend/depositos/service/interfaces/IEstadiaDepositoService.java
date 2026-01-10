@@ -12,8 +12,6 @@ public interface IEstadiaDepositoService {
 
         void finalizarEstadia(Long idDeposito, Long idSolicitud, PatchEstadiaDepositoDto dto);
 
-        void eliminar(Long idDeposito, Long idSolicitud);
-
         EstadiaDepositoResponseDto obtenerPorId(Long idDeposito, Long idSolicitud);
 
         List<EstadiaDepositoResponseDto> obtenerEstadiasActivas(Long idDeposito);
