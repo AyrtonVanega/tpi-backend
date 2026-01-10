@@ -13,6 +13,7 @@ public class RutaResponseDto {
     private Long idRuta;
     private int cantidadTramos;
     private int cantidadDepositos;
+    private Long idSolicitud;
     private double distanciaTotal;
     private double costoEstimado;
     private double tiempoEstimado;
