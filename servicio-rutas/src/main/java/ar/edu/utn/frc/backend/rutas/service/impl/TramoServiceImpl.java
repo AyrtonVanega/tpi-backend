@@ -234,13 +234,10 @@ public class TramoServiceImpl implements ITramoService {
 
     @Override
     public void validarFinalizacionTramo(Tramo tramo) {
-        if (tramo.getFechaHoraInicio() == null) {
-            log.error("Este Tramo todavia no ha iniciado");
-            throw new RuntimeException();
-        }
-
-        if (tramo.getFechaHoraFin() != null) {
-            log.error("Este Tramo ya ha finalizado");
+        if (!tramo.getEstado().getCodigo().equals("INICIADO")) {
+            log.error("El Tramo tiene que estar en estado 'INICIADO' - idRuta:{}, orden:{}",
+                    tramo.getIdTramo().getIdRuta(),
+                    tramo.getIdTramo().getOrden());
             throw new RuntimeException();
         }
     }
