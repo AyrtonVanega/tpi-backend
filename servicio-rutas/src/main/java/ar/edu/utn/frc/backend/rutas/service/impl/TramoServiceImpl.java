@@ -145,8 +145,9 @@ public class TramoServiceImpl implements ITramoService {
                     return new RuntimeException();
                 });
 
-        if (!tramo.getEstado().getCodigo().equals("ESTIMADO")) {
-            log.error("El Tramo tiene que estar en estado 'ESTIMADO' - idRuta:{}, orden:{}",
+        String estadoTramo = tramo.getEstado().getCodigo();
+        if (!estadoTramo.equals("ESTIMADO") && !estadoTramo.equals("ASIGNADO")) {
+            log.error("No se le puede asignar camion a este Tramo - idRuta:{}, orden:{}",
                     tramo.getIdTramo().getIdRuta(),
                     tramo.getIdTramo().getOrden());
             throw new RuntimeException();
