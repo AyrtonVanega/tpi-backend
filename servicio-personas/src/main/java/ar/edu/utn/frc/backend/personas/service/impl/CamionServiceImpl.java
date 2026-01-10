@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.personas.dto.CamionRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.CamionResponseDto;
-import ar.edu.utn.frc.backend.personas.dto.PatchCamionDto;
 import ar.edu.utn.frc.backend.personas.mapper.CamionMapper;
 import ar.edu.utn.frc.backend.personas.model.Camion;
 import ar.edu.utn.frc.backend.personas.model.Transportista;
@@ -104,15 +103,34 @@ public class CamionServiceImpl implements ICamionService {
     }
 
     @Override
-    public void actualizarDisponibilidad(String patenteCamion, PatchCamionDto patchCamionDto) {
+    public void reservarCamion(String patenteCamion) {
         Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
                     log.error("Camion {} no encontrado", patenteCamion);
                     return new RuntimeException();
                 });
 
-        camion.setDisponibilidad(patchCamionDto.isDisponibilidad());
+        if (!camion.isDisponibilidad()) {
+            log.error("El Camion {} no esta disponible", patenteCamion);
+            throw new RuntimeException();
+        }
+
+        camion.setDisponibilidad(false);
         camionRepository.save(camion);
+    }
+
+    @Override
+    public CamionResponseDto finalizarRecorrido(String patenteCamion) {
+        Camion camion = camionRepository.findById(patenteCamion)
+                .orElseThrow(() -> {
+                    log.error("Camion {} no encontrado", patenteCamion);
+                    return new RuntimeException();
+                });
+
+        camion.setDisponibilidad(true);
+        camionRepository.save(camion);
+
+        return camionMapper.toResponse(camion);
     }
 
     @Override

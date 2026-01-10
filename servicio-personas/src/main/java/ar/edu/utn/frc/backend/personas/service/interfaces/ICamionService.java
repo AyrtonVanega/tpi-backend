@@ -4,7 +4,6 @@ import java.util.List;
 
 import ar.edu.utn.frc.backend.personas.dto.CamionRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.CamionResponseDto;
-import ar.edu.utn.frc.backend.personas.dto.PatchCamionDto;
 import ar.edu.utn.frc.backend.personas.model.Camion;
 import ar.edu.utn.frc.backend.personas.model.Transportista;
 
@@ -19,7 +18,9 @@ public interface ICamionService {
 
     List<CamionResponseDto> obtenerCamionesDisponibles();
 
-    void actualizarDisponibilidad(String patenteCamion, PatchCamionDto patchCamionDto);
+    void reservarCamion(String patenteCamion);
+
+    CamionResponseDto finalizarRecorrido(String patenteCamion);
 
     Camion buscarCamionPorId(String patenteCamion);
 

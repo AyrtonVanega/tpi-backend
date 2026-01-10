@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.rutas.client.DepositoClient;
+import ar.edu.utn.frc.backend.rutas.client.PersonaClient;
 import ar.edu.utn.frc.backend.rutas.client.SolicitudClient;
 import ar.edu.utn.frc.backend.rutas.model.Tramo;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.ITramoService;
@@ -17,10 +18,13 @@ public class IniciarTramoWorkflow {
     private final ITramoService tramoService;
     private final DepositoClient depositoClient;
     private final SolicitudClient solicitudClient;
+    private final PersonaClient personaClient;
 
     public void iniciarTramo(Long idRuta, int orden) {
         Tramo tramo = tramoService.obtenerTramoPorId(idRuta, orden);
 
+        personaClient.reservarCamion(tramo.getPatenteCamion());
+        
         tramoService.validarInicioTramo(tramo);
         tramoService.iniciarTramo(tramo);
 

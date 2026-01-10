@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frc.backend.rutas.client.PersonaClient;
 import ar.edu.utn.frc.backend.rutas.client.dto.CamionDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.OsrmLegDto;
@@ -33,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TramoServiceImpl implements ITramoService {
 
-    private final PersonaClient personaClient;
     private final IDetalleCostoTramoService detalleTramoService;
     private final IEstadoTramoService estadoTramoService;
     private final TramoRepository tramoRepository;
@@ -167,8 +165,6 @@ public class TramoServiceImpl implements ITramoService {
         EstadoTramo estado = estadoTramoService.buscarPorCodigo("ASIGNADO");
         tramo.setEstado(estado);
 
-        personaClient.actualizarDisponibilidadCamion(dto.getPatenteCamion(), !dto.isDisponibilidad());
-
         tramoRepository.save(tramo);
     }
 
@@ -205,9 +201,7 @@ public class TramoServiceImpl implements ITramoService {
 
     @Override
     public void validarInicioTramo(Tramo tramo) {
-        Ruta ruta = tramo.getRuta();
-
-        boolean anteriorIniciado = ruta.getTramos()
+        boolean anteriorIniciado = tramo.getRuta().getTramos()
                 .stream()
                 .filter(t -> t.getIdTramo().getOrden() < tramo.getIdTramo().getOrden())
                 .anyMatch(t -> t.getFechaHoraFin() == null);
@@ -217,13 +211,8 @@ public class TramoServiceImpl implements ITramoService {
             throw new RuntimeException();
         }
 
-        if (tramo.getFechaHoraInicio() != null) {
-            log.error("Este Tramo ya ha iniciado");
-            throw new RuntimeException();
-        }
-
-        if (tramo.getPatenteCamion() == null) {
-            log.error("El Tramo no tiene camion asignado - idRuta:{}, orden:{}",
+        if (!tramo.getEstado().getCodigo().equals("ASIGNADO")) {
+            log.error("El Tramo tiene que estar en estado 'ASIGNADO' - idRuta:{}, orden:{}",
                     tramo.getIdTramo().getIdRuta(),
                     tramo.getIdTramo().getOrden());
             throw new RuntimeException();

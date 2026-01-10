@@ -33,7 +33,7 @@ public class FinalizarTramoWorkflow {
         tramoService.validarFinalizacionTramo(tramo);
 
         LocalDateTime fechaHora = LocalDateTime.now();
-        CamionDto camion = personaClient.obtenerCamionPorId(tramo.getPatenteCamion());
+        CamionDto camion = personaClient.finalizarRecorridoCamion(tramo.getPatenteCamion());
         ParametroGlobalDto parametroGlobal = tarifaClient.obtenerParametrosGlobales();
 
         // Finaliza el tramo
@@ -58,8 +58,5 @@ public class FinalizarTramoWorkflow {
             solicitudClient.actualizarEstadoContenedor(idSolicitud, "ENTREGADO");
             solicitudClient.finalizarSolicitud(idSolicitud, fechaHora, ruta.getTiempoReal(), ruta.getCostoReal());
         }
-
-        // Setea true la disponibilidad del camion
-        personaClient.actualizarDisponibilidadCamion(tramo.getPatenteCamion(), true);
     }
 }
