@@ -54,8 +54,7 @@ public class FinalizarTramoWorkflow {
             // Finaliza la ruta
             rutaService.finalizarRuta(ruta, parametroGlobal.getCostoGestionBase(), costoTotalEstadias);
 
-            // Cambia el estado del contenedor y finaliza la solicitud
-            solicitudClient.actualizarEstadoContenedor(idSolicitud, "ENTREGADO");
+            // Finaliza la solicitud
             solicitudClient.finalizarSolicitud(idSolicitud, fechaHora, ruta.getTiempoReal(), ruta.getCostoReal());
         }
     }

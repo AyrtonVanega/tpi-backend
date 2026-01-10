@@ -14,6 +14,7 @@ import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 import ar.edu.utn.frc.backend.solicitudes.model.EstadoSolicitud;
 import ar.edu.utn.frc.backend.solicitudes.model.Solicitud;
 import ar.edu.utn.frc.backend.solicitudes.repository.SolicitudRepository;
+import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IContenedorService;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IEstadoSolicitudService;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.ISolicitudService;
 
@@ -25,6 +26,7 @@ import java.util.List;
 @Slf4j
 public class SolicitudServiceImpl implements ISolicitudService {
 
+    private final IContenedorService contenedorService;
     private final IEstadoSolicitudService estadoSolicitudService;
     private final SolicitudRepository solicitudRepository;
     private final SolicitudMapper solicitudMapper;
@@ -160,6 +162,8 @@ public class SolicitudServiceImpl implements ISolicitudService {
 
         EstadoSolicitud estado = estadoSolicitudService.buscarPorCodigo("ENTREGADA");
         solicitud.setEstadoSolicitud(estado);
+
+        contenedorService.finalizarContenedor(solicitud.getContenedor());
 
         solicitudRepository.save(solicitud);
     }

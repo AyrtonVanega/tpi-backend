@@ -186,4 +186,9 @@ public class ContenedorServiceImpl implements IContenedorService {
 
         return responseDtoList;
     }
+
+    @Override
+    public void finalizarContenedor(Contenedor contenedor) {
+        historialEstadoService.registarCambioEstado(contenedor, "ENTREGADO");
+    }
 }
