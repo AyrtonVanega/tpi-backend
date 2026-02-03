@@ -127,6 +127,8 @@ public class SolicitudServiceImpl implements ISolicitudService {
         EstadoSolicitud estadoCancelado = estadoSolicitudService.buscarPorCodigo("CANCELADA");
         solicitud.setEstadoSolicitud(estadoCancelado);
 
+        solicitud.setFechaHoraFin(LocalDateTime.now());
+
         solicitudRepository.save(solicitud);
     }
 
