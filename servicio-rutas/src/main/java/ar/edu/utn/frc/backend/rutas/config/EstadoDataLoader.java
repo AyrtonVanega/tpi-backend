@@ -15,10 +15,10 @@ public class EstadoDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        crearSiNoExiste("ESTIMADO", "...");
-        crearSiNoExiste("ASIGNADO", "...");
-        crearSiNoExiste("INICIADO", "...");
-        crearSiNoExiste("FINALIZADO", "...");
+        crearSiNoExiste("ESTIMADO", "El tramo no tiene camión asignado.");
+        crearSiNoExiste("ASIGNADO", "El tramo tiene camión asignado y está listo para ser iniciado.");
+        crearSiNoExiste("INICIADO", "El tramo ha iniciado.");
+        crearSiNoExiste("FINALIZADO", "El tramo ha finalizado.");
     }
 
     private void crearSiNoExiste(String codigo, String descripcion) {
