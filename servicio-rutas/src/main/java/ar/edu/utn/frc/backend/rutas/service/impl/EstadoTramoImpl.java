@@ -2,6 +2,7 @@ package ar.edu.utn.frc.backend.rutas.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.rutas.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.rutas.model.EstadoTramo;
 import ar.edu.utn.frc.backend.rutas.repository.EstadoTramoRepository;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.IEstadoTramoService;
@@ -19,8 +20,7 @@ public class EstadoTramoImpl implements IEstadoTramoService {
     public EstadoTramo buscarPorCodigo(String codigo) {
         return estadoTramoRepository.findByCodigo(codigo)
                 .orElseThrow(() -> {
-                    log.error("Estado {} no encontrado", codigo);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("EstadoTramo con codigo " + codigo + " no encontrado");
                 });
     }
 }

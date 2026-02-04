@@ -15,6 +15,8 @@ import ar.edu.utn.frc.backend.rutas.dto.DetalleCostoTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.PatchTramoDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
+import ar.edu.utn.frc.backend.rutas.exception.BusinessException;
+import ar.edu.utn.frc.backend.rutas.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.rutas.mapper.TramoMapper;
 import ar.edu.utn.frc.backend.rutas.model.DetalleCostoTramo;
 import ar.edu.utn.frc.backend.rutas.model.EstadoTramo;
@@ -139,28 +141,22 @@ public class TramoServiceImpl implements ITramoService {
 
         Tramo tramo = tramoRepository.findById(idTramo)
                 .orElseThrow(() -> {
-                    log.error("Tramo no encontrado - idRuta:{}, orden:{}",
-                            idTramo.getIdRuta(),
-                            idTramo.getOrden());
-                    return new RuntimeException();
+                    return new ResourceNotFoundException(
+                            "Tramo no encontrado - idRuta: " + idTramo.getIdRuta() + ", orden: " + idTramo.getOrden());
                 });
 
         String estadoTramo = tramo.getEstado().getCodigo();
         if (!estadoTramo.equals("ESTIMADO") && !estadoTramo.equals("ASIGNADO")) {
-            log.error("No se le puede asignar camion a este Tramo - idRuta:{}, orden:{}",
-                    tramo.getIdTramo().getIdRuta(),
-                    tramo.getIdTramo().getOrden());
-            throw new RuntimeException();
+            throw new BusinessException("No se le puede asignar camion a este Tramo - idRuta:" + tramo.getIdTramo().getIdRuta()
+                    + ", orden: " + tramo.getIdTramo().getOrden());
         }
 
         if (!dto.isDisponibilidad()) {
-            log.error("El Camion {} no esta disponible", dto.getPatenteCamion());
-            throw new RuntimeException();
+            throw new BusinessException("El Camion " + dto.getPatenteCamion() + " no esta disponible");
         }
 
         if (dto.getVolumenCamion() < dto.getVolumenContenedor() || dto.getPesoCamion() < dto.getPesoContenedor()) {
-            log.error("El Camion {} no puede transportar el contenedor", dto.getPatenteCamion());
-            throw new RuntimeException();
+            throw new BusinessException("El Camion " + dto.getPatenteCamion() + " no puede transportar el contenedor");
         }
 
         tramo.setPatenteCamion(dto.getPatenteCamion());
@@ -195,10 +191,8 @@ public class TramoServiceImpl implements ITramoService {
 
         return tramoRepository.findById(idTramo)
                 .orElseThrow(() -> {
-                    log.error("Tramo no encontrado - idRuta:{}, orden:{}",
-                            idTramo.getIdRuta(),
-                            idTramo.getOrden());
-                    return new RuntimeException();
+                    return new ResourceNotFoundException(
+                            "Tramo no encontrado - idRuta: " + idTramo.getIdRuta() + ", orden: " + idTramo.getOrden());
                 });
     }
 
@@ -210,15 +204,12 @@ public class TramoServiceImpl implements ITramoService {
                 .anyMatch(t -> t.getFechaHoraFin() == null);
 
         if (anteriorIniciado) {
-            log.error("Todavia hay un Tramo en curso");
-            throw new RuntimeException();
+            throw new BusinessException("Todavia hay un Tramo en curso");
         }
 
         if (!tramo.getEstado().getCodigo().equals("ASIGNADO")) {
-            log.error("El Tramo tiene que estar en estado 'ASIGNADO' - idRuta:{}, orden:{}",
-                    tramo.getIdTramo().getIdRuta(),
-                    tramo.getIdTramo().getOrden());
-            throw new RuntimeException();
+            throw new BusinessException("El Tramo tiene que estar en estado 'ASIGNADO' - idRuta:" + tramo.getIdTramo().getIdRuta()
+                    + ", orden: " + tramo.getIdTramo().getOrden());
         }
     }
 
@@ -235,10 +226,8 @@ public class TramoServiceImpl implements ITramoService {
     @Override
     public void validarFinalizacionTramo(Tramo tramo) {
         if (!tramo.getEstado().getCodigo().equals("INICIADO")) {
-            log.error("El Tramo tiene que estar en estado 'INICIADO' - idRuta:{}, orden:{}",
-                    tramo.getIdTramo().getIdRuta(),
-                    tramo.getIdTramo().getOrden());
-            throw new RuntimeException();
+            throw new BusinessException("El Tramo tiene que estar en estado 'INICIADO' - idRuta:" + tramo.getIdTramo().getIdRuta()
+                    + ", orden: " + tramo.getIdTramo().getOrden());
         }
     }
 

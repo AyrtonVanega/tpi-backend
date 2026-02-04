@@ -23,6 +23,7 @@ import ar.edu.utn.frc.backend.rutas.dto.RutaResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.RutaTentativaDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoResponseDto;
 import ar.edu.utn.frc.backend.rutas.dto.TramoTentativoDto;
+import ar.edu.utn.frc.backend.rutas.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.rutas.mapper.RutaMapper;
 import ar.edu.utn.frc.backend.rutas.model.DetalleCostoRuta;
 import ar.edu.utn.frc.backend.rutas.model.Ruta;
@@ -227,8 +228,7 @@ public class RutaServiceImpl implements IRutaService {
         public RutaResponseDto obtenerPorId(Long idRuta) {
                 Ruta ruta = rutaRepository.findById(idRuta)
                                 .orElseThrow(() -> {
-                                        log.error("Ruta {} no encontrada", idRuta);
-                                        return new RuntimeException();
+                                        return new ResourceNotFoundException("Ruta " + idRuta + " no encontrada");
                                 });
 
                 RutaResponseDto rutaDto = rutaMapper.toResponse(ruta);
@@ -283,8 +283,7 @@ public class RutaServiceImpl implements IRutaService {
         public CostoRutaResponseDto mostrarCostos(Long idRuta) {
                 Ruta ruta = rutaRepository.findById(idRuta)
                                 .orElseThrow(() -> {
-                                        log.error("Ruta {} no encontrada", idRuta);
-                                        return new RuntimeException();
+                                        return new ResourceNotFoundException("Ruta " + idRuta + " no encontrada");
                                 });
 
                 List<DetalleCostoRutaDto> costosRuta = detalleRutaService.obtenerDetalles(ruta);
