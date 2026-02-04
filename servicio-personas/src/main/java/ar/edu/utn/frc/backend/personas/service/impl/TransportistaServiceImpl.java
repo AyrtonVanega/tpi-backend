@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.utn.frc.backend.personas.dto.CreateTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.PutTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
+import ar.edu.utn.frc.backend.personas.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.personas.mapper.TransportistaMapper;
 import ar.edu.utn.frc.backend.personas.model.Camion;
 import ar.edu.utn.frc.backend.personas.model.PersonaId;
@@ -43,7 +44,7 @@ public class TransportistaServiceImpl implements ITransportistaService {
                 dto.getCostoBaseKmCamion(),
                 dto.getConsumoCombustiblePromedioCamion(),
                 transportista);
-        
+
         // Setea el Camion
         transportista.setCamion(camion);
 
@@ -57,13 +58,10 @@ public class TransportistaServiceImpl implements ITransportistaService {
         PersonaId id = new PersonaId(docTransportista, tipoDocTransportista);
         Transportista transportista = transportistaRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.error(
-                            "Transportista no encontrado - docTransportista:{}, tipoDocTransportista:{}",
-                            id.getDoc(),
-                            id.getTipoDoc());
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Transportista no encontrado - docTransportista: "
+                            + id.getDoc() + ", tipoDocTransportista: " + id.getTipoDoc());
                 });
-        
+
         // Actualiza datos simples
         transportistaMapper.updateFromPutDto(dto, transportista);
 
@@ -77,11 +75,8 @@ public class TransportistaServiceImpl implements ITransportistaService {
         PersonaId id = new PersonaId(docTransportista, tipoDocTransportista);
         Transportista transportista = transportistaRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.error(
-                            "Transportista no encontrado - docTransportista:{}, tipoDocTransportista:{}",
-                            id.getDoc(),
-                            id.getTipoDoc());
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Transportista no encontrado - docTransportista: "
+                            + id.getDoc() + ", tipoDocTransportista: " + id.getTipoDoc());
                 });
 
         // Elimina el Transportista de la BD
@@ -94,11 +89,8 @@ public class TransportistaServiceImpl implements ITransportistaService {
         PersonaId id = new PersonaId(docTransportista, tipoDocTransportista);
         Transportista transportista = transportistaRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.error(
-                            "Transportista no encontrado - docTransportista:{}, tipoDocTransportista:{}",
-                            id.getDoc(),
-                            id.getTipoDoc());
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Transportista no encontrado - docTransportista: "
+                            + id.getDoc() + ", tipoDocTransportista: " + id.getTipoDoc());
                 });
 
         // Mapea datos simples Entity -> DTO
@@ -146,11 +138,8 @@ public class TransportistaServiceImpl implements ITransportistaService {
         PersonaId id = new PersonaId(docTransportista, tipoDocTransportista);
         return transportistaRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.error(
-                            "Transportista no encontrado - docTransportista:{}, tipoDocTransportista:{}",
-                            id.getDoc(),
-                            id.getTipoDoc());
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Transportista no encontrado - docTransportista: "
+                            + id.getDoc() + ", tipoDocTransportista: " + id.getTipoDoc());
                 });
     }
 }

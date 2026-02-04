@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.utn.frc.backend.personas.dto.ClienteResponseDto;
 import ar.edu.utn.frc.backend.personas.dto.CreateClienteDto;
 import ar.edu.utn.frc.backend.personas.dto.PutClienteDto;
+import ar.edu.utn.frc.backend.personas.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.personas.mapper.ClienteMapper;
 import ar.edu.utn.frc.backend.personas.model.Cliente;
 import ar.edu.utn.frc.backend.personas.model.PersonaId;
@@ -51,13 +52,10 @@ public class ClienteServiceImpl implements IClienteService {
         PersonaId id = new PersonaId(docCliente, tipoDocCliente);
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.error(
-                            "Cliente no encontrado - docCliente:{}, tipoDocCliente:{}",
-                            id.getDoc(),
-                            id.getTipoDoc());
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Cliente no encontrado - docCliente: " + id.getDoc()
+                            + ", tipoDocCliente: " + id.getTipoDoc());
                 });
-        
+
         // Actualiza datos simples
         clienteMapper.updateFromPutDto(dto, cliente);
 
@@ -71,11 +69,8 @@ public class ClienteServiceImpl implements IClienteService {
 
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.error(
-                            "Cliente no encontrado - docCliente:{}, tipoDocCliente:{}",
-                            id.getDoc(),
-                            id.getTipoDoc());
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Cliente no encontrado - docCliente: " + id.getDoc()
+                            + ", tipoDocCliente: " + id.getTipoDoc());
                 });
 
         clienteRepository.delete(cliente);
@@ -87,11 +82,8 @@ public class ClienteServiceImpl implements IClienteService {
         PersonaId id = new PersonaId(docCliente, tipoDocCliente);
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.error(
-                            "Cliente no encontrado - docCliente:{}, tipoDocCliente:{}",
-                            id.getDoc(),
-                            id.getTipoDoc());
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Cliente no encontrado - docCliente: " + id.getDoc()
+                            + ", tipoDocCliente: " + id.getTipoDoc());
                 });
 
         // Mapea datos simples Entity -> DTO

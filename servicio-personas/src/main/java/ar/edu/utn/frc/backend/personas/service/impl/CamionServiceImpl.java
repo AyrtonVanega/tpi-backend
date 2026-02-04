@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.personas.dto.CamionRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.CamionResponseDto;
+import ar.edu.utn.frc.backend.personas.exception.BusinessException;
+import ar.edu.utn.frc.backend.personas.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.personas.mapper.CamionMapper;
 import ar.edu.utn.frc.backend.personas.model.Camion;
 import ar.edu.utn.frc.backend.personas.model.Transportista;
@@ -48,8 +50,7 @@ public class CamionServiceImpl implements ICamionService {
         // Busca el camion en la BD
         Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
-                    log.error("Camion {} no encontrado", patenteCamion);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Camion " + patenteCamion + " no encontrado");
                 });
 
         // Mapea datos simples
@@ -64,8 +65,7 @@ public class CamionServiceImpl implements ICamionService {
         // Busca el camion en la BD
         Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
-                    log.error("Camion {} no encontrado", patenteCamion);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Camion " + patenteCamion + " no encontrado");
                 });
 
         // Mapea datos simples Entity -> DTO
@@ -106,13 +106,11 @@ public class CamionServiceImpl implements ICamionService {
     public void reservarCamion(String patenteCamion) {
         Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
-                    log.error("Camion {} no encontrado", patenteCamion);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Camion " + patenteCamion + " no encontrado");
                 });
 
         if (!camion.isDisponibilidad()) {
-            log.error("El Camion {} no esta disponible", patenteCamion);
-            throw new RuntimeException();
+            throw new BusinessException("El Camion " + patenteCamion + " no esta disponible");
         }
 
         camion.setDisponibilidad(false);
@@ -123,8 +121,7 @@ public class CamionServiceImpl implements ICamionService {
     public CamionResponseDto finalizarRecorrido(String patenteCamion) {
         Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
-                    log.error("Camion {} no encontrado", patenteCamion);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Camion " + patenteCamion + " no encontrado");
                 });
 
         camion.setDisponibilidad(true);
@@ -137,8 +134,7 @@ public class CamionServiceImpl implements ICamionService {
     public Camion buscarCamionPorId(String patenteCamion) {
         return camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
-                    log.error("Camion {} no encontrado", patenteCamion);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Camion " + patenteCamion + " no encontrado");
                 });
     }
 
