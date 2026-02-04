@@ -213,7 +213,7 @@ services:
       - TP_Back
 
   # ----------------------------------------------------
-  # OSRM - ROUTING SERVICE
+  # OSRM - ROUTING SERVICE (Opcional)
   # ----------------------------------------------------
 
   osrm:
@@ -227,6 +227,8 @@ services:
     restart: on-failure
     networks:
       - TP_Back
+    profiles:
+      - osrm
 
   # ----------------------------------------------------
   # DEFINICIÓN DE VOLÚMENES PERSISTENTES
