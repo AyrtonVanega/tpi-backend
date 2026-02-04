@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.depositos.dto.DepositoRequestDto;
 import ar.edu.utn.frc.backend.depositos.dto.DepositoResponseDto;
+import ar.edu.utn.frc.backend.depositos.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.depositos.mapper.DepositoMapper;
 import ar.edu.utn.frc.backend.depositos.model.Deposito;
 import ar.edu.utn.frc.backend.depositos.repository.DepositoRepository;
@@ -31,8 +32,7 @@ public class DepositoServiceImpl implements IDepositoService {
     public void actualizar(Long idDeposito, DepositoRequestDto depositoRequestDto) {
         Deposito deposito = depositoRepository.findById(idDeposito)
                 .orElseThrow(() -> {
-                    log.error("Deposito {} no encontrado", idDeposito);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Deposito " + idDeposito + " no encontrado");
                 });
 
         depositoMapper.updateFromDto(depositoRequestDto, deposito);
@@ -43,8 +43,7 @@ public class DepositoServiceImpl implements IDepositoService {
     public void eliminar(Long idDeposito) {
         Deposito deposito = depositoRepository.findById(idDeposito)
                 .orElseThrow(() -> {
-                    log.error("Deposito {} no encontrado", idDeposito);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Deposito " + idDeposito + " no encontrado");
                 });
 
         depositoRepository.delete(deposito);
@@ -54,8 +53,7 @@ public class DepositoServiceImpl implements IDepositoService {
     public DepositoResponseDto obtenerPorId(Long idDeposito) {
         Deposito deposito = depositoRepository.findById(idDeposito)
                 .orElseThrow(() -> {
-                    log.error("Deposito {} no encontrado", idDeposito);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Deposito " + idDeposito + " no encontrado");
                 });
 
         return depositoMapper.toResponse(deposito);
@@ -71,8 +69,7 @@ public class DepositoServiceImpl implements IDepositoService {
     public Deposito buscarDepositoPorId(Long idDeposito) {
         return depositoRepository.findById(idDeposito)
                 .orElseThrow(() -> {
-                    log.error("Deposito {} no encontrado", idDeposito);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Deposito " + idDeposito + " no encontrado");
                 });
     }
 

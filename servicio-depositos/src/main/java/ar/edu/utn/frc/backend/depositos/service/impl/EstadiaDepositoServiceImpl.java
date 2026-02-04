@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import ar.edu.utn.frc.backend.depositos.dto.CreateEstadiaDepositoDto;
 import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoResponseDto;
 import ar.edu.utn.frc.backend.depositos.dto.PatchEstadiaDepositoDto;
+import ar.edu.utn.frc.backend.depositos.exception.BusinessException;
+import ar.edu.utn.frc.backend.depositos.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.depositos.mapper.EstadiaDepositoMapper;
 import ar.edu.utn.frc.backend.depositos.model.Deposito;
 import ar.edu.utn.frc.backend.depositos.model.EstadiaDeposito;
@@ -40,11 +42,8 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
         Optional<EstadiaDeposito> estadiaDeposito = estadiaDepositoRepository.findById(id);
 
         if (estadiaDeposito != null) {
-            log.error(
-                    "Esta Estadia Deposito ya existe - idDeposito:{}, idSolicitud:{}",
-                    id.getIdDeposito(),
-                    id.getIdSolicitud());
-            throw new RuntimeException();
+            throw new BusinessException("Esta Estadia Deposito ya existe - idDeposito: " + id.getIdDeposito()
+                    + ", idSolicitud: " + id.getIdSolicitud());
         } else {
             EstadiaDeposito nuevaEstadia = estadiaMapper.toEntity(dto);
             nuevaEstadia.setIdEstadiaDeposito(id);
@@ -67,18 +66,14 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
 
         EstadiaDeposito estadiaDeposito = estadiaDepositoRepository.findById(idEstadiaDeposito)
                 .orElseThrow(() -> {
-                    log.error(
-                            "Estadia Deposito no encontrada - idDeposito:{}, idSolicitud:{}",
-                            idEstadiaDeposito.getIdDeposito(),
-                            idEstadiaDeposito.getIdSolicitud()
-                    );
-                    return new RuntimeException();
+                    return new ResourceNotFoundException(
+                            "Estadia Deposito no encontrada - idDeposito: " + idEstadiaDeposito.getIdDeposito()
+                                    + ", idSolicitud: " + idEstadiaDeposito.getIdSolicitud());
                 });
 
         // Setea la fecha de finalizacion
         if (estadiaDeposito.getFechaHoraEntrada().isAfter(dto.getFechaHoraSalida())) {
-            log.error("La fecha y hora de salida no puede ser anterior a la de ingreso");
-            throw new RuntimeException();
+            throw new BusinessException("La fecha y hora de salida no puede ser anterior a la de ingreso");
         }
 
         estadiaDeposito.setFechaHoraSalida(dto.getFechaHoraSalida());
@@ -96,12 +91,9 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
 
         EstadiaDeposito estadiaDeposito = estadiaDepositoRepository.findById(idEstadiaDeposito)
                 .orElseThrow(() -> {
-                    log.error(
-                            "Estadia Deposito no encontrada - idDeposito:{}, idSolicitud:{}",
-                            idEstadiaDeposito.getIdDeposito(),
-                            idEstadiaDeposito.getIdSolicitud()
-                    );
-                    return new RuntimeException();
+                    return new ResourceNotFoundException(
+                            "Estadia Deposito no encontrada - idDeposito: " + idEstadiaDeposito.getIdDeposito()
+                                    + ", idSolicitud: " + idEstadiaDeposito.getIdSolicitud());
                 });
         return estadiaMapper.toResponse(estadiaDeposito);
     }

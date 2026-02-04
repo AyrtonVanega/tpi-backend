@@ -1,0 +1,7 @@
+package ar.edu.utn.frc.backend.depositos.exception;
+
+public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+}

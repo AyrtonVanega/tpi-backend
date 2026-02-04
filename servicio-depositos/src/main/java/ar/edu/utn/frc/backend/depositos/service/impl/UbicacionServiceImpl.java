@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionRequestDto;
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionResponseDto;
+import ar.edu.utn.frc.backend.depositos.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.depositos.mapper.UbicacionMapper;
 import ar.edu.utn.frc.backend.depositos.model.Ubicacion;
 import ar.edu.utn.frc.backend.depositos.repository.UbicacionRepository;
@@ -42,8 +43,7 @@ public class UbicacionServiceImpl implements IUbicacionService {
     public void actualizar(Long idUbicacion, UbicacionRequestDto ubicacionRequestDto) {
         Ubicacion ubicacion = ubicacionRepository.findById(idUbicacion)
                 .orElseThrow(() -> {
-                    log.error("Ubicacion {} no encontrada", idUbicacion);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Ubicacion " + idUbicacion + " no encontrada");
                 });
 
         ubicacionMapper.updateFromDto(ubicacionRequestDto, ubicacion);
@@ -54,8 +54,7 @@ public class UbicacionServiceImpl implements IUbicacionService {
     public void eliminar(Long idUbicacion) {
         Ubicacion ubicacion = ubicacionRepository.findById(idUbicacion)
                 .orElseThrow(() -> {
-                    log.error("Ubicacion {} no encontrada", idUbicacion);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Ubicacion " + idUbicacion + " no encontrada");
                 });
 
         ubicacionRepository.delete(ubicacion);
@@ -65,8 +64,7 @@ public class UbicacionServiceImpl implements IUbicacionService {
     public UbicacionResponseDto obtenerPorId(Long idUbicacion) {
         Ubicacion ubicacion = ubicacionRepository.findById(idUbicacion)
                 .orElseThrow(() -> {
-                    log.error("Ubicacion {} no encontrada", idUbicacion);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Ubicacion " + idUbicacion + " no encontrada");
                 });
 
         return ubicacionMapper.toResponse(ubicacion);

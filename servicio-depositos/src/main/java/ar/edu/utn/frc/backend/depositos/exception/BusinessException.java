@@ -1,0 +1,7 @@
+package ar.edu.utn.frc.backend.depositos.exception;
+
+public class BusinessException extends RuntimeException {
+    public BusinessException(String message) {
+        super(message);
+    }
+}

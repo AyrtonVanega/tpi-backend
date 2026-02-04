@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.depositos.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.depositos.model.EstadoEstadiaDeposito;
 import ar.edu.utn.frc.backend.depositos.repository.EstadoEstadiaDepositoRepository;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IEstadoEstadiaDepositoService;
@@ -19,8 +20,7 @@ public class EstadoEstadiaDepositoServiceImpl implements IEstadoEstadiaDepositoS
     public EstadoEstadiaDeposito buscarPorCodigo(String codigo) {
         return estadoEstadiaDepositoRepository.findByCodigo(codigo)
                 .orElseThrow(() -> {
-                    log.error("Estado {} no encontrado", codigo);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Estado " + codigo + " no encontrado");
                 });
     }
 }
