@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.solicitudes.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.solicitudes.model.EstadoContenedor;
 import ar.edu.utn.frc.backend.solicitudes.repository.EstadoContenedorRepository;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IEstadoContenedorService;
@@ -19,8 +20,7 @@ public class EstadoContenedorServiceImpl implements IEstadoContenedorService {
     public EstadoContenedor buscarPorCodigo(String codigo) {
         return estadoContenedorRepository.findByCodigo(codigo)
                 .orElseThrow(() -> {
-                    log.error("EstadoContenedor con codigo {} no encontrado", codigo);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("EstadoContenedor con codigo " + codigo + " no encontrado");
                 });
-    }    
+    }
 }

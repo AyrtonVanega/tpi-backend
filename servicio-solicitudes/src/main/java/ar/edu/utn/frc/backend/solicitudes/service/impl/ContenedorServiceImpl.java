@@ -9,6 +9,7 @@ import ar.edu.utn.frc.backend.solicitudes.dto.HistorialContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SeguimientoContenedorDto;
+import ar.edu.utn.frc.backend.solicitudes.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.solicitudes.mapper.ContenedorMapper;
 import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 import ar.edu.utn.frc.backend.solicitudes.model.EstadoContenedor;
@@ -55,8 +56,7 @@ public class ContenedorServiceImpl implements IContenedorService {
     public void actualizar(Long idContenedor, PutContenedorDto contenedorRequestDto) {
         Contenedor contenedor = contenedorRepository.findById(idContenedor)
                 .orElseThrow(() -> {
-                    log.error("Contenedor {} no encontrado", idContenedor);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Contenedor " + idContenedor + " no encontrado");
                 });
 
         contenedorMapper.updateFromPutDto(contenedorRequestDto, contenedor);
@@ -68,8 +68,7 @@ public class ContenedorServiceImpl implements IContenedorService {
         // Busca el Contenedor en la BD
         Contenedor contenedor = contenedorRepository.findById(idContenedor)
                 .orElseThrow(() -> {
-                    log.error("Contenedor {} no encontrado", idContenedor);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Contenedor " + idContenedor + " no encontrado");
                 });
 
         // Mapea datos simples Entity -> DTO
@@ -119,8 +118,7 @@ public class ContenedorServiceImpl implements IContenedorService {
     public void actualizarEstado(Long idContenedor, PatchContenedorDto contenedorRequestDto) {
         Contenedor contenedor = contenedorRepository.findById(idContenedor)
                 .orElseThrow(() -> {
-                    log.error("Contenedor {} no encontrado", idContenedor);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Contenedor " + idContenedor + " no encontrado");
                 });
 
         // Registra el cambio de estado en el historial
@@ -131,8 +129,7 @@ public class ContenedorServiceImpl implements IContenedorService {
     public SeguimientoContenedorDto obtenerEstadosContenedor(Long idContenedor) {
         Contenedor contenedor = contenedorRepository.findById(idContenedor)
                 .orElseThrow(() -> {
-                    log.error("Contenedor {} no encontrado", idContenedor);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Contenedor " + idContenedor + " no encontrado");
                 });
 
         SeguimientoContenedorDto estados = new SeguimientoContenedorDto();

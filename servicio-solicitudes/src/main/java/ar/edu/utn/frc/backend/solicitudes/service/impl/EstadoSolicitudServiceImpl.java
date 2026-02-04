@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.solicitudes.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.solicitudes.model.EstadoSolicitud;
 import ar.edu.utn.frc.backend.solicitudes.repository.EstadoSolicitudRepository;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IEstadoSolicitudService;
@@ -19,8 +20,7 @@ public class EstadoSolicitudServiceImpl implements IEstadoSolicitudService {
     public EstadoSolicitud buscarPorCodigo(String codigo) {
         return estadoSolicitudRepository.findByCodigo(codigo)
                 .orElseThrow(() -> {
-                    log.error("EstadoSolicitud con codigo {} no encontrado", codigo);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("EstadoSolicitud con codigo " + codigo + " no encontrado");
                 });
     }
 }

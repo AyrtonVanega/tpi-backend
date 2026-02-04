@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.solicitudes.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 import ar.edu.utn.frc.backend.solicitudes.model.EstadoContenedor;
 import ar.edu.utn.frc.backend.solicitudes.model.HistorialEstadoContenedor;
@@ -42,8 +43,7 @@ public class HistorialEstadoContenedorServiceImpl implements IHistorialEstadoCon
         return historialRepository.findTopByContenedorIdContenedorOrderByFechaHoraDesc(idContenedor)
                 .map(HistorialEstadoContenedor::getEstadoContenedor)
                 .orElseThrow(() -> {
-                    log.error("No hay historial para el contenedor {}", idContenedor);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("No hay historial para el contenedor " + idContenedor);
                 });
     }
 }

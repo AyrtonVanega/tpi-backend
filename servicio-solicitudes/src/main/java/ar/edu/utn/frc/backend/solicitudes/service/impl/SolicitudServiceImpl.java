@@ -9,6 +9,8 @@ import ar.edu.utn.frc.backend.solicitudes.dto.FinalizarSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchAsignarRutadDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchSolicitudDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SolicitudResponseDto;
+import ar.edu.utn.frc.backend.solicitudes.exception.BusinessException;
+import ar.edu.utn.frc.backend.solicitudes.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.solicitudes.mapper.SolicitudMapper;
 import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 import ar.edu.utn.frc.backend.solicitudes.model.EstadoSolicitud;
@@ -53,8 +55,7 @@ public class SolicitudServiceImpl implements ISolicitudService {
     public void actualizarEstado(Long idSolicitud, PatchSolicitudDto dto) {
         Solicitud solicitud = solicitudRepository.findById(idSolicitud)
                 .orElseThrow(() -> {
-                    log.error("Solicitud {} no encontrada", idSolicitud);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Solicitud " + idSolicitud + " no encontrada");
                 });
 
         // Actualiza el estado
@@ -69,8 +70,7 @@ public class SolicitudServiceImpl implements ISolicitudService {
         // Busca la Solicitud en la BD
         Solicitud solicitud = solicitudRepository.findById(idSolicitud)
                 .orElseThrow(() -> {
-                    log.error("Solicitud {} no encontrada", idSolicitud);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Solicitud " + idSolicitud + " no encontrada");
                 });
 
         // Mapea datos simples Entity -> DTO
@@ -120,10 +120,13 @@ public class SolicitudServiceImpl implements ISolicitudService {
     public void cancelarSolicitud(Long idSolicitud) {
         Solicitud solicitud = solicitudRepository.findById(idSolicitud)
                 .orElseThrow(() -> {
-                    log.error("Solicitud {} no encontrada", idSolicitud);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Solicitud " + idSolicitud + " no encontrada");
                 });
-        
+
+        if (!solicitud.getEstadoSolicitud().getCodigo().equals("BORRADOR")) {
+            throw new BusinessException("Sólo se pueden cancelar solicitudes en estado BORRADOR");
+        }
+
         EstadoSolicitud estadoCancelado = estadoSolicitudService.buscarPorCodigo("CANCELADA");
         solicitud.setEstadoSolicitud(estadoCancelado);
 
@@ -136,8 +139,7 @@ public class SolicitudServiceImpl implements ISolicitudService {
     public void asignarRuta(Long idSolicitud, PatchAsignarRutadDto asignarRutadDto) {
         Solicitud solicitud = solicitudRepository.findById(idSolicitud)
                 .orElseThrow(() -> {
-                    log.error("Solicitud {} no encontrada", idSolicitud);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Solicitud " + idSolicitud + " no encontrada");
                 });
 
         solicitud.setIdRuta(asignarRutadDto.getIdRuta());
@@ -154,10 +156,9 @@ public class SolicitudServiceImpl implements ISolicitudService {
     public void finalizarSolicitud(Long idSolicitud, FinalizarSolicitudDto dto) {
         Solicitud solicitud = solicitudRepository.findById(idSolicitud)
                 .orElseThrow(() -> {
-                    log.error("Solicitud {} no encontrada", idSolicitud);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Solicitud " + idSolicitud + " no encontrada");
                 });
-        
+
         solicitud.setFechaHoraFin(dto.getFechaHoraFin());
         solicitud.setCostoReal(dto.getCostoReal());
         solicitud.setTiempoReal(dto.getTiempoReal());
