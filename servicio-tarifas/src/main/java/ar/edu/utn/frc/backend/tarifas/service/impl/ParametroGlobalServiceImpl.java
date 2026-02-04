@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.tarifas.dto.ParametroRequestDto;
 import ar.edu.utn.frc.backend.tarifas.dto.ParametroResponseDto;
+import ar.edu.utn.frc.backend.tarifas.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.tarifas.mapper.ParametroMapper;
 import ar.edu.utn.frc.backend.tarifas.model.ParametroGlobal;
 import ar.edu.utn.frc.backend.tarifas.repository.ParametroGlobalRepository;
@@ -25,8 +26,7 @@ public class ParametroGlobalServiceImpl implements IParametroGlobalService {
     public void actualizar(ParametroRequestDto dto) {
         ParametroGlobal parametro = parametroRepository.findById(1L)
                 .orElseThrow(() -> {
-                    log.error("Parametro no encontrado");
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Parametro no encontrado");
                 });
 
         parametroMapper.updateFromDto(dto, parametro);
@@ -40,8 +40,7 @@ public class ParametroGlobalServiceImpl implements IParametroGlobalService {
     public ParametroResponseDto obtenerParametroGlobal() {
         ParametroGlobal parametro = parametroRepository.findById(1L)
                 .orElseThrow(() -> {
-                    log.error("Parametro no encontrado");
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Parametro no encontrado");
                 });
 
         return parametroMapper.toResponse(parametro);

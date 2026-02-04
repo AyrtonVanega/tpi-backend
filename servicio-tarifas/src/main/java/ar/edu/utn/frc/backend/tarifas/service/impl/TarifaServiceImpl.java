@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import ar.edu.utn.frc.backend.tarifas.dto.CreateTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.PatchTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
+import ar.edu.utn.frc.backend.tarifas.exception.BusinessException;
+import ar.edu.utn.frc.backend.tarifas.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.tarifas.mapper.TarifaMapper;
 import ar.edu.utn.frc.backend.tarifas.model.Tarifa;
 import ar.edu.utn.frc.backend.tarifas.repository.TarifaRepository;
@@ -26,8 +28,7 @@ public class TarifaServiceImpl implements ITarifaService {
     public void validarRangosTarifa(double pesoMin, double pesoMax, double volMin, double volMax) {
         boolean existeSolapamiento = tarifaRepository.existeSolapamiento(pesoMin, pesoMax, volMin, volMax);
         if (existeSolapamiento) {
-            log.error("No se puede crear la Tarifa porque existe un solapamiento entre los rangos");
-            throw new RuntimeException();
+            throw new BusinessException("No se puede crear la Tarifa porque existe un solapamiento entre los rangos");
         }
     }
 
@@ -42,8 +43,7 @@ public class TarifaServiceImpl implements ITarifaService {
     public void actualizarParcial(Long idTarifa, PatchTarifaDto dto) {
         Tarifa tarifa = tarifaRepository.findById(idTarifa)
                 .orElseThrow(() -> {
-                    log.error("Tarifa {} no encontrada", idTarifa);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Tarifa " + idTarifa + " no encontrada");
                 });
 
         if (dto.getConsumoCombustibleGralAprox() != null) {
@@ -61,8 +61,7 @@ public class TarifaServiceImpl implements ITarifaService {
     public void eliminar(Long idTarifa) {
         Tarifa tarifa = tarifaRepository.findById(idTarifa)
                 .orElseThrow(() -> {
-                    log.error("Tarifa {} no encontrada", idTarifa);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Tarifa " + idTarifa + " no encontrada");
                 });
         tarifaRepository.delete(tarifa);
     }
@@ -71,8 +70,7 @@ public class TarifaServiceImpl implements ITarifaService {
     public TarifaResponseDto obtenerPorId(Long idTarifa) {
         Tarifa tarifa = tarifaRepository.findById(idTarifa)
                 .orElseThrow(() -> {
-                    log.error("Tarifa {} no encontrada", idTarifa);
-                    return new RuntimeException();
+                    return new ResourceNotFoundException("Tarifa " + idTarifa + " no encontrada");
                 });
         return tarifaMapper.toResponse(tarifa);
     }
