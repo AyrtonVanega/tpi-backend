@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class TransportistaController {
     private final ITransportistaService transportistaService;
     private final ConsultarTramosAsignadosWorkflow consultarTramosAsignadosWorkflow;
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @PostMapping()
     public ResponseEntity<Void> registrarTransportista(@RequestBody CreateTransportistaDto transportistaRequestDto) {
         transportistaService.crear(transportistaRequestDto);
@@ -37,6 +39,7 @@ public class TransportistaController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @PutMapping("/{docTransportista}/{tipoDocTransportista}")
     public ResponseEntity<Void> actualizarTransportista(
             @PathVariable String docTransportista,
@@ -46,6 +49,7 @@ public class TransportistaController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @DeleteMapping("/{docTransportista}/{tipoDocTransportista}")
     public ResponseEntity<Void> darDeBajaTransportista(
             @PathVariable String docTransportista,
@@ -54,6 +58,7 @@ public class TransportistaController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping("/{docTransportista}/{tipoDocTransportista}")
     public ResponseEntity<TransportistaResponseDto> obtenerTransportistaPorDoc(
             @PathVariable String docTransportista,
@@ -61,11 +66,13 @@ public class TransportistaController {
         return ResponseEntity.ok(transportistaService.obtenerPorId(docTransportista, tipoDocTransportista));
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping()
     public ResponseEntity<List<TransportistaResponseDto>> obtenerTransportistas() {
         return ResponseEntity.ok(transportistaService.obtenerTodos());
     }
 
+    @PreAuthorize("hasRole('TRANSPORTISTA')")
     @GetMapping("/{docTransportista}/{tipoDocTransportista}/tramos-asignados")
     public ResponseEntity<List<TramoResponseDto>> obtenerTramosAsignados(
             @PathVariable String docTransportista,

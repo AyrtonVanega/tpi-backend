@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class ClienteController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('CLIENTE')")
     @PutMapping("/{docCliente}/{tipoDocCliente}")
     public ResponseEntity<Void> actualizarCliente(
             @PathVariable String docCliente,
@@ -43,6 +45,7 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('CLIENTE')")
     @DeleteMapping("/{docCliente}/{tipoDocCliente}")
     public ResponseEntity<Void> darDeBajaCliente(
             @PathVariable String docCliente,
@@ -51,6 +54,7 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping("/{docCliente}/{tipoDocCliente}")
     public ResponseEntity<ClienteResponseDto> obtenerClientePorDoc(
             @PathVariable String docCliente,
@@ -58,6 +62,7 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.obtenerPorId(docCliente, tipoDocCliente));
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping()
     public ResponseEntity<List<ClienteResponseDto>> obtenerClientes() {
         return ResponseEntity.ok(clienteService.obtenerTodos());
