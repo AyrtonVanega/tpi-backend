@@ -40,13 +40,13 @@ public class UbicacionController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('OPERADOR')")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'CLIENTE')")
     @GetMapping("/{idUbicacion}")
     public ResponseEntity<UbicacionResponseDto> obtenerUbicacionPorId(@PathVariable Long idUbicacion) {
         return ResponseEntity.ok(ubicacionService.obtenerPorId(idUbicacion));
     }
 
-    @PreAuthorize("hasRole('OPERADOR')")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'CLIENTE')")
     @GetMapping()
     public ResponseEntity<List<UbicacionResponseDto>> obtenerUbicaciones() {
         return ResponseEntity.ok(ubicacionService.obtenerTodos());

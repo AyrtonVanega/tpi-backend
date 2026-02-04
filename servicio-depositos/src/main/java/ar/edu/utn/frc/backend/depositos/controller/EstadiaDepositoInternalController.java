@@ -2,6 +2,7 @@ package ar.edu.utn.frc.backend.depositos.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ public class EstadiaDepositoInternalController {
 
     private final IEstadiaDepositoService estadiaDepositoService;
 
+    @PreAuthorize("hasRole('INTERNAL_CALL')")
     @PostMapping()
     public ResponseEntity<Void> crearEstadia(@RequestBody CreateEstadiaDepositoDto dto) {
         estadiaDepositoService.crear(dto);
@@ -31,6 +33,7 @@ public class EstadiaDepositoInternalController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('INTERNAL_CALL')")
     @PatchMapping("/{idDeposito}/{idSolicitud}")
     public ResponseEntity<Void> finalizarEstadia(
             @PathVariable Long idDeposito,
@@ -41,6 +44,7 @@ public class EstadiaDepositoInternalController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('INTERNAL_CALL')")
     @GetMapping("/costo-total")
     public ResponseEntity<Double> calcularCostoEstadiaDiario(@RequestParam Long idSolicitud) {
         return ResponseEntity.ok(estadiaDepositoService.calcularCostoTotal(idSolicitud));

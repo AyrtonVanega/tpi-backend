@@ -2,6 +2,7 @@ package ar.edu.utn.frc.backend.depositos.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import ar.edu.utn.frc.backend.depositos.dto.EstadiaDepositoResponseDto;
@@ -16,6 +17,7 @@ public class EstadiaDepositoController {
 
     private final IEstadiaDepositoService estadiaDepositoService;
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping("/{idDeposito}/{idSolicitud}")
     public ResponseEntity<EstadiaDepositoResponseDto> obtenerEstadiaPorId(
             @PathVariable Long idDeposito,
@@ -23,6 +25,7 @@ public class EstadiaDepositoController {
         return ResponseEntity.ok(estadiaDepositoService.obtenerPorId(idDeposito, idSolicitud));
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping("/activas")
     public ResponseEntity<List<EstadiaDepositoResponseDto>> listarEstadiasActivas(@RequestParam Long idDeposito) {
         return ResponseEntity.ok(estadiaDepositoService.obtenerEstadiasActivas(idDeposito));
