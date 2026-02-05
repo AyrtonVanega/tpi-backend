@@ -95,15 +95,36 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
                             "Estadia Deposito no encontrada - idDeposito: " + idEstadiaDeposito.getIdDeposito()
                                     + ", idSolicitud: " + idEstadiaDeposito.getIdSolicitud());
                 });
-        return estadiaMapper.toResponse(estadiaDeposito);
+
+        // Mapea datos simples Entity -> DTO
+        EstadiaDepositoResponseDto responseDto = estadiaMapper.toResponse(estadiaDeposito);
+
+        // Setea el id del deposito y el estado de la estadia
+        responseDto.setIdDeposito(idDeposito);
+        responseDto.setCodigoEstado(estadiaDeposito.getEstado().getCodigo());
+
+        return responseDto;
     }
 
     @Override
     public List<EstadiaDepositoResponseDto> obtenerEstadiasActivas(Long idDeposito) {
+        // Obtiene todas las estadias activas del deposito
         List<EstadiaDeposito> estadiasActivas = estadiaDepositoRepository
                 .buscarPorDepositoYEstado(idDeposito, "ACTIVA");
 
-        return estadiaMapper.toResponseList(estadiasActivas);
+        // Mapea datos simples Entity -> DTO
+        List<EstadiaDepositoResponseDto> responseDtoList = estadiaMapper.toResponseList(estadiasActivas);
+
+        // Completa los datos faltantes
+        for (int i = 0; i < estadiasActivas.size(); i++) {
+            EstadiaDeposito estadiaActiva = estadiasActivas.get(i);
+            EstadiaDepositoResponseDto dto = responseDtoList.get(i);
+
+            dto.setIdDeposito(idDeposito);
+            dto.setCodigoEstado(estadiaActiva.getEstado().getCodigo());
+        }
+
+        return responseDtoList;
     }
 
     @Override
