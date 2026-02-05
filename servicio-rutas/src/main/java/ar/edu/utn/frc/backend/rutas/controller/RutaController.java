@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public class RutaController {
 
     private final IRutaService rutaService;
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping("/tentativas")
     public ResponseEntity<List<RutaTentativaDto>> obtenerRutasTentativas(@ModelAttribute FiltroRutaDto filtro) {
 
@@ -43,6 +45,7 @@ public class RutaController {
         return ResponseEntity.ok(rutasTentativas);
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @PostMapping()
     public ResponseEntity<Void> crearRuta(@RequestBody CreateRutaDto dto) {
         rutaService.crear(dto);
@@ -51,11 +54,13 @@ public class RutaController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyRole('OPERADOR','CLIENTE')")
     @GetMapping("/{idRuta}")
     public ResponseEntity<RutaResponseDto> obtenerRutaPorId(@PathVariable Long idRuta) {
         return ResponseEntity.ok(rutaService.obtenerPorId(idRuta));
     }
 
+    @PreAuthorize("hasRole('CLIENTE')")
     @GetMapping("/{idRuta}/costos")
     public ResponseEntity<CostoRutaResponseDto> mostrarCostos(@PathVariable Long idRuta) {
         return ResponseEntity.ok(rutaService.mostrarCostos(idRuta));
