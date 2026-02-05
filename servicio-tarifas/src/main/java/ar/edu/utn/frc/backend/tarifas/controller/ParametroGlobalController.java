@@ -1,6 +1,7 @@
 package ar.edu.utn.frc.backend.tarifas.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ public class ParametroGlobalController {
 
     private final IParametroGlobalService parametroService;
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @PutMapping()
     public ResponseEntity<Void> actualizarParametroGlobal(
         @RequestBody ParametroRequestDto parametroRequestDto) {
@@ -27,6 +29,7 @@ public class ParametroGlobalController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping()
     public ResponseEntity<ParametroResponseDto> obtenerParametro() {
         return ResponseEntity.ok(parametroService.obtenerParametroGlobal());

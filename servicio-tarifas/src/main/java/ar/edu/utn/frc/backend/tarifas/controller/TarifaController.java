@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,6 +29,7 @@ public class TarifaController {
     private final ITarifaService tarifaService;
     private final CrearTarifaWorkflow crearTarifaWorkflow;
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @PostMapping()
     public ResponseEntity<Void> crearTarifa(@RequestBody CreateTarifaDto tarifaRequestDto) {
         crearTarifaWorkflow.crearTarifa(tarifaRequestDto);
@@ -36,6 +38,7 @@ public class TarifaController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @PatchMapping("/{idTarifa}")
     public ResponseEntity<Void> actualizarTarifa(
             @PathVariable Long idTarifa,
@@ -44,17 +47,20 @@ public class TarifaController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @DeleteMapping("/{idTarifa}")
     public ResponseEntity<Void> eliminarTarifa(@PathVariable Long idTarifa) {
         tarifaService.eliminar(idTarifa);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping("/{idTarifa}")
     public ResponseEntity<TarifaResponseDto> obtenerTarifaPorId(@PathVariable Long idTarifa) {
         return ResponseEntity.ok(tarifaService.obtenerPorId(idTarifa));
     }
 
+    @PreAuthorize("hasRole('OPERADOR')")
     @GetMapping()
     public ResponseEntity<List<TarifaResponseDto>> obtenerTarifas() {
         return ResponseEntity.ok(tarifaService.obtenerTodos());
