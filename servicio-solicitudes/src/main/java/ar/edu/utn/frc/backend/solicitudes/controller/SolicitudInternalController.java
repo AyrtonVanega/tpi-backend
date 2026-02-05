@@ -1,6 +1,7 @@
 package ar.edu.utn.frc.backend.solicitudes.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ public class SolicitudInternalController {
 
     private final ISolicitudService solicitudService;
 
+    @PreAuthorize("hasRole('INTERNAL_CALL')")
     @PatchMapping("/{idSolicitud}/asignar-ruta")
     public ResponseEntity<Void> asignarRuta(
             @PathVariable Long idSolicitud,
@@ -29,6 +31,7 @@ public class SolicitudInternalController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('INTERNAL_CALL')")
     @PatchMapping("/{idSolicitud}/estado")
     public ResponseEntity<Void> actualizarEstadoSolicitud(
             @PathVariable Long idSolicitud,
@@ -38,6 +41,7 @@ public class SolicitudInternalController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('INTERNAL_CALL')")
     @PatchMapping("/{idSolicitud}/finalizar")
     public ResponseEntity<Void> finalizarSolicitud(
             @PathVariable Long idSolicitud,
