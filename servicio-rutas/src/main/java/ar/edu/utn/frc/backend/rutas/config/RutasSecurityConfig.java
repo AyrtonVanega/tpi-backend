@@ -23,12 +23,17 @@ public class RutasSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated())
-            .oauth2ResourceServer(oauth2 -> 
-                oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**")
+                        .permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .anyRequest().authenticated())
+                .oauth2ResourceServer(
+                        oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
         return http.build();
     }
 
@@ -41,9 +46,9 @@ public class RutasSecurityConfig {
             if (realmAccess != null && realmAccess.containsKey("roles")) {
                 var roles = (Collection<String>) realmAccess.get("roles");
                 roles.stream()
-                    .map(r -> "ROLE_" + r.toUpperCase())
-                    .map(SimpleGrantedAuthority::new)
-                    .forEach(authorities::add);
+                        .map(r -> "ROLE_" + r.toUpperCase())
+                        .map(SimpleGrantedAuthority::new)
+                        .forEach(authorities::add);
             }
             return new JwtAuthenticationToken(jwt, authorities);
         };

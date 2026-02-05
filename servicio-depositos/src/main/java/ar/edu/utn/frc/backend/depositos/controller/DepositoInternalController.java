@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.utn.frc.backend.depositos.dto.DepositoResponseDto;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IDepositoService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 
+@Hidden
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/depositos/internal")

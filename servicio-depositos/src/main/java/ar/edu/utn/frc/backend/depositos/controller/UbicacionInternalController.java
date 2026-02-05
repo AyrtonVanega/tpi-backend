@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Hidden;
 
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionRequestDto;
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionResponseDto;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IUbicacionService;
 import lombok.RequiredArgsConstructor;
 
+@Hidden
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ubicaciones/internal")

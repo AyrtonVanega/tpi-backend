@@ -16,6 +16,11 @@ public class GatewaySecurityConfig {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(auth -> auth
+                        .pathMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**")
+                        .permitAll() // permite acceso sin token a swagger
                         .anyExchange().authenticated()) // todas las requests deben tener token válido
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())) // valida firma, issuer, expiración
                 .build();
