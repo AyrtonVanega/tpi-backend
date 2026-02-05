@@ -19,14 +19,12 @@ import ar.edu.utn.frc.backend.depositos.model.Deposito;
 public interface DepositoMapper{
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "estadiasDeposito", ignore = true)
     Deposito toEntity(DepositoRequestDto dto);
 
     @Mapping(target = "idDeposito", source = "id")
     DepositoResponseDto toResponse(Deposito entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "estadiasDeposito", ignore = true)
     void updateFromDto(DepositoRequestDto dto, @MappingTarget Deposito entity);
 
     List<DepositoResponseDto> toResponseList(List<Deposito> depositos);

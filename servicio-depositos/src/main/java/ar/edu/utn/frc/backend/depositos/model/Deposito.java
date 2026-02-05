@@ -1,12 +1,7 @@
 package ar.edu.utn.frc.backend.depositos.model;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -31,7 +26,4 @@ public class Deposito extends Ubicacion{
 
     @Column(name = "costo_estadia")
     private double costoEstadiaDiaria;
-
-    @OneToMany(mappedBy = "deposito", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<EstadiaDeposito> estadiasDeposito;
 }
