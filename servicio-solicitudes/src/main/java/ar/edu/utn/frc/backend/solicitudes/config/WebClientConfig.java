@@ -19,7 +19,7 @@ public class WebClientConfig {
     }
 
     @Bean
-    public WebClient depositoWebClient(
+    public WebClient internalWebClient(
             WebClient.Builder builder,
             ClientRegistrationRepository repo,
             OAuth2AuthorizedClientRepository authRepo) {
@@ -27,23 +27,7 @@ public class WebClientConfig {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
                 repo, authRepo);
 
-        oauth.setDefaultClientRegistrationId("depositos-client");
-
-        return builder
-                .apply(oauth.oauth2Configuration())
-                .build();
-    }
-
-    @Bean
-    public WebClient personaWebClient(
-            WebClient.Builder builder,
-            ClientRegistrationRepository repo,
-            OAuth2AuthorizedClientRepository authRepo) {
-
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
-                repo, authRepo);
-
-        oauth.setDefaultClientRegistrationId("personas-client");
+        oauth.setDefaultClientRegistrationId("ms-solicitudes");
 
         return builder
                 .apply(oauth.oauth2Configuration())

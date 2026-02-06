@@ -18,7 +18,7 @@ public class WebClientConfig {
     }
 
     @Bean
-    public WebClient rutaWebClient(
+    public WebClient internalWebClient(
             WebClient.Builder builder,
             ClientRegistrationRepository repo,
             OAuth2AuthorizedClientRepository authRepo) {
@@ -26,7 +26,7 @@ public class WebClientConfig {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
                 repo, authRepo);
 
-        oauth.setDefaultClientRegistrationId("depositos-client");
+        oauth.setDefaultClientRegistrationId("ms-personas");
 
         return builder.apply(oauth.oauth2Configuration())
                 .build();

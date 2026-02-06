@@ -2,6 +2,7 @@ package ar.edu.utn.frc.backend.rutas.client;
 
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -9,13 +10,15 @@ import ar.edu.utn.frc.backend.rutas.client.dto.FinalizarSolicitudDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.PatchAsignarRutadDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.PatchContenedorDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.PatchSolicitudDto;
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class SolicitudClient {
 
     private final WebClient solicitudWebClient;
+
+    public SolicitudClient(@Qualifier("internalWebClient") WebClient webClient) {
+        this.solicitudWebClient = webClient;
+    }
 
     public void asignarRuta(Long idSolicitud, Long idRuta, double costoEstimado, double tiempoEstimado) {
         solicitudWebClient.patch()

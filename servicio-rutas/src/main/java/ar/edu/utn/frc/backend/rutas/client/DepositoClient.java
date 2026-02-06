@@ -3,6 +3,7 @@ package ar.edu.utn.frc.backend.rutas.client;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -10,13 +11,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 import ar.edu.utn.frc.backend.rutas.client.dto.CreateEstadiaDepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.DepositoDto;
 import ar.edu.utn.frc.backend.rutas.client.dto.FinalizarEstadiaDto;
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class DepositoClient {
 
     private final WebClient depositoWebClient;
+
+    public DepositoClient(@Qualifier("internalWebClient") WebClient webClient) {
+        this.depositoWebClient = webClient;
+    }
 
     public List<DepositoDto> obtenerDepositosEnBoundingBox(double minLat, double maxLat, double minLon, double maxLon) {
         return depositoWebClient.get()
