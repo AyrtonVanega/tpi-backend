@@ -39,6 +39,7 @@ public class DepositosSecurityConfig {
         return http.build();
     }
 
+    @SuppressWarnings("unchecked")
     @Bean
     public Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter() {
         return jwt -> {

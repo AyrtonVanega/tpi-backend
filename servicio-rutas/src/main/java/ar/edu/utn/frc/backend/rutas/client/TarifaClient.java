@@ -18,7 +18,7 @@ public class TarifaClient {
 
     public ParametroGlobalDto obtenerParametrosGlobales() {
         return tarifaWebClient.get()
-                .uri("http://tarifas/parametro-global")
+                .uri("http://tarifas/parametro-global/internal")
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<ParametroGlobalDto>() {
                 })

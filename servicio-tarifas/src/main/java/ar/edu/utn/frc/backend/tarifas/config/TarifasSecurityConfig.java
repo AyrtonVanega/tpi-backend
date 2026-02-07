@@ -46,7 +46,7 @@ public class TarifasSecurityConfig {
             if (realmAccess != null && realmAccess.containsKey("roles")) {
                 var roles = (Collection<String>) realmAccess.get("roles");
                 roles.stream()
-                        .map(r -> "ROLE_" + r.toUpperCase())
+                        .map(r -> "ROLE_" + r.toUpperCase().replace("-", "_"))
                         .map(SimpleGrantedAuthority::new)
                         .forEach(authorities::add);
             }
