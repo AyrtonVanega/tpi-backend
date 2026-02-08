@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.utn.frc.backend.tarifas.dto.CreateTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.PatchTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
-import ar.edu.utn.frc.backend.tarifas.event.CamionCreadoEvent;
+import ar.edu.utn.frc.backend.tarifas.event.CamionCapacidadEvent;
 import ar.edu.utn.frc.backend.tarifas.exception.BusinessException;
 import ar.edu.utn.frc.backend.tarifas.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.tarifas.mapper.TarifaMapper;
@@ -84,7 +84,7 @@ public class TarifaServiceImpl implements ITarifaService {
     }
 
     @Override
-    public void recalcularConsumoPromedioParaTarifasAfectadas(CamionCreadoEvent event) {
+    public void recalcularConsumoPromedioParaTarifasAfectadas(CamionCapacidadEvent event) {
 
         List<Tarifa> tarifasAfectadas = tarifaRepository.buscarTarifasPorRango(
                 event.getPeso(),

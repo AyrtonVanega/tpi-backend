@@ -135,4 +135,13 @@ public class CamionServiceImpl implements ICamionService {
                 .average()
                 .orElse(0.0);
     }
+
+    @Override
+    public Camion obtenerCamionPorTransportista(String docTransportista, String tipoDocTransportista) {
+        return camionRepository.buscarCamionPorTransportista(docTransportista, tipoDocTransportista)
+                .orElseThrow(() -> {
+                    return new ResourceNotFoundException("Camion no encontrado para Transportista con doc: "
+                            + docTransportista + " y tipoDoc: " + tipoDocTransportista);
+                });
+    }
 }

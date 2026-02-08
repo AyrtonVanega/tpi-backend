@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CamionCreadoEvent implements CamionCapacidadEvent {
+public class CamionEliminadoEvent implements CamionCapacidadEvent {
     private String patente;
     private double peso;
     private double volumen;
-    private double consumoCombustiblePromedio;
 }

@@ -4,6 +4,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import ar.edu.utn.frc.backend.personas.event.CamionCreadoEvent;
+import ar.edu.utn.frc.backend.personas.event.CamionEliminadoEvent;
 import ar.edu.utn.frc.backend.personas.model.Camion;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,23 @@ public class CamionEventPublisher {
                 camion.getConsumoCombustiblePromedio());
 
         kafkaTemplate.send("camion-creado", event)
+                .whenComplete((result, ex) -> {
+                    if (ex != null) {
+                        log.error("ERROR enviando evento", ex);
+                    } else {
+                        log.info("Evento enviado. Offset={}",
+                                result.getRecordMetadata().offset());
+                    }
+                });
+    }
+
+    public void publicarCamionEliminado(Camion camion) {
+        CamionEliminadoEvent event = new CamionEliminadoEvent(
+                camion.getPatente(),
+                camion.getPeso(),
+                camion.getVolumen());
+
+        kafkaTemplate.send("camion-eliminado", event)
                 .whenComplete((result, ex) -> {
                     if (ex != null) {
                         log.error("ERROR enviando evento", ex);

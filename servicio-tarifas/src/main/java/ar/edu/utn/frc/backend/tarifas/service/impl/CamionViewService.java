@@ -3,6 +3,7 @@ package ar.edu.utn.frc.backend.tarifas.service.impl;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.tarifas.event.CamionCreadoEvent;
+import ar.edu.utn.frc.backend.tarifas.event.CamionEliminadoEvent;
 import ar.edu.utn.frc.backend.tarifas.mapper.CamionViewMapper;
 import ar.edu.utn.frc.backend.tarifas.model.CamionView;
 import ar.edu.utn.frc.backend.tarifas.repository.CamionViewRepository;
@@ -28,5 +29,9 @@ public class CamionViewService {
                 .mapToDouble(CamionView::getConsumoCombustiblePromedio)
                 .average()
                 .orElse(0.0);
+    }
+
+    public void eliminarDesdeEvento(CamionEliminadoEvent event) {
+        camionViewRepository.deleteById(event.getPatente());
     }
 }

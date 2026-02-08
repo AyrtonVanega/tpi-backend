@@ -25,6 +25,7 @@ import ar.edu.utn.frc.backend.personas.dto.PutTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ITransportistaService;
 import ar.edu.utn.frc.backend.personas.workflow.ConsultarTramosAsignadosWorkflow;
+import ar.edu.utn.frc.backend.personas.workflow.EliminarTransportistaWorkflow;
 import ar.edu.utn.frc.backend.personas.workflow.RegistrarTransportistaWorkflow;
 import lombok.AllArgsConstructor;
 
@@ -40,6 +41,7 @@ public class TransportistaController {
     private final ITransportistaService transportistaService;
     private final ConsultarTramosAsignadosWorkflow consultarTramosAsignadosWorkflow;
     private final RegistrarTransportistaWorkflow registrarTransportistaWorkflow;
+    private final EliminarTransportistaWorkflow eliminarTransportistaWorkflow;
 
     @Operation(
         summary = "Registrar un transportista",
@@ -99,7 +101,7 @@ public class TransportistaController {
     public ResponseEntity<Void> darDeBajaTransportista(
             @PathVariable String docTransportista,
             @PathVariable String tipoDocTransportista) {
-        transportistaService.eliminar(docTransportista, tipoDocTransportista);
+        eliminarTransportistaWorkflow.eliminarTransportista(docTransportista, tipoDocTransportista);
         return ResponseEntity.noContent().build();
     }
 

@@ -5,7 +5,7 @@ import java.util.List;
 import ar.edu.utn.frc.backend.tarifas.dto.CreateTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.PatchTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
-import ar.edu.utn.frc.backend.tarifas.event.CamionCreadoEvent;
+import ar.edu.utn.frc.backend.tarifas.event.CamionCapacidadEvent;
 
 public interface ITarifaService {
 
@@ -21,5 +21,5 @@ public interface ITarifaService {
 
     List<TarifaResponseDto> obtenerTodos();
 
-    void recalcularConsumoPromedioParaTarifasAfectadas(CamionCreadoEvent event);
+    void recalcularConsumoPromedioParaTarifasAfectadas(CamionCapacidadEvent event);
 }
