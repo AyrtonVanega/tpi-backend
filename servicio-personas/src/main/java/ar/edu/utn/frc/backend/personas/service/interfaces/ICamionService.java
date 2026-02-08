@@ -9,7 +9,7 @@ import ar.edu.utn.frc.backend.personas.model.Transportista;
 
 public interface ICamionService {
 
-    Camion crearSiNoExiste(String patente, double volumen, double peso, double costoBaseKm,
+    Camion crear(String patente, double volumen, double peso, double costoBaseKm,
             double consumoCombustiblePromedio, Transportista transportista);
 
     void actualizar(String patenteCamion, CamionRequestDto dto);

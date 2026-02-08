@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.utn.frc.backend.tarifas.dto.CreateTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.PatchTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
+import ar.edu.utn.frc.backend.tarifas.event.CamionCreadoEvent;
 import ar.edu.utn.frc.backend.tarifas.exception.BusinessException;
 import ar.edu.utn.frc.backend.tarifas.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.tarifas.mapper.TarifaMapper;
@@ -23,6 +24,7 @@ public class TarifaServiceImpl implements ITarifaService {
 
     private final TarifaRepository tarifaRepository;
     private final TarifaMapper tarifaMapper;
+    private final CamionViewService camionViewService;
 
     @Override
     public void validarRangosTarifa(double pesoMin, double pesoMax, double volMin, double volMax) {
@@ -79,5 +81,25 @@ public class TarifaServiceImpl implements ITarifaService {
     public List<TarifaResponseDto> obtenerTodos() {
         List<Tarifa> tarifas = tarifaRepository.findAll();
         return tarifaMapper.toResponseList(tarifas);
+    }
+
+    @Override
+    public void recalcularConsumoPromedioParaTarifasAfectadas(CamionCreadoEvent event) {
+
+        List<Tarifa> tarifasAfectadas = tarifaRepository.buscarTarifasPorRango(
+                event.getPeso(),
+                event.getVolumen());
+
+        for (Tarifa tarifa : tarifasAfectadas) {
+
+            double promedio = camionViewService.calcularConsumoPromedio(
+                    tarifa.getRangoPesoMin(),
+                    tarifa.getRangoPesoMax(),
+                    tarifa.getRangoVolumenMin(),
+                    tarifa.getRangoVolumenMax());
+
+            tarifa.setConsumoCombustibleGralAprox(promedio);
+            tarifaRepository.save(tarifa);
+        }
     }
 }

@@ -28,7 +28,7 @@ public class TransportistaServiceImpl implements ITransportistaService {
     private final TransportistaMapper transportistaMapper;
 
     @Override
-    public void crear(CreateTransportistaDto dto) {
+    public Transportista crear(CreateTransportistaDto dto) {
         // Mapea datos simples DTO -> Entity
         Transportista transportista = transportistaMapper.toEntity(dto);
 
@@ -36,20 +36,8 @@ public class TransportistaServiceImpl implements ITransportistaService {
         PersonaId id = new PersonaId(dto.getDocTransportista(), dto.getTipoDocTransportista());
         transportista.setIdPersona(id);
 
-        // Crea el camion si no existe
-        Camion camion = camionService.crearSiNoExiste(
-                dto.getPatenteCamion(),
-                dto.getVolumenCamion(),
-                dto.getPesoCamion(),
-                dto.getCostoBaseKmCamion(),
-                dto.getConsumoCombustiblePromedioCamion(),
-                transportista);
-
-        // Setea el Camion
-        transportista.setCamion(camion);
-
         // Guarda en la BD
-        transportistaRepository.save(transportista);
+        return transportistaRepository.save(transportista);
     }
 
     @Override

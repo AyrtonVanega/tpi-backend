@@ -9,7 +9,7 @@ import ar.edu.utn.frc.backend.personas.model.Transportista;
 
 public interface ITransportistaService {
 
-    void crear(CreateTransportistaDto dto);
+    Transportista crear(CreateTransportistaDto dto);
 
     void actualizar(String docTransportista, String tipoDocTransportista, PutTransportistaDto dto);
 

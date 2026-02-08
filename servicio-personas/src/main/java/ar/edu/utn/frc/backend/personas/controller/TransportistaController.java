@@ -25,6 +25,7 @@ import ar.edu.utn.frc.backend.personas.dto.PutTransportistaDto;
 import ar.edu.utn.frc.backend.personas.dto.TransportistaResponseDto;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ITransportistaService;
 import ar.edu.utn.frc.backend.personas.workflow.ConsultarTramosAsignadosWorkflow;
+import ar.edu.utn.frc.backend.personas.workflow.RegistrarTransportistaWorkflow;
 import lombok.AllArgsConstructor;
 
 @Tag(
@@ -38,6 +39,7 @@ public class TransportistaController {
 
     private final ITransportistaService transportistaService;
     private final ConsultarTramosAsignadosWorkflow consultarTramosAsignadosWorkflow;
+    private final RegistrarTransportistaWorkflow registrarTransportistaWorkflow;
 
     @Operation(
         summary = "Registrar un transportista",
@@ -53,7 +55,7 @@ public class TransportistaController {
     @PreAuthorize("hasRole('OPERADOR')")
     @PostMapping()
     public ResponseEntity<Void> registrarTransportista(@RequestBody CreateTransportistaDto transportistaRequestDto) {
-        transportistaService.crear(transportistaRequestDto);
+        registrarTransportistaWorkflow.registrarTransportista(transportistaRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();

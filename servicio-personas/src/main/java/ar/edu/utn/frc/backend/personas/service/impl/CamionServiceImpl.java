@@ -1,8 +1,6 @@
 package ar.edu.utn.frc.backend.personas.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -26,23 +24,14 @@ public class CamionServiceImpl implements ICamionService {
     private final CamionRepository camionRepository;
     private final CamionMapper camionMapper;
 
-    private final Map<String, Camion> camiones = new HashMap<>();
-
     @Override
-    public Camion crearSiNoExiste(String patente, double volumen, double peso, double costoBaseKm,
+    public Camion crear(String patente, double volumen, double peso, double costoBaseKm,
             double consumoCombustiblePromedio, Transportista transportista) {
 
-        return this.camiones.computeIfAbsent(patente, pat -> {
-            Camion c = new Camion(
-                    pat,
-                    volumen,
-                    peso,
-                    true,
-                    costoBaseKm,
-                    consumoCombustiblePromedio,
-                    transportista);
-            return c;
-        });
+        Camion camion = new Camion(patente, volumen, peso, true, costoBaseKm, consumoCombustiblePromedio,
+                transportista);
+
+        return camionRepository.save(camion);
     }
 
     @Override
