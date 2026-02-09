@@ -81,6 +81,7 @@ public class SolicitudServiceImpl implements ISolicitudService {
 
         // Setea el estado de la Solicitud al ResponseDto
         responseDto.setCodigoEstadoSolicitud(solicitud.getEstadoSolicitud().getCodigo());
+        responseDto.setDescripcionEstadoSolicitud(solicitud.getEstadoSolicitud().getDescripcion());
 
         // Setea el cliente
         responseDto.setDocCliente(solicitud.getDocCliente());
@@ -107,6 +108,7 @@ public class SolicitudServiceImpl implements ISolicitudService {
 
             // Setea el estado de la Solicitud al ResponseDto
             dto.setCodigoEstadoSolicitud(solicitud.getEstadoSolicitud().getCodigo());
+            dto.setDescripcionEstadoSolicitud(solicitud.getEstadoSolicitud().getDescripcion());
 
             // Setea el cliente
             dto.setDocCliente(solicitud.getDocCliente());

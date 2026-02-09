@@ -16,6 +16,7 @@ import ar.edu.utn.frc.backend.solicitudes.model.Solicitud;
 public interface SolicitudMapper {
 
     @Mapping(target = "codigoEstadoSolicitud", ignore = true)
+    @Mapping(target = "descripcionEstadoSolicitud", ignore = true)
     @Mapping(target = "idContenedor", ignore = true)
     @Mapping(target = "docCliente", ignore = true)
     @Mapping(target = "tipoDocCliente", ignore = true)

@@ -20,6 +20,7 @@ public class SolicitudResponseDto {
     private double costoReal;
     private double tiempoReal;
     private String codigoEstadoSolicitud;
+    private String descripcionEstadoSolicitud;
     private Long idContenedor;
     private Long idRuta;
     private String docCliente;
