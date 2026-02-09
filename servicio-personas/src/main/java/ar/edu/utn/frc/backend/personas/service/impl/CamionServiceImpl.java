@@ -128,15 +128,6 @@ public class CamionServiceImpl implements ICamionService {
     }
 
     @Override
-    public double calcularConsumoPromedio(double pesoMin, double pesoMax, double volMin, double volMax) {
-        List<Camion> camiones = camionRepository.buscarCamionesPorCapacidad(pesoMin, pesoMax, volMin, volMax);
-        return camiones.stream()
-                .mapToDouble(Camion::getConsumoCombustiblePromedio)
-                .average()
-                .orElse(0.0);
-    }
-
-    @Override
     public Camion obtenerCamionPorTransportista(String docTransportista, String tipoDocTransportista) {
         return camionRepository.buscarCamionPorTransportista(docTransportista, tipoDocTransportista)
                 .orElseThrow(() -> {

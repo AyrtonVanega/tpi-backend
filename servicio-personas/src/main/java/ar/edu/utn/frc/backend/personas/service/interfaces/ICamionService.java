@@ -24,7 +24,5 @@ public interface ICamionService {
 
     Camion buscarCamionPorId(String patenteCamion);
 
-    double calcularConsumoPromedio(double pesoMin, double pesoMax, double volMin, double volMax);
-
     Camion obtenerCamionPorTransportista(String docTransportista, String tipoDocTransportista);
 }

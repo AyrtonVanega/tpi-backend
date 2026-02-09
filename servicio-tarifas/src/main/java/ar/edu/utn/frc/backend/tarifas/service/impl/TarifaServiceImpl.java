@@ -35,10 +35,9 @@ public class TarifaServiceImpl implements ITarifaService {
     }
 
     @Override
-    public void crear(CreateTarifaDto dto, double consumoCombustibleGralAprox) {
+    public Tarifa crear(CreateTarifaDto dto) {
         Tarifa tarifa = tarifaMapper.toEntity(dto);
-        tarifa.setConsumoCombustibleGralAprox(consumoCombustibleGralAprox);
-        tarifaRepository.save(tarifa);
+        return tarifaRepository.save(tarifa);
     }
 
     @Override
@@ -101,5 +100,17 @@ public class TarifaServiceImpl implements ITarifaService {
             tarifa.setConsumoCombustibleGralAprox(promedio);
             tarifaRepository.save(tarifa);
         }
+    }
+
+    @Override
+    public void calcularConsumoCombustibleGralAprox(Tarifa tarifa) {
+        double promedio = camionViewService.calcularConsumoPromedio(
+                tarifa.getRangoPesoMin(),
+                tarifa.getRangoPesoMax(),
+                tarifa.getRangoVolumenMin(),
+                tarifa.getRangoVolumenMax());
+
+        tarifa.setConsumoCombustibleGralAprox(promedio);
+        tarifaRepository.save(tarifa);
     }
 }

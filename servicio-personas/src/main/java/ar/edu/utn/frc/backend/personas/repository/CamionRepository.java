@@ -16,15 +16,6 @@ public interface CamionRepository extends JpaRepository<Camion, String> {
         List<Camion> findByDisponibilidadTrue();
 
         @Query("SELECT c FROM Camion c " +
-                        "WHERE (c.peso >= :pesoMin AND c.peso < :pesoMax) " +
-                        "AND (c.volumen >= :volMin AND c.volumen < :volMax)")
-        List<Camion> buscarCamionesPorCapacidad(
-                        @Param("pesoMin") double pesoMin,
-                        @Param("pesoMax") double pesoMax,
-                        @Param("volMin") double volMin,
-                        @Param("volMax") double volMax);
-
-        @Query("SELECT c FROM Camion c " +
                         "WHERE c.transportista.idPersona.doc = :doc " +
                         "AND c.transportista.idPersona.tipoDoc = :tipoDoc")
         Optional<Camion> buscarCamionPorTransportista(

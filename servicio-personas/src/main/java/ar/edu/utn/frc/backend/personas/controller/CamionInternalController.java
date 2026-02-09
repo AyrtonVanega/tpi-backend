@@ -2,11 +2,9 @@ package ar.edu.utn.frc.backend.personas.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Hidden;
 
@@ -33,16 +31,5 @@ public class CamionInternalController {
     @PatchMapping("/{patenteCamion}/finalizar-recorrido")
     public ResponseEntity<CamionResponseDto> finalizarRecorrido(@PathVariable String patenteCamion) {
         return ResponseEntity.ok(camionService.finalizarRecorrido(patenteCamion));
-    }
-
-    @PreAuthorize("hasRole('INTERNAL_CALL')")
-    @GetMapping("/consumo-promedio")
-    public ResponseEntity<Double> calcularConsumoPromedio(
-            @RequestParam double pesoMin,
-            @RequestParam double pesoMax,
-            @RequestParam double volMin,
-            @RequestParam double volMax) {
-
-        return ResponseEntity.ok(camionService.calcularConsumoPromedio(pesoMin, pesoMax, volMin, volMax));
     }
 }

@@ -6,12 +6,13 @@ import ar.edu.utn.frc.backend.tarifas.dto.CreateTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.PatchTarifaDto;
 import ar.edu.utn.frc.backend.tarifas.dto.TarifaResponseDto;
 import ar.edu.utn.frc.backend.tarifas.event.CamionCapacidadEvent;
+import ar.edu.utn.frc.backend.tarifas.model.Tarifa;
 
 public interface ITarifaService {
 
     void validarRangosTarifa(double pesoMin, double pesoMax, double volMin, double volMax);
 
-    void crear(CreateTarifaDto dto, double consumoCombustibleGralAprox);
+    Tarifa crear(CreateTarifaDto dto);
 
     void actualizarParcial(Long idTarifa, PatchTarifaDto dto);
 
@@ -22,4 +23,6 @@ public interface ITarifaService {
     List<TarifaResponseDto> obtenerTodos();
 
     void recalcularConsumoPromedioParaTarifasAfectadas(CamionCapacidadEvent event);
+
+    void calcularConsumoCombustibleGralAprox(Tarifa tarifa); 
 }
