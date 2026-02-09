@@ -16,11 +16,9 @@ import ar.edu.utn.frc.backend.personas.repository.TransportistaRepository;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ICamionService;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ITransportistaService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class TransportistaServiceImpl implements ITransportistaService {
 
     private final ICamionService camionService;

@@ -99,11 +99,14 @@ public class CamionServiceImpl implements ICamionService {
                 });
 
         if (!camion.isDisponibilidad()) {
+            log.warn("Intento de reservar camion no disponible: {}", patenteCamion);
             throw new BusinessException("El Camion " + patenteCamion + " no esta disponible");
         }
 
         camion.setDisponibilidad(false);
         camionRepository.save(camion);
+
+        log.info("Camion {} reservado correctamente", patenteCamion);
     }
 
     @Override
@@ -116,6 +119,7 @@ public class CamionServiceImpl implements ICamionService {
         camion.setDisponibilidad(true);
         camionRepository.save(camion);
 
+        log.info("Recorrido finalizado correctamente para el camion {}", patenteCamion);
         return camionMapper.toResponse(camion);
     }
 

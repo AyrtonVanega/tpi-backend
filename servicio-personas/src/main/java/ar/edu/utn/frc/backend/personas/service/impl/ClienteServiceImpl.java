@@ -16,11 +16,9 @@ import ar.edu.utn.frc.backend.personas.model.PersonaId;
 import ar.edu.utn.frc.backend.personas.repository.ClienteRepository;
 import ar.edu.utn.frc.backend.personas.service.interfaces.IClienteService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ClienteServiceImpl implements IClienteService {
 
     private final ClienteRepository clienteRepository;
