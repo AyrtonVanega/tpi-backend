@@ -1,6 +1,7 @@
 package ar.edu.utn.frc.backend.tarifas.service.impl;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -40,10 +41,8 @@ public class TarifaServiceImpl implements ITarifaService {
         Tarifa tarifa = tarifaMapper.toEntity(dto);
 
         // Calcula y setea el consumoCombustibleGralAprox para la nueva tarifa
-        double consumoCombustibleGralAprox = calcularConsumoCombustibleGralAprox(
-                tarifa.getRangoPesoMin(),
+        Double consumoCombustibleGralAprox = calcularConsumoCombustibleGralAprox(
                 tarifa.getRangoPesoMax(),
-                tarifa.getRangoVolumenMin(),
                 tarifa.getRangoVolumenMax());
         tarifa.setConsumoCombustibleGralAprox(consumoCombustibleGralAprox);
 
@@ -57,10 +56,6 @@ public class TarifaServiceImpl implements ITarifaService {
                 .orElseThrow(() -> {
                     return new ResourceNotFoundException("Tarifa " + idTarifa + " no encontrada");
                 });
-
-        if (dto.getConsumoCombustibleGralAprox() != null) {
-            tarifa.setConsumoCombustibleGralAprox(dto.getConsumoCombustibleGralAprox());
-        }
 
         if (dto.getCostoBaseKmVolumen() != null) {
             tarifa.setCostoBaseKmVolumen(dto.getCostoBaseKmVolumen());
@@ -95,32 +90,30 @@ public class TarifaServiceImpl implements ITarifaService {
 
     @Override
     public void recalcularConsumoPromedioParaTarifasAfectadas(CamionCapacidadEvent event) {
+        // Obtiene todas las tarifas existentes
+        List<Tarifa> tarifas = tarifaRepository.findAll();
 
-        List<Tarifa> tarifasAfectadas = tarifaRepository.buscarTarifasPorRango(
-                event.getPeso(),
-                event.getVolumen());
+        // Para cada tarifa, actualiza su consumoCombustibleGralAprox si el camion del
+        // evento afecta su rango
+        for (Tarifa tarifa : tarifas) {
 
-        for (Tarifa tarifa : tarifasAfectadas) {
-
-            double promedio = camionViewService.calcularConsumoPromedio(
-                    tarifa.getRangoPesoMin(),
+            Double nuevoPromedio = camionViewService.calcularConsumoPromedio(
                     tarifa.getRangoPesoMax(),
-                    tarifa.getRangoVolumenMin(),
                     tarifa.getRangoVolumenMax());
 
-            tarifa.setConsumoCombustibleGralAprox(promedio);
-            tarifaRepository.save(tarifa);
+            // Solo guarda si hubo un cambio real
+            if (!Objects.equals(tarifa.getConsumoCombustibleGralAprox(), nuevoPromedio)) {
+                tarifa.setConsumoCombustibleGralAprox(nuevoPromedio);
+                tarifaRepository.save(tarifa);
+            }
         }
     }
 
     @Override
-    public double calcularConsumoCombustibleGralAprox(double rangoPesoMin, double rangoPesoMax, double rangoVolumenMin,
-            double rangoVolumenMax) {
+    public Double calcularConsumoCombustibleGralAprox(double rangoPesoMax, double rangoVolumenMax) {
 
         return camionViewService.calcularConsumoPromedio(
-                rangoPesoMin,
                 rangoPesoMax,
-                rangoVolumenMin,
                 rangoVolumenMax);
     }
 }

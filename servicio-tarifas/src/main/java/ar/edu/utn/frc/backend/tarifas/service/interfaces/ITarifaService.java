@@ -23,6 +23,5 @@ public interface ITarifaService {
 
     void recalcularConsumoPromedioParaTarifasAfectadas(CamionCapacidadEvent event);
 
-    double calcularConsumoCombustibleGralAprox(double rangoPesoMin, double rangoPesoMax, double rangoVolumenMin,
-            double rangoVolumenMax);
+    Double calcularConsumoCombustibleGralAprox(double rangoPesoMax, double rangoVolumenMax);
 }

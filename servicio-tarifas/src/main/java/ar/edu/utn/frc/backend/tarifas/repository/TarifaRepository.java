@@ -1,7 +1,5 @@
 package ar.edu.utn.frc.backend.tarifas.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,11 +22,4 @@ public interface TarifaRepository extends JpaRepository<Tarifa, Long> {
                         @Param("nuevoMaxPeso") double nuevoMaxPeso,
                         @Param("nuevoMinVol") double nuevoMinVol,
                         @Param("nuevoMaxVol") double nuevoMaxVol);
-
-        @Query("SELECT t FROM Tarifa t " +
-                "WHERE (t.rangoPesoMin <= :peso AND :peso < t.rangoPesoMax) " +
-                "AND (t.rangoVolumenMin <= :volumen AND :volumen < t.rangoVolumenMax)")
-        List<Tarifa> buscarTarifasPorRango(
-                        @Param("peso") double peso,
-                        @Param("volumen") double volumen);
 }

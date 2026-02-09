@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PatchTarifaDto {
     private Double costoBaseKmVolumen;
-    private Double consumoCombustibleGralAprox;
 }

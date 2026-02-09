@@ -22,14 +22,9 @@ public class CamionViewService {
         camionViewRepository.save(camionView);
     }
 
-    public double calcularConsumoPromedio(double pesoMin, double pesoMax, double volMin, double volMax) {
-
-        return camionViewRepository
-                .buscarCamionesPorCapacidad(pesoMin, pesoMax, volMin, volMax)
-                .stream()
-                .mapToDouble(CamionView::getConsumoCombustiblePromedio)
-                .average()
-                .orElse(0.0);
+    public Double calcularConsumoPromedio(double pesoMax, double volMax) {
+        Double promedio = camionViewRepository.obtenerPromedioConsumoDeCamionesAptos(pesoMax, volMax);
+        return promedio != null ? promedio : 0.0;
     }
 
     public void eliminarDesdeEvento(CamionEliminadoEvent event) {
