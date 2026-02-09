@@ -30,6 +30,7 @@ public interface TramoMapper {
     @Mapping(target = "orden", ignore = true)
     @Mapping(target = "tipo", ignore = true)
     @Mapping(target = "codigoEstado", ignore = true)
+    @Mapping(target = "descripcionEstado", ignore = true)
     TramoResponseDto toResponse(Tramo entity);
 
     List<TramoResponseDto> toResponseList(List<Tramo> tramos);

@@ -180,6 +180,7 @@ public class TramoServiceImpl implements ITramoService {
             dto.setOrden(tramo.getIdTramo().getOrden());
             dto.setTipo(tramo.getTipoTramo().toString());
             dto.setCodigoEstado(tramo.getEstado().getCodigo());
+            dto.setDescripcionEstado(tramo.getEstado().getDescripcion());
         }
 
         return responseList;
@@ -266,6 +267,7 @@ public class TramoServiceImpl implements ITramoService {
             dto.setOrden(tramo.getIdTramo().getOrden());
             dto.setTipo(tramo.getTipoTramo().toString());
             dto.setCodigoEstado(tramo.getEstado().getCodigo());
+            dto.setDescripcionEstado(tramo.getEstado().getDescripcion());
         }
 
         return responseList;

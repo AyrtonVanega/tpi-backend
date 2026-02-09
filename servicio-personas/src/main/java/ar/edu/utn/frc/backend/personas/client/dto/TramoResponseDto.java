@@ -20,5 +20,6 @@ public class TramoResponseDto {
     private LocalDateTime fechaHoraInicio;
     private LocalDateTime fechaHoraFin;
     private String codigoEstado;
+    private String descripcionEstado;
     private String patenteCamion;
 }
