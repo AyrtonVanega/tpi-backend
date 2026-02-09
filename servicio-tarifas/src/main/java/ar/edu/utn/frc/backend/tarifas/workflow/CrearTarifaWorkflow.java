@@ -3,7 +3,6 @@ package ar.edu.utn.frc.backend.tarifas.workflow;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.tarifas.dto.CreateTarifaDto;
-import ar.edu.utn.frc.backend.tarifas.model.Tarifa;
 import ar.edu.utn.frc.backend.tarifas.service.interfaces.ITarifaService;
 import lombok.RequiredArgsConstructor;
 
@@ -24,8 +23,7 @@ public class CrearTarifaWorkflow {
         // tarifas existentes
         tarifaService.validarRangosTarifa(pesoMin, pesoMax, volMin, volMax);
 
-        // Crea la Tarifa y calcula su consumoCombustibleGralAprox
-        Tarifa tarifa = tarifaService.crear(dto);
-        tarifaService.calcularConsumoCombustibleGralAprox(tarifa);
+        // Crea la Tarifa
+        tarifaService.crear(dto);
     }
 }
