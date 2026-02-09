@@ -49,6 +49,9 @@ public class SolicitudServiceImpl implements ISolicitudService {
                 .build();
 
         solicitudRepository.save(solicitud);
+
+        log.info("Solicitud {} creada con estado BORRADOR para el cliente {} {}", solicitud.getIdSolicitud(),
+                tipoDocCliente, docCliente);
     }
 
     @Override
@@ -57,6 +60,8 @@ public class SolicitudServiceImpl implements ISolicitudService {
                 .orElseThrow(() -> {
                     return new ResourceNotFoundException("Solicitud " + idSolicitud + " no encontrada");
                 });
+
+        log.info("Actualizando estado de la solicitud {} al estado {}", idSolicitud, dto.getCodigoEstadoSolicitud());
 
         // Actualiza el estado
         EstadoSolicitud nuevoEstado = estadoSolicitudService.buscarPorCodigo(dto.getCodigoEstadoSolicitud());
@@ -126,6 +131,8 @@ public class SolicitudServiceImpl implements ISolicitudService {
                 });
 
         if (!solicitud.getEstadoSolicitud().getCodigo().equals("BORRADOR")) {
+            log.warn("Intento de cancelar la solicitud {} en estado {}", idSolicitud,
+                    solicitud.getEstadoSolicitud().getCodigo());
             throw new BusinessException("Sólo se pueden cancelar solicitudes en estado BORRADOR");
         }
 
@@ -133,6 +140,8 @@ public class SolicitudServiceImpl implements ISolicitudService {
         solicitud.setEstadoSolicitud(estadoCancelado);
 
         solicitud.setFechaHoraFin(LocalDateTime.now());
+
+        log.info("Solicitud {} cancelada", idSolicitud);
 
         solicitudRepository.save(solicitud);
     }
@@ -150,6 +159,8 @@ public class SolicitudServiceImpl implements ISolicitudService {
 
         EstadoSolicitud estado = estadoSolicitudService.buscarPorCodigo("PROGRAMADA");
         solicitud.setEstadoSolicitud(estado);
+
+        log.info("Solicitud {} asignada a ruta {}", idSolicitud, asignarRutadDto.getIdRuta());
 
         solicitudRepository.save(solicitud);
     }
@@ -169,6 +180,8 @@ public class SolicitudServiceImpl implements ISolicitudService {
         solicitud.setEstadoSolicitud(estado);
 
         contenedorService.finalizarContenedor(solicitud.getContenedor());
+
+        log.info("Solicitud {} finalizada", idSolicitud);
 
         solicitudRepository.save(solicitud);
     }

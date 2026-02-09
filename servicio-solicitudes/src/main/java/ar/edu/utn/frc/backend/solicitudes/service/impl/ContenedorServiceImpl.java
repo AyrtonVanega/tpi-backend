@@ -123,6 +123,9 @@ public class ContenedorServiceImpl implements IContenedorService {
                     return new ResourceNotFoundException("Contenedor " + idContenedor + " no encontrado");
                 });
 
+        log.info("Actualizando estado del contenedor {} al estado {}", idContenedor,
+                contenedorRequestDto.getCodigoEstadoContenedor());
+
         // Registra el cambio de estado en el historial
         historialEstadoService.registarCambioEstado(contenedor, contenedorRequestDto.getCodigoEstadoContenedor());
     }
@@ -189,6 +192,7 @@ public class ContenedorServiceImpl implements IContenedorService {
 
     @Override
     public void finalizarContenedor(Contenedor contenedor) {
+        log.info("Finalizando contenedor {}", contenedor.getIdContenedor());
         historialEstadoService.registarCambioEstado(contenedor, "ENTREGADO");
     }
 }

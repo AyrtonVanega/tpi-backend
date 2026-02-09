@@ -1,7 +1,6 @@
 package ar.edu.utn.frc.backend.solicitudes.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.solicitudes.exception.ResourceNotFoundException;
@@ -11,7 +10,6 @@ import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IEstadoContenedorSe
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class EstadoContenedorServiceImpl implements IEstadoContenedorService {
 
     private final EstadoContenedorRepository estadoContenedorRepository;

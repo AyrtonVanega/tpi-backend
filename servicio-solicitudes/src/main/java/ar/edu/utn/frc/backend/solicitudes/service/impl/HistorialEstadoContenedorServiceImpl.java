@@ -1,7 +1,6 @@
 package ar.edu.utn.frc.backend.solicitudes.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.solicitudes.exception.ResourceNotFoundException;
@@ -16,7 +15,6 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class HistorialEstadoContenedorServiceImpl implements IHistorialEstadoContenedorService {
 
     private final HistorialEstadoContenedorRepository historialRepository;
