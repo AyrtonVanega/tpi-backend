@@ -12,11 +12,9 @@ import ar.edu.utn.frc.backend.tarifas.model.ParametroGlobal;
 import ar.edu.utn.frc.backend.tarifas.repository.ParametroGlobalRepository;
 import ar.edu.utn.frc.backend.tarifas.service.interfaces.IParametroGlobalService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ParametroGlobalServiceImpl implements IParametroGlobalService {
 
     private final ParametroGlobalRepository parametroRepository;

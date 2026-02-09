@@ -31,6 +31,8 @@ public class TarifaServiceImpl implements ITarifaService {
     public void validarRangosTarifa(double pesoMin, double pesoMax, double volMin, double volMax) {
         boolean existeSolapamiento = tarifaRepository.existeSolapamiento(pesoMin, pesoMax, volMin, volMax);
         if (existeSolapamiento) {
+            log.warn("Intento de crear tarifa con rangos que solapan con una tarifa existente: " +
+                    "Peso[{}-{}], Volumen[{}-{}]", pesoMin, pesoMax, volMin, volMax);
             throw new BusinessException("No se puede crear la Tarifa porque existe un solapamiento entre los rangos");
         }
     }
@@ -48,6 +50,9 @@ public class TarifaServiceImpl implements ITarifaService {
 
         // Guarda en la BD
         tarifaRepository.save(tarifa);
+
+        log.info("Tarifa creada con ID {}, ConsumoAprox={}", tarifa.getIdTarifa(),
+                tarifa.getConsumoCombustibleGralAprox());
     }
 
     @Override
@@ -105,6 +110,8 @@ public class TarifaServiceImpl implements ITarifaService {
             if (!Objects.equals(tarifa.getConsumoCombustibleGralAprox(), nuevoPromedio)) {
                 tarifa.setConsumoCombustibleGralAprox(nuevoPromedio);
                 tarifaRepository.save(tarifa);
+                log.info("ConsumoCombustibleGralAprox recalculado para la Tarifa {}: nuevo valor={}",
+                        tarifa.getIdTarifa(), nuevoPromedio);
             }
         }
     }
