@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HistorialContenedorDto {
     private String estado;
+    private String descripcionEstado;
     private LocalDateTime fechaHora;
 }

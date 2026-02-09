@@ -83,6 +83,7 @@ public class ContenedorServiceImpl implements IContenedorService {
         // Setea el estadoActual al ResponseDto
         EstadoContenedor estadoActual = historialEstadoService.obtenerEstadoActual(idContenedor);
         responseDto.setEstadoActual(estadoActual.getCodigo());
+        responseDto.setDescripcionEstadoActual(estadoActual.getDescripcion());
 
         return responseDto;
     }
@@ -109,6 +110,7 @@ public class ContenedorServiceImpl implements IContenedorService {
             // Setea el estadoActual al ResponseDto
             EstadoContenedor estadoActual = historialEstadoService.obtenerEstadoActual(contenedor.getIdContenedor());
             dto.setEstadoActual(estadoActual.getCodigo());
+            dto.setDescripcionEstadoActual(estadoActual.getDescripcion());
         }
 
         return responseDtoList;
@@ -146,6 +148,7 @@ public class ContenedorServiceImpl implements IContenedorService {
 
             dto.setFechaHora(historial.getFechaHora());
             dto.setEstado(historial.getEstadoContenedor().getCodigo());
+            dto.setDescripcionEstado(historial.getEstadoContenedor().getDescripcion());
 
             historialEstadosDto.add(dto);
         }

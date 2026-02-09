@@ -15,4 +15,5 @@ public class ContenedorResponseDto {
     private double peso;
     private Long idSolicitud;
     private String estadoActual;
+    private String descripcionEstadoActual;
 }

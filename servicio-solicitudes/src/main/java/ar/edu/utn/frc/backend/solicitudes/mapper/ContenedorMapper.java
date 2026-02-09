@@ -25,6 +25,7 @@ public interface ContenedorMapper {
 
     @Mapping(target = "idSolicitud", ignore = true)
     @Mapping(target = "estadoActual", ignore = true)
+    @Mapping(target = "descripcionEstadoActual", ignore = true)
     ContenedorResponseDto toResponse(Contenedor entity);
 
     @Mapping(target = "idContenedor", ignore = true)
