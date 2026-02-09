@@ -35,7 +35,7 @@ public class CamionServiceImpl implements ICamionService {
     }
 
     @Override
-    public void actualizar(String patenteCamion, CamionRequestDto dto) {
+    public Camion actualizar(String patenteCamion, CamionRequestDto dto) {
         // Busca el camion en la BD
         Camion camion = camionRepository.findById(patenteCamion)
                 .orElseThrow(() -> {
@@ -46,7 +46,7 @@ public class CamionServiceImpl implements ICamionService {
         camionMapper.updateFromPutDto(dto, camion);
 
         // Guarda los cambios
-        camionRepository.save(camion);
+        return camionRepository.save(camion);
     }
 
     @Override

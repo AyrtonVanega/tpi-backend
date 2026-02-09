@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import ar.edu.utn.frc.backend.personas.dto.CamionRequestDto;
 import ar.edu.utn.frc.backend.personas.dto.CamionResponseDto;
 import ar.edu.utn.frc.backend.personas.service.interfaces.ICamionService;
+import ar.edu.utn.frc.backend.personas.workflow.ActualizarCamionWorkflow;
 import lombok.AllArgsConstructor;
 
 @Tag(
@@ -31,6 +32,7 @@ import lombok.AllArgsConstructor;
 public class CamionController {
 
     private final ICamionService camionService;
+    private final ActualizarCamionWorkflow actualizarCamionWorkflow;
 
     @Operation(
         summary = "Actualizar camión",
@@ -50,7 +52,7 @@ public class CamionController {
             @PathVariable String patenteCamion,
             @RequestBody CamionRequestDto camionRequestDto) {
 
-        camionService.actualizar(patenteCamion, camionRequestDto);
+        actualizarCamionWorkflow.actualizarCamion(patenteCamion, camionRequestDto);
         return ResponseEntity.noContent().build();
     }
 

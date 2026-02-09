@@ -3,6 +3,7 @@ package ar.edu.utn.frc.backend.personas.infrastructure.messaging;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import ar.edu.utn.frc.backend.personas.event.CamionActualizadoEvent;
 import ar.edu.utn.frc.backend.personas.event.CamionCreadoEvent;
 import ar.edu.utn.frc.backend.personas.event.CamionEliminadoEvent;
 import ar.edu.utn.frc.backend.personas.model.Camion;
@@ -41,6 +42,24 @@ public class CamionEventPublisher {
                 camion.getVolumen());
 
         kafkaTemplate.send("camion-eliminado", event)
+                .whenComplete((result, ex) -> {
+                    if (ex != null) {
+                        log.error("ERROR enviando evento", ex);
+                    } else {
+                        log.info("Evento enviado. Offset={}",
+                                result.getRecordMetadata().offset());
+                    }
+                });
+    }
+
+    public void publicarCamionActualizado(Camion camion) {
+        CamionActualizadoEvent event = new CamionActualizadoEvent(
+                camion.getPatente(),
+                camion.getPeso(),
+                camion.getVolumen(),
+                camion.getConsumoCombustiblePromedio());
+
+        kafkaTemplate.send("camion-actualizado", event)
                 .whenComplete((result, ex) -> {
                     if (ex != null) {
                         log.error("ERROR enviando evento", ex);

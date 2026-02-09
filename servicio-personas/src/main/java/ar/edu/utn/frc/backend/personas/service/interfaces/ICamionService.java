@@ -12,7 +12,7 @@ public interface ICamionService {
     Camion crear(String patente, double volumen, double peso, double costoBaseKm,
             double consumoCombustiblePromedio, Transportista transportista);
 
-    void actualizar(String patenteCamion, CamionRequestDto dto);
+    Camion actualizar(String patenteCamion, CamionRequestDto dto);
 
     CamionResponseDto obtenerPorId(String patenteCamion);
 

@@ -2,6 +2,7 @@ package ar.edu.utn.frc.backend.tarifas.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import ar.edu.utn.frc.backend.tarifas.event.CamionActualizadoEvent;
 import ar.edu.utn.frc.backend.tarifas.event.CamionCreadoEvent;
 import ar.edu.utn.frc.backend.tarifas.event.CamionEliminadoEvent;
 import ar.edu.utn.frc.backend.tarifas.mapper.CamionViewMapper;
@@ -33,5 +34,13 @@ public class CamionViewService {
 
     public void eliminarDesdeEvento(CamionEliminadoEvent event) {
         camionViewRepository.deleteById(event.getPatente());
+    }
+
+    public void actualizarDesdeEvento(CamionActualizadoEvent event) {
+        CamionView camionView = camionViewRepository.findById(event.getPatente())
+                .orElseThrow(() -> new RuntimeException("CamionView no encontrado para patente: " + event.getPatente()));
+
+        camionViewMapper.updateFromEvent(event, camionView);
+        camionViewRepository.save(camionView);
     }
 }
