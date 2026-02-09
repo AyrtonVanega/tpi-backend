@@ -1,7 +1,6 @@
 package ar.edu.utn.frc.backend.depositos.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.depositos.exception.ResourceNotFoundException;
@@ -11,7 +10,6 @@ import ar.edu.utn.frc.backend.depositos.service.interfaces.IEstadoEstadiaDeposit
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class EstadoEstadiaDepositoServiceImpl implements IEstadoEstadiaDepositoService {
 
     private final EstadoEstadiaDepositoRepository estadoEstadiaDepositoRepository;

@@ -12,11 +12,9 @@ import ar.edu.utn.frc.backend.depositos.model.Deposito;
 import ar.edu.utn.frc.backend.depositos.repository.DepositoRepository;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IDepositoService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DepositoServiceImpl implements IDepositoService {
 
     private final DepositoRepository depositoRepository;

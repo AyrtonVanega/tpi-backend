@@ -41,23 +41,29 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
         EstadiaDepositoId id = new EstadiaDepositoId(dto.getIdDeposito(), dto.getIdSolicitud());
         Optional<EstadiaDeposito> estadiaDeposito = estadiaDepositoRepository.findById(id);
 
-        if (estadiaDeposito != null) {
+        if (estadiaDeposito.isPresent()) {
+            log.warn("Intento de crear EstadiaDeposito duplicada - idDeposito:{}, idSolicitud:{}",
+                    id.getIdDeposito(), id.getIdSolicitud());
             throw new BusinessException("Esta Estadia Deposito ya existe - idDeposito: " + id.getIdDeposito()
                     + ", idSolicitud: " + id.getIdSolicitud());
-        } else {
-            EstadiaDeposito nuevaEstadia = estadiaMapper.toEntity(dto);
-            nuevaEstadia.setIdEstadiaDeposito(id);
-
-            // Resuelve la relación con Deposito
-            Deposito deposito = depositoService.buscarDepositoPorId(dto.getIdDeposito());
-            nuevaEstadia.setDeposito(deposito);
-
-            // Setea el estado inicial
-            EstadoEstadiaDeposito estado = estadoEstadiaService.buscarPorCodigo("ACTIVA");
-            nuevaEstadia.setEstado(estado);
-
-            estadiaDepositoRepository.save(nuevaEstadia);
         }
+
+        EstadiaDeposito nuevaEstadia = estadiaMapper.toEntity(dto);
+        nuevaEstadia.setIdEstadiaDeposito(id);
+
+        // Resuelve la relación con Deposito
+        Deposito deposito = depositoService.buscarDepositoPorId(dto.getIdDeposito());
+        nuevaEstadia.setDeposito(deposito);
+
+        // Setea el estado inicial
+        EstadoEstadiaDeposito estado = estadoEstadiaService.buscarPorCodigo("ACTIVA");
+        nuevaEstadia.setEstado(estado);
+
+        estadiaDepositoRepository.save(nuevaEstadia);
+
+        log.info("EstadiaDeposito creada correctamente. idDeposito={}, idSolicitud={}",
+                id.getIdDeposito(),
+                id.getIdSolicitud());
     }
 
     @Override
@@ -73,6 +79,10 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
 
         // Setea la fecha de finalizacion
         if (estadiaDeposito.getFechaHoraEntrada().isAfter(dto.getFechaHoraSalida())) {
+            log.warn(
+                    "Intento de finalizar EstadiaDeposito con fecha de salida {} anterior a fecha de entrada {} - idDeposito:{}, idSolicitud:{}",
+                    dto.getFechaHoraSalida(), estadiaDeposito.getFechaHoraEntrada(),
+                    idDeposito, idSolicitud);
             throw new BusinessException("La fecha y hora de salida no puede ser anterior a la de ingreso");
         }
 
@@ -83,6 +93,9 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
         estadiaDeposito.setEstado(estado);
 
         estadiaDepositoRepository.save(estadiaDeposito);
+
+        log.info("EstadiaDeposito finalizada correctamente. idDeposito={}, idSolicitud={}",
+                idDeposito, idSolicitud);
     }
 
     @Override

@@ -12,11 +12,9 @@ import ar.edu.utn.frc.backend.depositos.model.Ubicacion;
 import ar.edu.utn.frc.backend.depositos.repository.UbicacionRepository;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IUbicacionService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class UbicacionServiceImpl implements IUbicacionService {
 
     private final UbicacionRepository ubicacionRepository;
