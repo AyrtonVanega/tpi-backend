@@ -15,4 +15,5 @@ public class EstadiaDepositoResponseDto {
     private LocalDateTime fechaHoraEntrada;
     private LocalDateTime fechaHoraSalida;
     private String codigoEstado;
+    private String descripcionEstado;
 }

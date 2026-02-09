@@ -102,6 +102,7 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
         // Setea el id del deposito y el estado de la estadia
         responseDto.setIdDeposito(idDeposito);
         responseDto.setCodigoEstado(estadiaDeposito.getEstado().getCodigo());
+        responseDto.setDescripcionEstado(estadiaDeposito.getEstado().getDescripcion());
 
         return responseDto;
     }
@@ -122,6 +123,7 @@ public class EstadiaDepositoServiceImpl implements IEstadiaDepositoService {
 
             dto.setIdDeposito(idDeposito);
             dto.setCodigoEstado(estadiaActiva.getEstado().getCodigo());
+            dto.setDescripcionEstado(estadiaActiva.getEstado().getDescripcion());
         }
 
         return responseDtoList;

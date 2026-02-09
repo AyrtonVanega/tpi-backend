@@ -24,6 +24,7 @@ public interface EstadiaDepositoMapper {
 
     @Mapping(target = "idDeposito", ignore = true)
     @Mapping(target = "codigoEstado", ignore = true)
+    @Mapping(target = "descripcionEstado", ignore = true)
     EstadiaDepositoResponseDto toResponse(EstadiaDeposito entity);
 
     List<EstadiaDepositoResponseDto> toResponseList(List<EstadiaDeposito> estadias);
