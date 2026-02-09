@@ -67,6 +67,8 @@ public class RutaServiceImpl implements IRutaService {
                                 minLon,
                                 maxLon);
 
+                log.info("Cantidad de depositos encontrados en bounding box: {}", depositosEnBoundingBox.size());
+
                 // -------------------------------------------------
                 // RUTA DIRECTA
                 // -------------------------------------------------
@@ -132,6 +134,9 @@ public class RutaServiceImpl implements IRutaService {
                 // Calcula la Ruta con OSRM
                 OsrmRouteDto route = osrmClient.calcularRutaConOsrm(waypoints);
 
+                log.info("Ruta calculada con OSRM: distancia = {} km, tiempo = {} horas", route.getDistance() / 1000.0,
+                                route.getDuration() / 3600.0);
+
                 // Crea la Ruta
                 RutaTentativaDto ruta = new RutaTentativaDto();
 
@@ -156,6 +161,10 @@ public class RutaServiceImpl implements IRutaService {
                 ruta.setCostoEstimado(calcularCostoEstimadoTotal(tramos.size(), costoEstimadoTramos));
                 ruta.setTiempoEstimado(route.getDuration() / 3600.0);
                 ruta.setTramos(tramos);
+
+                log.info("Ruta Tentativa: cantidadTramos = {}, cantidadDepositos = {}, distanciaTotal = {} km, costoEstimado = {}, tiempoEstimado = {} horas",
+                                ruta.getCantidadTramos(), ruta.getCantidadDepositos(), ruta.getDistanciaTotal(),
+                                ruta.getCostoEstimado(), ruta.getTiempoEstimado());
 
                 return ruta;
         }
@@ -242,11 +251,15 @@ public class RutaServiceImpl implements IRutaService {
 
         @Override
         public void finalizarRuta(Ruta ruta, double costoGestionBase, double costoTotalEstadias) {
-                List<DetalleCostoRuta> detalles = detalleRutaService.crearDetalles(ruta, costoGestionBase, costoTotalEstadias);
-                ruta.setDetallesCostoRuta(detalles);
+                List<DetalleCostoRuta> detalles = detalleRutaService.crearDetalles(ruta, costoGestionBase,
+                                costoTotalEstadias);
 
+                ruta.setDetallesCostoRuta(detalles);
                 ruta.setCostoReal(calcularCostoRealTotal(ruta.getDetallesCostoRuta()));
                 ruta.setTiempoReal(calcularTiempoReal(ruta));
+
+                log.info("Ruta finalizada con costo real: {}, tiempo real: {} horas", ruta.getCostoReal(),
+                                ruta.getTiempoReal());
 
                 rutaRepository.save(ruta);
         }

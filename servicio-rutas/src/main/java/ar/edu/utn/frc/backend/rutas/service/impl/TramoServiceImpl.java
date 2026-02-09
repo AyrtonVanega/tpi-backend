@@ -147,15 +147,22 @@ public class TramoServiceImpl implements ITramoService {
 
         String estadoTramo = tramo.getEstado().getCodigo();
         if (!estadoTramo.equals("ESTIMADO") && !estadoTramo.equals("ASIGNADO")) {
-            throw new BusinessException("No se le puede asignar camion a este Tramo - idRuta:" + tramo.getIdTramo().getIdRuta()
-                    + ", orden: " + tramo.getIdTramo().getOrden());
+            log.warn("Intento de asignar camion a Tramo en estado {} - idRuta: {}, orden: {}", estadoTramo, idRuta,
+                    orden);
+            throw new BusinessException(
+                    "No se le puede asignar camion a este Tramo - idRuta:" + idRuta + ", orden: " + orden);
         }
 
         if (!dto.isDisponibilidad()) {
+            log.warn("Intento de asignar camion no disponible al Tramo - idRuta: {}, orden: {}, patenteCamion: {}",
+                    idRuta, orden, dto.getPatenteCamion());
             throw new BusinessException("El Camion " + dto.getPatenteCamion() + " no esta disponible");
         }
 
         if (dto.getVolumenCamion() < dto.getVolumenContenedor() || dto.getPesoCamion() < dto.getPesoContenedor()) {
+            log.warn(
+                    "No se pudo asignar el camion {} al Tramo - idRuta: {}, orden: {}: capacidad insuficiente",
+                    dto.getPatenteCamion(), idRuta, orden);
             throw new BusinessException("El Camion " + dto.getPatenteCamion() + " no puede transportar el contenedor");
         }
 
@@ -163,6 +170,9 @@ public class TramoServiceImpl implements ITramoService {
 
         EstadoTramo estado = estadoTramoService.buscarPorCodigo("ASIGNADO");
         tramo.setEstado(estado);
+
+        log.info("Camion {} asignado correctamente al Tramo - idRuta: {}, orden: {}", dto.getPatenteCamion(), idRuta,
+                orden);
 
         tramoRepository.save(tramo);
     }
@@ -205,12 +215,18 @@ public class TramoServiceImpl implements ITramoService {
                 .anyMatch(t -> t.getFechaHoraFin() == null);
 
         if (anteriorIniciado) {
+            log.warn("Intento de iniciar Tramo sin finalizar el anterior - idRuta: {}, orden: {}",
+                    tramo.getIdTramo().getIdRuta(),
+                    tramo.getIdTramo().getOrden());
             throw new BusinessException("Todavia hay un Tramo en curso");
         }
 
         if (!tramo.getEstado().getCodigo().equals("ASIGNADO")) {
-            throw new BusinessException("El Tramo tiene que estar en estado 'ASIGNADO' - idRuta:" + tramo.getIdTramo().getIdRuta()
-                    + ", orden: " + tramo.getIdTramo().getOrden());
+            log.warn("Intento de iniciar Tramo en estado {} - idRuta: {}, orden: {}", tramo.getEstado().getCodigo(),
+                    tramo.getIdTramo().getIdRuta(), tramo.getIdTramo().getOrden());
+            throw new BusinessException(
+                    "El Tramo tiene que estar en estado 'ASIGNADO' - idRuta:" + tramo.getIdTramo().getIdRuta()
+                            + ", orden: " + tramo.getIdTramo().getOrden());
         }
     }
 
@@ -221,14 +237,20 @@ public class TramoServiceImpl implements ITramoService {
         EstadoTramo estado = estadoTramoService.buscarPorCodigo("INICIADO");
         tramo.setEstado(estado);
 
+        log.info("Tramo iniciado - idRuta: {}, orden: {}", tramo.getIdTramo().getIdRuta(),
+                tramo.getIdTramo().getOrden());
+
         tramoRepository.save(tramo);
     }
 
     @Override
     public void validarFinalizacionTramo(Tramo tramo) {
         if (!tramo.getEstado().getCodigo().equals("INICIADO")) {
-            throw new BusinessException("El Tramo tiene que estar en estado 'INICIADO' - idRuta:" + tramo.getIdTramo().getIdRuta()
-                    + ", orden: " + tramo.getIdTramo().getOrden());
+            log.warn("Intento de finalizar Tramo en estado {} - idRuta: {}, orden: {}", tramo.getEstado().getCodigo(),
+                    tramo.getIdTramo().getIdRuta(), tramo.getIdTramo().getOrden());
+            throw new BusinessException(
+                    "El Tramo tiene que estar en estado 'INICIADO' - idRuta:" + tramo.getIdTramo().getIdRuta()
+                            + ", orden: " + tramo.getIdTramo().getOrden());
         }
     }
 
@@ -243,6 +265,9 @@ public class TramoServiceImpl implements ITramoService {
         tramo.setDetallesCostoTramo(detalles);
 
         tramo.setCostoReal(calcularCostoReal(detalles));
+
+        log.info("Tramo finalizado - idRuta: {}, orden: {}, costo real: {}", tramo.getIdTramo().getIdRuta(),
+                tramo.getIdTramo().getOrden(), tramo.getCostoReal());
 
         tramoRepository.save(tramo);
     }

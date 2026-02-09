@@ -12,11 +12,9 @@ import ar.edu.utn.frc.backend.rutas.model.DetalleCostoTramo;
 import ar.edu.utn.frc.backend.rutas.model.Tramo;
 import ar.edu.utn.frc.backend.rutas.service.interfaces.IDetalleCostoTramoService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DetalleCostoTramoServiceImpl implements IDetalleCostoTramoService {
 
     private final DetalleCostoTramoMapper detalleTramoMapper;
