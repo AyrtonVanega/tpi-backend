@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorResponseDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.CreateContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.HistorialContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
@@ -34,13 +35,13 @@ public class ContenedorServiceImpl implements IContenedorService {
     private final ContenedorMapper contenedorMapper;
 
     @Override
-    public Contenedor crear(double ancho, double largo, double altura, double peso) {
+    public Contenedor crear(CreateContenedorDto dto) {
         // Crea el contenedor
         Contenedor contenedor = Contenedor.builder()
-                .ancho(ancho)
-                .largo(largo)
-                .alto(altura)
-                .peso(peso)
+                .ancho(dto.getAncho())
+                .largo(dto.getLargo())
+                .alto(dto.getAlto())
+                .peso(dto.getPeso())
                 .build();
 
         // Guarda el contenedor

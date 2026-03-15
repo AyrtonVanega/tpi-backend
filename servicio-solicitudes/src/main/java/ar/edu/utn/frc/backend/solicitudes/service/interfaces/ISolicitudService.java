@@ -10,7 +10,8 @@ import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 
 public interface ISolicitudService {
 
-    void crear(Long idOrigen, Long idDestino, Contenedor contenedor, String docCliente, String tipoDocCliente);
+    void crear(String direccionOrigen, String nombreCiudadOrigen, String direccionDestino, String nombreCiudadDestino,
+            Contenedor contenedor, String docCliente, String tipoDocCliente);
 
     void actualizarEstado(Long idSolicitud, PatchSolicitudDto solicitudRequestDto);
 

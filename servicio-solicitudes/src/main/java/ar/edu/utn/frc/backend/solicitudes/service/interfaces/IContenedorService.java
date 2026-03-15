@@ -3,6 +3,7 @@ package ar.edu.utn.frc.backend.solicitudes.service.interfaces;
 import java.util.List;
 
 import ar.edu.utn.frc.backend.solicitudes.dto.ContenedorResponseDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.CreateContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PatchContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.PutContenedorDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.SeguimientoContenedorDto;
@@ -10,7 +11,7 @@ import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 
 public interface IContenedorService {
 
-    Contenedor crear(double ancho, double largo, double altura, double peso);
+    Contenedor crear(CreateContenedorDto dto);
 
     void actualizar(Long idContenedor, PutContenedorDto contenedorRequestDto);
 

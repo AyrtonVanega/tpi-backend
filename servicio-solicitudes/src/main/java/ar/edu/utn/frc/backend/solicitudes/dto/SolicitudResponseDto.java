@@ -11,8 +11,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class SolicitudResponseDto {
     private Long idSolicitud;
-    private Long idUbicacionOrigen;
-    private Long idUbicacionDestino;
+    private String direccionOrigen;
+    private String nombreCiudadOrigen;
+    private String direccionDestino;
+    private String nombreCiudadDestino;
     private LocalDateTime fechaHoraInicio;
     private LocalDateTime fechaHoraFin;
     private double costoEstimado;

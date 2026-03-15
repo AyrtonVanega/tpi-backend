@@ -21,11 +21,17 @@ public class Solicitud {
     @Column(name = "id_solicitud")
     private Long idSolicitud;
 
-    @Column(name = "id_ubicacion_origen")
-    private Long idUbicacionOrigen;
+    @Column(name = "direccion_origen")
+    private String direccionOrigen;
 
-    @Column(name = "id_ubicacion_destino")
-    private Long idUbicacionDestino;
+    @Column(name = "nombre_ciudad_origen")
+    private String nombreCiudadOrigen;
+
+    @Column(name = "direccion_destino")
+    private String direccionDestino;
+
+    @Column(name = "nombre_ciudad_destino")
+    private String nombreCiudadDestino;
 
     @Column(name = "fecha_hora_inicio")
     private LocalDateTime fechaHoraInicio;

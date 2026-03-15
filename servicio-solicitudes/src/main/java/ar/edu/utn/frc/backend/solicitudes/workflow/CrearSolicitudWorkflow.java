@@ -2,10 +2,11 @@ package ar.edu.utn.frc.backend.solicitudes.workflow;
 
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frc.backend.solicitudes.client.DepositoClient;
-import ar.edu.utn.frc.backend.solicitudes.client.PersonaClient;
-import ar.edu.utn.frc.backend.solicitudes.client.dto.UbicacionResponseDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.ClienteDto;
 import ar.edu.utn.frc.backend.solicitudes.dto.CreateSolicitudDto;
+import ar.edu.utn.frc.backend.solicitudes.dto.UbicacionDto;
+import ar.edu.utn.frc.backend.solicitudes.event.SolicitudCreadaEvent;
+import ar.edu.utn.frc.backend.solicitudes.infrastructure.messaging.SolicitudEventPublisher;
 import ar.edu.utn.frc.backend.solicitudes.model.Contenedor;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.IContenedorService;
 import ar.edu.utn.frc.backend.solicitudes.service.interfaces.ISolicitudService;
@@ -15,48 +16,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CrearSolicitudWorkflow {
 
-    private final DepositoClient depositoClient;
-    private final PersonaClient personaClient;
-    private final IContenedorService contenedorService;
-    private final ISolicitudService solicitudService;
+        private final IContenedorService contenedorService;
+        private final ISolicitudService solicitudService;
+        private final SolicitudEventPublisher solicitudEventPublisher;
 
-    public void crearSolicitud(CreateSolicitudDto solicitudRequestDto) {
+        public void crearSolicitud(CreateSolicitudDto solicitudRequestDto) {
 
-        // Crea, si no existen, las ubicaciones de origen y destino
-        UbicacionResponseDto origen = depositoClient.crearUbicacion(
-                solicitudRequestDto.getDireccionUbicacionOrigen(),
-                solicitudRequestDto.getLatitudUbicacionOrigen(),
-                solicitudRequestDto.getLongitudUbicacionOrigen(),
-                solicitudRequestDto.getNombreCiudadUbicacionOrigen());
+                // Crea el contenedor
+                Contenedor contenedor = contenedorService.crear(solicitudRequestDto.getContenedor());
 
-        UbicacionResponseDto destino = depositoClient.crearUbicacion(
-                solicitudRequestDto.getDireccionUbicacionDestino(),
-                solicitudRequestDto.getLatitudUbicacionDestino(),
-                solicitudRequestDto.getLongitudUbicacionDestino(),
-                solicitudRequestDto.getNombreCiudadUbicacionDestino());
+                UbicacionDto origen = solicitudRequestDto.getOrigen();
+                UbicacionDto destino = solicitudRequestDto.getDestino();
+                ClienteDto cliente = solicitudRequestDto.getCliente();
 
-        // Registra, si no esta registrado, el cliente
-        personaClient.registrarCliente(
-                solicitudRequestDto.getDocCliente(),
-                solicitudRequestDto.getTipoDocCliente(),
-                solicitudRequestDto.getNombreCliente(),
-                solicitudRequestDto.getApellidoCliente(),
-                solicitudRequestDto.getTelefonoCliente(),
-                solicitudRequestDto.getEmailCliente());
+                // Crea la solicitud
+                solicitudService.crear(
+                                origen.getDireccion(),
+                                origen.getNombreCiudad(),
+                                destino.getDireccion(),
+                                destino.getNombreCiudad(),
+                                contenedor,
+                                cliente.getDoc(),
+                                cliente.getTipoDoc());
 
-        // Crea el contenedor
-        Contenedor contenedor = contenedorService.crear(
-                solicitudRequestDto.getAnchoContenedor(),
-                solicitudRequestDto.getLargoContenedor(),
-                solicitudRequestDto.getAlturaContenedor(),
-                solicitudRequestDto.getPesoContenedor());
-
-        // Crea la solicitud
-        solicitudService.crear(
-                origen.getIdUbicacion(),
-                destino.getIdUbicacion(),
-                contenedor,
-                solicitudRequestDto.getDocCliente(),
-                solicitudRequestDto.getTipoDocCliente());
-    }
+                // Publica el evento solicitud-creada
+                SolicitudCreadaEvent event = new SolicitudCreadaEvent(origen, destino, cliente);
+                solicitudEventPublisher.publicarSolicitudCreada(event);
+        }
 }

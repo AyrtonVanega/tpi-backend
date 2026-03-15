@@ -34,13 +34,16 @@ public class SolicitudServiceImpl implements ISolicitudService {
     private final SolicitudMapper solicitudMapper;
 
     @Override
-    public void crear(Long idOrigen, Long idDestino, Contenedor contenedor, String docCliente, String tipoDocCliente) {
+    public void crear(String direccionOrigen, String nombreCiudadOrigen, String direccionDestino,
+            String nombreCiudadDestino, Contenedor contenedor, String docCliente, String tipoDocCliente) {
 
         EstadoSolicitud estadoSolicitud = estadoSolicitudService.buscarPorCodigo("BORRADOR");
 
         Solicitud solicitud = Solicitud.builder()
-                .idUbicacionOrigen(idOrigen)
-                .idUbicacionDestino(idDestino)
+                .direccionOrigen(direccionOrigen)
+                .nombreCiudadOrigen(nombreCiudadOrigen)
+                .direccionDestino(direccionDestino)
+                .nombreCiudadDestino(nombreCiudadDestino)
                 .contenedor(contenedor)
                 .docCliente(docCliente)
                 .tipoDocCliente(tipoDocCliente)
