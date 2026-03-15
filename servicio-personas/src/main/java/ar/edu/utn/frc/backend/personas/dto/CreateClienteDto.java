@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateClienteDto {
-    private String docCliente;
-    private String tipoDocCliente;
+    private String doc;
+    private String tipoDoc;
     private String nombre;
     private String apellido;
     private String telefono;

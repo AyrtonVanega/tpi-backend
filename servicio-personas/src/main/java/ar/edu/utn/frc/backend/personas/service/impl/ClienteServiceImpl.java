@@ -29,7 +29,7 @@ public class ClienteServiceImpl implements IClienteService {
     @Override
     public void crear(CreateClienteDto dto) {
         // Compone el id
-        PersonaId personaId = new PersonaId(dto.getDocCliente(), dto.getTipoDocCliente());
+        PersonaId personaId = new PersonaId(dto.getDoc(), dto.getTipoDoc());
 
         // Registra el cliente si no existe
         this.clientes.computeIfAbsent(personaId, id -> {
