@@ -157,17 +157,21 @@ workflow/
 exception/
 ```
 
+> workflow/: orquestación de casos de uso de la aplicación. Coordina la ejecución de múltiples servicios y define el flujo de negocio para operaciones que involucran varias entidades o acciones.
+
 ### 🔌 Comunicación por Eventos (Kafka)
 
 Algunos microservicios incorporan componentes adicionales para la comunicación asincrónica mediante eventos:
 
-- **ServicioPersonas**
+- **Servicio Productor de Eventos**
   - `infrastructure/messaging/`: productores de eventos
   - `event/`: definición de eventos de dominio publicados
 
-- **ServicioTarifas**
+- **Servicio Consumidor de Eventos**
   - `listener/`: consumidores de eventos
   - `event/`: definición de eventos de dominio recibidos
+
+Se utiliza la propiedad `spring.kafka.consumer.properties.spring.json.type.mapping` para mapear el tipo de evento publicado por un microservicio al tipo de evento equivalente dentro del contexto del microservicio consumidor debido a que el sistema maneja un número reducido de eventos.
 
 ---
 
