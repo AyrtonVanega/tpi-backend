@@ -52,7 +52,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"direccionUbicacionOrigen\": \"Blvd. 27 de Febrero\",\r\n  \"latitudUbicacionOrigen\": -32.97159,\r\n  \"longitudUbicacionOrigen\": -60.62053,\r\n  \"nombreCiudadUbicacionOrigen\": \"Rosario\",\r\n\r\n  \"direccionUbicacionDestino\": \"4100 Av. Colón\",\r\n  \"latitudUbicacionDestino\": -31.39775,\r\n  \"longitudUbicacionDestino\": -64.23532,\r\n  \"nombreCiudadUbicacionDestino\": \"Córdoba\",\r\n\r\n  \"anchoContenedor\": 1.0,\r\n  \"largoContenedor\": 5.0,\r\n  \"alturaContenedor\": 3.0,\r\n  \"pesoContenedor\": 2500.0,\r\n\r\n  \"docCliente\": \"32486157\",\r\n  \"tipoDocCliente\": \"DNI\",\r\n  \"nombreCliente\": \"Juan\",\r\n  \"apellidoCliente\": \"Pérez\",\r\n  \"telefonoCliente\": \"12345678\",\r\n  \"emailCliente\": \"juan.perez@example.com\"\r\n}",
+							"raw": "{\n  \"origen\": {\n    \"direccion\": \"Blvd. 27 de Febrero\",\n    \"latitud\": -32.97159,\n    \"longitud\": -60.62053,\n    \"nombreCiudad\": \"Rosario\"\n  },\n  \n  \"destino\": {\n    \"direccion\": \"4100 Av. Colón\",\n    \"latitud\": -31.39775,\n    \"longitud\": -64.23532,\n    \"nombreCiudad\": \"Córdoba\"\n  },\n\n  \"cliente\": {\n    \"doc\": \"32486157\",\n    \"tipoDoc\": \"DNI\",\n    \"nombre\": \"Juan\",\n    \"apellido\": \"Pérez\",\n    \"telefono\": \"12345678\",\n    \"email\": \"juan.perez@example.com\"\n  },\n  \n  \"contenedor\": {\n    \"ancho\": 1.0,\n    \"largo\": 5.0,\n    \"alto\": 3.0,\n    \"peso\": 2500.0\n  }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
