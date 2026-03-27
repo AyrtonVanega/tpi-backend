@@ -25,7 +25,6 @@ public interface UbicacionMapper {
     )
     Ubicacion toEntity(UbicacionRequestDto dto);
 
-    @Mapping(target = "idUbicacion", source = "id")
     @Mapping(target = "latitud", source = "coordenadas", qualifiedByName = "toLat")
     @Mapping(target = "longitud", source = "coordenadas", qualifiedByName = "toLon")
     UbicacionResponseDto toResponse(Ubicacion entity);
