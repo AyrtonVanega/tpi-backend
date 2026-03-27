@@ -44,7 +44,12 @@ public class DepositoServiceImpl implements IDepositoService {
                     return new ResourceNotFoundException("Deposito " + idDeposito + " no encontrado");
                 });
 
+        // Actualiza el Deposito
         depositoMapper.updateFromDto(depositoRequestDto, deposito);
+
+        // Actualiza la Ubicacion
+        ubicacionService.actualizar(deposito.getUbicacion().getId(), depositoRequestDto.getUbicacion());
+
         depositoRepository.save(deposito);
     }
 
