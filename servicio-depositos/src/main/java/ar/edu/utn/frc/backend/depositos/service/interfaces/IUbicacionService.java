@@ -4,10 +4,11 @@ import java.util.List;
 
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionRequestDto;
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionResponseDto;
+import ar.edu.utn.frc.backend.depositos.model.Ubicacion;
 
 public interface IUbicacionService {
     
-    UbicacionResponseDto crearSiNoExiste(UbicacionRequestDto dto);
+    Ubicacion crearSiNoExiste(UbicacionRequestDto dto);
 
     void actualizar(Long idUbicacion, UbicacionRequestDto dto);
 

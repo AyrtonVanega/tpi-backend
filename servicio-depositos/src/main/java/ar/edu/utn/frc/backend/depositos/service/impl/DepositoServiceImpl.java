@@ -9,8 +9,10 @@ import ar.edu.utn.frc.backend.depositos.dto.DepositoResponseDto;
 import ar.edu.utn.frc.backend.depositos.exception.ResourceNotFoundException;
 import ar.edu.utn.frc.backend.depositos.mapper.DepositoMapper;
 import ar.edu.utn.frc.backend.depositos.model.Deposito;
+import ar.edu.utn.frc.backend.depositos.model.Ubicacion;
 import ar.edu.utn.frc.backend.depositos.repository.DepositoRepository;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IDepositoService;
+import ar.edu.utn.frc.backend.depositos.service.interfaces.IUbicacionService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -19,10 +21,17 @@ public class DepositoServiceImpl implements IDepositoService {
 
     private final DepositoRepository depositoRepository;
     private final DepositoMapper depositoMapper;
+    private final IUbicacionService ubicacionService;
 
     @Override
     public void crear(DepositoRequestDto depositoRequestDto) {
+        // Crea la Ubicacion del Deposito
+        Ubicacion ubicacion = ubicacionService.crearSiNoExiste(depositoRequestDto.getUbicacion());
+
+        // Mapea datos simples DTO -> Entity y setea la ubicacion
         Deposito deposito = depositoMapper.toEntity(depositoRequestDto);
+        deposito.setUbicacion(ubicacion);
+
         depositoRepository.save(deposito);
     }
 

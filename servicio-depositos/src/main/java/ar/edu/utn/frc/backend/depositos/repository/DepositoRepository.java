@@ -12,13 +12,19 @@ import ar.edu.utn.frc.backend.depositos.model.Deposito;
 @Repository
 public interface DepositoRepository extends JpaRepository<Deposito, Long> {
 
-    // Busca depósitos dentro de un rectangulo de latitudes y longuitdes
-    @Query("SELECT d FROM Deposito d " +
-            "WHERE d.latitud BETWEEN :minLat AND :maxLat " +
-            "AND d.longitud BETWEEN :minLon AND :maxLon")
-    List<Deposito> findDepositosEnBoundingBox(
-            @Param("minLat") double minLat,
-            @Param("maxLat") double maxLat,
-            @Param("minLon") double minLon,
-            @Param("maxLon") double maxLon);
+        // Busca depósitos dentro de un rectangulo de latitudes y longuitdes
+        @Query(value = """
+                            SELECT d.*
+                            FROM depositos d
+                            JOIN ubicaciones u ON d.id_ubicacion = u.id_ubicacion
+                            WHERE ST_Within(
+                                u.coordenadas,
+                                ST_MakeEnvelope(:minLon, :minLat, :maxLon, :maxLat, 4326)
+                            )
+                        """, nativeQuery = true)
+        List<Deposito> findDepositosEnBoundingBox(
+                        @Param("minLat") double minLat,
+                        @Param("maxLat") double maxLat,
+                        @Param("minLon") double minLon,
+                        @Param("maxLon") double maxLon);
 }

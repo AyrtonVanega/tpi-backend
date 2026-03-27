@@ -2,11 +2,13 @@ package ar.edu.utn.frc.backend.depositos.service.impl;
 
 import java.util.List;
 
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionRequestDto;
 import ar.edu.utn.frc.backend.depositos.dto.UbicacionResponseDto;
 import ar.edu.utn.frc.backend.depositos.exception.ResourceNotFoundException;
+import ar.edu.utn.frc.backend.depositos.mapper.GeometryMapper;
 import ar.edu.utn.frc.backend.depositos.mapper.UbicacionMapper;
 import ar.edu.utn.frc.backend.depositos.model.Ubicacion;
 import ar.edu.utn.frc.backend.depositos.repository.UbicacionRepository;
@@ -19,22 +21,25 @@ public class UbicacionServiceImpl implements IUbicacionService {
 
     private final UbicacionRepository ubicacionRepository;
     private final UbicacionMapper ubicacionMapper;
+    private final GeometryMapper geometryMapper;
 
     @Override
-    public UbicacionResponseDto crearSiNoExiste(UbicacionRequestDto dto) {
+    public Ubicacion crearSiNoExiste(UbicacionRequestDto dto) {
+        // Crea el Point a partir de las coordenadas recibidas
+        Point punto = geometryMapper.toPoint(dto.getLatitud(), dto.getLongitud());
+
         // Busca en la BD la Ubicacion por coordenadas (latitud y longitud),
         // si no la encuentra la crea
-        Ubicacion ubicacion = ubicacionRepository.buscarPorCoordenadasAprox(dto.getLatitud(), dto.getLongitud())
+        Ubicacion ubicacion = ubicacionRepository.buscarPorCoordenadasAprox(punto, 10)
                 .orElseGet(() -> {
                     Ubicacion u = Ubicacion.builder()
                             .direccion(dto.getDireccion())
-                            .latitud(dto.getLatitud())
-                            .longitud(dto.getLongitud())
+                            .coordenadas(punto)
                             .nombreCiudad(dto.getNombreCiudad())
                             .build();
                     return ubicacionRepository.save(u);
                 });
-        return ubicacionMapper.toResponse(ubicacion);
+        return ubicacion;
     }
 
     @Override

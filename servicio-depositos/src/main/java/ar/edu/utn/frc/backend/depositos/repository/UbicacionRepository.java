@@ -2,6 +2,7 @@ package ar.edu.utn.frc.backend.depositos.repository;
 
 import java.util.Optional;
 
+import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,8 +13,12 @@ import ar.edu.utn.frc.backend.depositos.model.Ubicacion;
 @Repository
 public interface UbicacionRepository extends JpaRepository<Ubicacion, Long> {
 
-    @Query("SELECT u FROM Ubicacion u WHERE ABS(u.latitud - :lat) < 0.00001 AND ABS(u.longitud - :lon) < 0.00001")
+    @Query(value = """
+                SELECT *
+                FROM ubicaciones u
+                WHERE ST_DWithin(u.coordenadas, :punto, :distancia)
+            """, nativeQuery = true)
     Optional<Ubicacion> buscarPorCoordenadasAprox(
-            @Param("lat") double latitud,
-            @Param("lon") double longitud);
+            @Param("punto") Point punto,
+            @Param("distancia") double distancia);
 }

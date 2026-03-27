@@ -8,9 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DepositoRequestDto {
-    private String direccion;
-    private double latitud;
-    private double longitud;
-    private String nombreCiudad;
+    private UbicacionRequestDto ubicacion;
     private double costoEstadiaDiaria;
 }

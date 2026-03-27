@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import ar.edu.utn.frc.backend.depositos.dto.DepositoRequestDto;
+import ar.edu.utn.frc.backend.depositos.dto.UbicacionRequestDto;
 import ar.edu.utn.frc.backend.depositos.repository.DepositoRepository;
 import ar.edu.utn.frc.backend.depositos.service.interfaces.IDepositoService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,8 @@ public class DemoDataSeeder implements CommandLineRunner {
 
     private void crearDepositoDemo(String direccion, double latitud, double longitud, String nombreCiudad,
             double costoEstadiaDiaria) {
-        DepositoRequestDto dto = new DepositoRequestDto(direccion, latitud, longitud, nombreCiudad, costoEstadiaDiaria);
+        UbicacionRequestDto ubicacionDto = new UbicacionRequestDto(direccion, latitud, longitud, nombreCiudad);
+        DepositoRequestDto dto = new DepositoRequestDto(ubicacionDto, costoEstadiaDiaria);
         depositoService.crear(dto);
     }
 }
