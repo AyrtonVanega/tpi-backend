@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class JwtAuthConverter
         implements Converter<Jwt, AbstractAuthenticationToken> {
 
+    @SuppressWarnings("unchecked")
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
 
