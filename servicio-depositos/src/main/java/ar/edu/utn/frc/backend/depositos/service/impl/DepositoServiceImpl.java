@@ -60,7 +60,13 @@ public class DepositoServiceImpl implements IDepositoService {
                     return new ResourceNotFoundException("Deposito " + idDeposito + " no encontrado");
                 });
 
+        Long idUbicacion = deposito.getUbicacion().getId();
+
         depositoRepository.delete(deposito);
+
+        if (!depositoRepository.existsByUbicacionId(idUbicacion)) {
+            ubicacionService.eliminar(idUbicacion);
+        }
     }
 
     @Override
